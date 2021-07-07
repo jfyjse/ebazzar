@@ -1,9 +1,9 @@
 package com.sayone.ebazzar.repository;
 
-import com.sayone.ebazzar.entity.Product;
+import com.sayone.ebazzar.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
 }

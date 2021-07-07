@@ -1,13 +1,11 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Product implements Serializable {
+@Table(name = "products")
+public class ProductEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long productId;

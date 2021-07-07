@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "wishlist")
 public class WishlistEntity {
     @Id
     @GeneratedValue

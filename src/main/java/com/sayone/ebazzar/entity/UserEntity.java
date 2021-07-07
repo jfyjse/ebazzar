@@ -1,7 +1,7 @@
 package com.sayone.ebazzar.entity;
 
 import javax.persistence.*;
-@Entity(name="userEntity")
+@Entity(name="user")
 public class UserEntity {
 
     @Id

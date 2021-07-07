@@ -1,8 +1,9 @@
 package com.sayone.ebazzar.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderDto {
+public class OrderDto implements Serializable {
 
     private Long orderId;
     private String orderStatus;

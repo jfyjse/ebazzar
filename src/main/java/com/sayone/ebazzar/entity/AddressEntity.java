@@ -3,7 +3,7 @@ package com.sayone.ebazzar.entity;
 
 import javax.persistence.*;
 
-@Entity(name="addressEntity")
+@Entity(name="address")
 public class AddressEntity {
 
     @Id

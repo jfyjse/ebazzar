@@ -20,4 +20,23 @@ public interface RestResources {
     String PRODUCT_POST_SAVE = "/create";
     String PRODUCT_PUT_UPDATE = "/update/{id}";
     String PRODUCT_GET_SEARCH = "/search";
+
+    /*
+     * API Endpoints for Review related operations
+     * */
+//    String REVIEW_ROOT = "/customer";
+//    String CUSTOMER_POST_REGISTER = "/register";
+//    String CUSTOMER_POST_LOGIN = "/login";
+//    String CUSTOMER_DELETE_LOGOUT = "/logout";
+//    String CUSTOMER_DELETE_BY_ID = "/{id}";
+//    String CUSTOMER_GET_ME = "/{id}";
+
+
+
+
+
+
+
+
+
 }
