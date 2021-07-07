@@ -1,19 +1,25 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class SubCategory implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subCategoryId;
 
     @Column(nullable = false,length = 100)
     private String subCategoryName;
+
+    public SubCategory(){
+
+    }
+
+    public SubCategory(String subCategoryName) {
+        this.subCategoryName=subCategoryName;
+    }
+
 
     public Long getSubCategoryId() {
         return subCategoryId;
