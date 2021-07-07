@@ -1,18 +1,41 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table
-public class WishlistEntity {
+@Table(name = "wishlist")
+public class WishlistEntity implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "id")
     private long wishlistId;
-    private long userId;
-    private long productId;
+//    private long userId;
+    @OneToOne(targetEntity = Product.class,cascade = CascadeType.MERGE)
+    @JoinColumn(
+        name = "wishlist_id",
+        referencedColumnName = "wishlistId"
+      )
+    private Product product;
+
+//    @OneToOne(mappedBy = "wishlist")
+
+//    @JoinColumn(name = "users_id", referencedColumnName = "id")
+//    @JoinColumn(name="userId")
+    @OneToOne(targetEntity = UserEntity.class,cascade = CascadeType.MERGE)
+    @JoinColumn(
+            name = "wishlist_id",
+            referencedColumnName = "wishlist_id"
+    )
+    private UserEntity user;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 
     public long getWishlistId() {
         return wishlistId;
@@ -22,19 +45,11 @@ public class WishlistEntity {
         this.wishlistId = wishlistId;
     }
 
-    public long getUserId() {
-        return userId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

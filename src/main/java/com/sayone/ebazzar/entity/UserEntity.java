@@ -1,11 +1,17 @@
 package com.sayone.ebazzar.entity;
 
 import javax.persistence.*;
-@Entity(name="userEntity")
-public class UserEntity {
+import java.io.Serializable;
+
+//table name changed , @entity added.
+@Entity
+@Table(name = "users")
+public class UserEntity implements Serializable {
 
     @Id
-    @GeneratedValue
+    //column added to name user id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "id")
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -21,6 +27,27 @@ public class UserEntity {
     private String userType;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private AddressEntity address;
+
+    //one to one mapping for wishlist
+
+    //@OneToOne(cascade = CascadeType.ALL)
+    //joining user to wishlist(uno reverse)
+    //@JoinColumn(name = "wishlist_id", referencedColumnName = "id")
+    @OneToOne(targetEntity = WishlistEntity.class,cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "id"
+    )
+    private WishlistEntity wishlist;
+
+    public WishlistEntity getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(WishlistEntity wishlist) {
+        this.wishlist = wishlist;
+    }
+
     public long getId() {
         return userId;
     }

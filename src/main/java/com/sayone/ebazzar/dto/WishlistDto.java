@@ -2,8 +2,18 @@ package com.sayone.ebazzar.dto;
 
 public class WishlistDto {
     private long wishlistId;
-    private long userId;
-    private long productId;
+    private UserDto userDto;
+    private String wishlistName;
+    private ProductDto productDto;
+
+
+    public String getWishlistName() {
+        return wishlistName;
+    }
+
+    public void setWishlistName(String wishlistName) {
+        this.wishlistName = wishlistName;
+    }
 
     public long getWishlistId() {
         return wishlistId;
@@ -13,19 +23,19 @@ public class WishlistDto {
         this.wishlistId = wishlistId;
     }
 
-    public long getUserId() {
-        return userId;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 
-    public long getProductId() {
-        return productId;
+    public ProductDto getProductDto() {
+        return productDto;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setProductDto(ProductDto productDto) {
+        this.productDto = productDto;
     }
 }
