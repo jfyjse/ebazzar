@@ -1,11 +1,10 @@
-package com.sayone.ebazzar.dto;
+package com.sayone.ebazzar.model.request;
 
+import com.sayone.ebazzar.dto.AddressDto;
 import com.sayone.ebazzar.entity.AddressEntity;
 
-import java.io.Serializable;
-
-public class UserDto implements Serializable {
-    private long userId;
+public class UserDetailsRequestModel {
+   // private long userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -14,16 +13,14 @@ public class UserDto implements Serializable {
     private String userType;
     private AddressDto address;
 
-    private static final long serialVersionUID= -9039122762070330566L;
 
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
+//    public long getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(long userId) {
+//        this.userId = userId;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -71,6 +68,7 @@ public class UserDto implements Serializable {
 
     public void setUserType(String userType) {
         this.userType = userType;
+
     }
 
     public AddressDto getAddress() {

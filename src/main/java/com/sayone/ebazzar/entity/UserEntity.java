@@ -1,11 +1,25 @@
 package com.sayone.ebazzar.entity;
 
 import javax.persistence.*;
-@Entity(name="userEntity")
-public class UserEntity {
+import java.io.Serializable;
+import java.util.List;
+
+@Entity
+@Table(name = "user")
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID= 5174137885820647783L;
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name="user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -19,8 +33,15 @@ public class UserEntity {
     private int phoneNumber;
     @Column(nullable = false,length = 50)
     private String userType;
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+
+    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "userId"
+    )
     private AddressEntity address;
+
+
     public long getId() {
         return userId;
     }
