@@ -7,10 +7,11 @@ import java.io.Serializable;
 @Table(name = "wishlist")
 public class WishlistEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "id")
     private long wishlistId;
-//    private long userId;
+    private String wishlistName;
+    //    private long userId;
     @OneToOne(targetEntity = Product.class,cascade = CascadeType.MERGE)
     @JoinColumn(
         name = "wishlist_id",
@@ -28,6 +29,14 @@ public class WishlistEntity implements Serializable {
             referencedColumnName = "wishlist_id"
     )
     private UserEntity user;
+
+    public String getWishlistName() {
+        return wishlistName;
+    }
+
+    public void setWishlistName(String wishlistName) {
+        this.wishlistName = wishlistName;
+    }
 
     public UserEntity getUser() {
         return user;

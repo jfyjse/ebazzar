@@ -38,9 +38,7 @@ public class WishlistController {
         WishlistDto wishlistDto = modelMapper.map(wishlistRequestModel,WishlistDto.class);
         wishlistDto.setProductDto(productDto);
         wishlistDto.setUserDto(userDto);
-        WishlistDto returnValue = wishlistService.createWishlist(wishlistDto);
-
-        return returnValue;
+        return wishlistService.createWishlist(wishlistDto);
 
     }
 

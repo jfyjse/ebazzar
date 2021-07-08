@@ -36,22 +36,20 @@ public class WishlistService {
 
     public ProductDto getProductById(Long productId) {
         Optional<Product> productEntity = productRepository.findById(productId);
-        if(!productEntity.isPresent()){
-            throw new NullPointerException("Product not Present");
+        if(productEntity.isEmpty()){
+            throw new NullPointerException("no product found");
         }
         ModelMapper modelMapper = new ModelMapper();
-        ProductDto productDto = modelMapper.map(productEntity.get(),ProductDto.class);
-        return  productDto;
+        return modelMapper.map(productEntity.get(),ProductDto.class);
     }
 
     public UserDto getUserById(long userId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
-        if(!userEntity.isPresent()){
+        if(userEntity.isEmpty()){
             throw new NullPointerException("no user found");
         }
         ModelMapper modelMapper = new ModelMapper();
-        UserDto userDto= modelMapper.map(userEntity.get(),UserDto.class);
-        return userDto;
+        return modelMapper.map(userEntity.get(),UserDto.class);
     }
 
     public WishlistDto createWishlist(WishlistDto wishlistDto) {
