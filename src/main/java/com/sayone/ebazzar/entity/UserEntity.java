@@ -31,8 +31,12 @@ public class UserEntity implements Serializable {
     private String password;
     @Column(nullable = false,length = 10)
     private int phoneNumber;
+    @Column(nullable = false)
+    private String encryptedPassword;
+
     @Column(nullable = false,length = 50)
     private String userType;
+
 
     @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(
@@ -41,13 +45,14 @@ public class UserEntity implements Serializable {
     )
     private AddressEntity address;
 
-
-    public long getId() {
+    public long getUserId() {
         return userId;
     }
-    public void setId(long id) {
-        this.userId = id;
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -89,5 +94,13 @@ public class UserEntity implements Serializable {
     }
     public void setAddress(AddressEntity address) {
         this.address = address;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 }

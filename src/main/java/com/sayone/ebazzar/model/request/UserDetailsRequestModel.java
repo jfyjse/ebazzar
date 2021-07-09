@@ -1,10 +1,8 @@
 package com.sayone.ebazzar.model.request;
 
 import com.sayone.ebazzar.dto.AddressDto;
-import com.sayone.ebazzar.entity.AddressEntity;
 
 public class UserDetailsRequestModel {
-   // private long userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,14 +11,6 @@ public class UserDetailsRequestModel {
     private String userType;
     private AddressDto address;
 
-
-//    public long getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(long userId) {
-//        this.userId = userId;
-//    }
 
     public String getFirstName() {
         return firstName;

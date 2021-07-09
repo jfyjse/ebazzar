@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.dto;
 
-import com.sayone.ebazzar.entity.UserEntity;
 
 
 

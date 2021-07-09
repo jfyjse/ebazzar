@@ -4,12 +4,11 @@ import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.model.request.UserDetailsRequestModel;
 import com.sayone.ebazzar.model.response.UserRestModel;
 import com.sayone.ebazzar.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users")
@@ -34,6 +33,18 @@ public class UserController {
 
         return returnValue;
     }
+
+
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name="authorization",value = "${userController.authorizationHeader.description}",paramType ="header")
+            }
+    )
+    @GetMapping
+    public String getUser(){
+        return "get user was called";
+    }
+
 
 
 }
