@@ -1,19 +1,36 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cart")
 public class CartEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cartId;
-    private long userId;
-    private long productId;
+
     private int totalAmount;
+
+    private String cartStatus;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @OneToMany(targetEntity = ProductEntity.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
+    private List<ProductEntity> productEntityList;
+
+    public CartEntity() {
+    }
+
+    public CartEntity(int totalAmount, UserEntity userEntity, String cartStatus) {
+        this.totalAmount = totalAmount;
+        this.userEntity = userEntity;
+        this.cartStatus = cartStatus;
+
+    }
 
     public long getCartId() {
         return cartId;
@@ -23,20 +40,12 @@ public class CartEntity {
         this.cartId = cartId;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getCartStatus() {
+        return cartStatus;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
     }
 
     public int getTotalAmount() {
@@ -45,6 +54,22 @@ public class CartEntity {
 
     public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public List<ProductEntity> getProductEntityList() {
+        return productEntityList;
+    }
+
+    public void setProductEntityList(List<ProductEntity> productEntityList) {
+        this.productEntityList = productEntityList;
     }
 
 

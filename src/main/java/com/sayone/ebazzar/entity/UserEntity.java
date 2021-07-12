@@ -1,11 +1,15 @@
 package com.sayone.ebazzar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-@Entity(name="user")
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","address"})
+@Table(name="user")
 public class UserEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -19,8 +23,29 @@ public class UserEntity {
     private int phoneNumber;
     @Column(nullable = false,length = 50)
     private String userType;
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.MERGE)
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "userId"
+    )
     private AddressEntity address;
+
+
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String firstName, String lastName, String email,
+                      String password, int phoneNumber, String userType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.userType = userType;
+
+    }
+
     public long getId() {
         return userId;
     }

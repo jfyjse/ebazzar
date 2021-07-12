@@ -1,10 +1,21 @@
 package com.sayone.ebazzar.dto;
 
+import java.util.List;
+
 public class CartDto {
     private long cartId;
-    private long userId;
-    private long productId;
+    private UserDto userDto;
+    private List<ProductDto> productDtoList;
     private int totalAmount;
+    private String cartStatus;
+
+    public String getCartStatus() {
+        return cartStatus;
+    }
+
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
+    }
 
     public long getCartId() {
         return cartId;
@@ -14,27 +25,27 @@ public class CartDto {
         this.cartId = cartId;
     }
 
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
-
     public int getTotalAmount() {
         return totalAmount;
     }
 
     public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
+    }
+
+    public List<ProductDto> getProductDtoList() {
+        return productDtoList;
+    }
+
+    public void setProductDtoList(List<ProductDto> productDtoList) {
+        this.productDtoList = productDtoList;
     }
 }

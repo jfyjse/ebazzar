@@ -1,28 +1,13 @@
-package com.sayone.ebazzar.dto;
+package com.sayone.ebazzar.model.response;
 
-import java.io.Serializable;
+import com.sayone.ebazzar.dto.AddressDto;
 
-public class OrderDto implements Serializable {
-
+public class OrderResponsemodel {
     private Long orderId;
     private String orderStatus;
     private int orderAmount;
     private AddressDto shippingAddress;
     private AddressDto billingAddress;
-    private CartDto cartDto;
-
-
-    public OrderDto() {
-    }
-
-    public OrderDto(String orderStatus, int orderAmount,
-                    AddressDto shippingAddress, AddressDto billingAddress, CartDto cartDto) {
-        this.orderStatus = orderStatus;
-        this.orderAmount = orderAmount;
-        this.shippingAddress = shippingAddress;
-        this.billingAddress = billingAddress;
-        this.cartDto = cartDto;
-    }
 
     public Long getOrderId() {
         return orderId;
@@ -62,13 +47,5 @@ public class OrderDto implements Serializable {
 
     public void setBillingAddress(AddressDto billingAddress) {
         this.billingAddress = billingAddress;
-    }
-
-    public CartDto getCartDto() {
-        return cartDto;
-    }
-
-    public void setCartDto(CartDto cartDto) {
-        this.cartDto = cartDto;
     }
 }

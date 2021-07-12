@@ -19,10 +19,6 @@ import java.util.Optional;
 @Service
 public class ReviewService {
 
-    ReviewEntity reviewEntity = new ReviewEntity();
-    ProductEntity productEntity = new ProductEntity();
-    UserEntity userEntity = new UserEntity();
-
     @Autowired
     ReviewRepository reviewRepository;
 
@@ -35,14 +31,14 @@ public class ReviewService {
     public ReviewDto createReview(ReviewDto reviewDto) {
 
         ModelMapper modelMapper = new ModelMapper();
-        reviewEntity = modelMapper.map(reviewDto, ReviewEntity.class);
+        ReviewEntity reviewEntity = modelMapper.map(reviewDto, ReviewEntity.class);
 
         ProductDto productDto = reviewDto.getProductDto();
         ProductEntity productEntity = modelMapper.map(productDto, ProductEntity.class);
         reviewEntity.setProductEntity(productEntity);
 
         UserDto userDto = reviewDto.getUserDto();
-        userEntity = modelMapper.map(userDto, UserEntity.class);
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
         reviewEntity.setUserEntity(userEntity);
 
         ReviewEntity storedReviewEntity = reviewRepository.save(reviewEntity);
@@ -78,6 +74,28 @@ public class ReviewService {
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userEntity1.get(),UserDto.class);
         return  userDto;
+
+    }
+
+    public ReviewDto updateReview(Long reviewId, ReviewDto reviewDto) {
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        Optional<ReviewEntity> reviewEntity = reviewRepository.findById(reviewId);
+        if(!reviewEntity.isPresent())
+            throw new NullPointerException("Invalid Review Id");
+        ReviewEntity reviewEntity1 = new ReviewEntity();
+        BeanUtils.copyProperties(reviewEntity.get(),reviewEntity1);
+
+        reviewEntity1.setRating(reviewDto.getRating());
+        reviewEntity1.setDescription(reviewDto.getDescription());
+
+        ReviewEntity storedEntity = reviewRepository.save(reviewEntity1);
+        ReviewDto returnValue = modelMapper.map(storedEntity,ReviewDto.class);
+
+        returnValue.setProductDto(modelMapper.map(storedEntity.getProductEntity(),ProductDto.class));
+        returnValue.setUserDto(modelMapper.map(storedEntity.getUserEntity(),UserDto.class));
+        return returnValue;
 
     }
 }

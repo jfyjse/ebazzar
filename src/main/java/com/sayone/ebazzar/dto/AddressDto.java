@@ -2,18 +2,25 @@ package com.sayone.ebazzar.dto;
 
 import com.sayone.ebazzar.entity.UserEntity;
 
-
-
 public class AddressDto {
 
     private static final long serialVersionUID= 7972379581449181725L;
 
     private Long addressId;
     private String lane;
+    private  String street;
     private String city;
     private String zip;
     private String type;
     private UserEntity user;
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
     public Long getAddressId() {
         return addressId;

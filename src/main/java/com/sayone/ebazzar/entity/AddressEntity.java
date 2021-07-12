@@ -1,9 +1,13 @@
 package com.sayone.ebazzar.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
-@Entity(name="address")
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","user"})
+@Table(name="address")
 public class AddressEntity {
 
     @Id
@@ -30,6 +34,18 @@ public class AddressEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
     private UserEntity user;
+
+    public AddressEntity() {
+    }
+
+    public AddressEntity(String lane, String street, String city, String zip, String type, UserEntity user) {
+        this.lane = lane;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+        this.type = type;
+        this.user = user;
+    }
 
     public Long getAddressId() {
         return addressId;

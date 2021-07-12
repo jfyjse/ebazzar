@@ -1,21 +1,16 @@
 package com.sayone.ebazzar.entity;
 
+import com.sayone.ebazzar.entity.base.AuditableEntity;
+
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "reviews")
-public class ReviewEntity implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+public class ReviewEntity extends AuditableEntity {
 
     private Integer rating;
     private String description;
 
-    // one review belongs to only one product
-    // one product can have multiple reviews
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private ProductEntity productEntity;
@@ -24,25 +19,14 @@ public class ReviewEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private UserEntity userEntity;
 
-
-
     public ReviewEntity() {
     }
 
-    public ReviewEntity(Long reviewId, ProductEntity productEntity, UserEntity userEntity, Integer rating, String description) {
-        this.reviewId = reviewId;
+    public ReviewEntity(ProductEntity productEntity, UserEntity userEntity, Integer rating, String description) {
         this.productEntity = productEntity;
         this.userEntity = userEntity;
         this.rating = rating;
         this.description = description;
-    }
-
-    public Long getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
     }
 
     public ProductEntity getProductEntity() {
@@ -77,9 +61,5 @@ public class ReviewEntity implements Serializable {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Review{" + "reviewId=" + reviewId + ", productEntity=" + productEntity +
-                ", userEntity=" + userEntity + ", rating=" + rating + ", description='" + description + '\'' + '}';
-    }
+
 }

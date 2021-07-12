@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.dto;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
 
 public class ReviewDto implements Serializable {

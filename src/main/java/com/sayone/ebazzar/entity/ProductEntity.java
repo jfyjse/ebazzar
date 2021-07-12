@@ -7,13 +7,27 @@ import java.io.Serializable;
 @Table(name = "products")
 public class ProductEntity implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     @Column(nullable = false)
     private String productName;
     private String description;
     @Column(nullable = false)
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private  CartEntity cartEntity;
+
+    public ProductEntity() {
+    }
+
+    public ProductEntity(String productName, String description, Integer price,CartEntity cartEntity) {
+        this.productName = productName;
+        this.description = description;
+        this.cartEntity = cartEntity;
+        this.price = price;
+    }
 
     public Long getProductId() {
         return productId;

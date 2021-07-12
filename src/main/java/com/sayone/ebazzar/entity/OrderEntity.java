@@ -2,7 +2,6 @@ package com.sayone.ebazzar.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -18,34 +17,29 @@ public class OrderEntity implements Serializable {
     @Column(nullable = false)
     private int orderAmount;
 
-    @ManyToOne
-    private UserEntity userEntity;
-
-    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "billing_address")
     private AddressEntity billingAddress;
 
-    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "shipping_address")
     private AddressEntity shippingAddress;
 
-//    @OneToMany(targetEntity = ProductEntity.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "order_id", referencedColumnName = "orderId")
-//    private List<ProductEntity> productEntityList;
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private CartEntity cartEntity;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(Long orderId, String orderStatus, int orderAmount,
-                       UserEntity userEntity, AddressEntity billingAddress,
-                       AddressEntity shippingAddress,List<ProductEntity> productEntityList) {
-        this.orderId = orderId;
+    public OrderEntity(String orderStatus, int orderAmount, AddressEntity billingAddress,
+                       AddressEntity shippingAddress, CartEntity cartEntity) {
         this.orderStatus = orderStatus;
         this.orderAmount = orderAmount;
-        this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
-        this.userEntity = userEntity;
-      //  this.productEntityList = productEntityList;
+        this.shippingAddress = shippingAddress;
+        this.cartEntity = cartEntity;
+
     }
 
     public Long getOrderId() {
@@ -88,29 +82,20 @@ public class OrderEntity implements Serializable {
         this.billingAddress = billingAddress;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public CartEntity getCartEntity() {
+        return cartEntity;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setCartEntity(CartEntity cartEntity) {
+        this.cartEntity = cartEntity;
     }
 
-//    public List<ProductEntity> getProductEntityList() {
-//        return productEntityList;
-//    }
-//
-//    public void setProductEntityList(List<ProductEntity> productEntityList) {
-//        this.productEntityList = productEntityList;
-//    }
-
-//    @Override
-//    public String toString() {
-//        return "OrderEntity{" + "orderId=" + orderId + ", orderStatus='" + orderStatus +
-//                '\'' + ", orderAmount=" + orderAmount + ", userEntity=" + userEntity +
-//                ", billingAddress=" + billingAddress + ", shippingAddress=" + shippingAddress +
-//                ", productEntityList=" + productEntityList + '}';
-//    }
+    @Override
+    public String toString() {
+        return "OrderEntity{" + "orderId=" + orderId + ", orderStatus='" + orderStatus +
+                '\'' + ", orderAmount=" + orderAmount + ", billingAddress=" + billingAddress +
+                ", shippingAddress=" + shippingAddress + ", cartEntity=" + cartEntity +'}';
+    }
 }
 
 

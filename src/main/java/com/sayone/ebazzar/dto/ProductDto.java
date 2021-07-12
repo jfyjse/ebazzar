@@ -1,8 +1,5 @@
 package com.sayone.ebazzar.dto;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 public class ProductDto implements Serializable {
