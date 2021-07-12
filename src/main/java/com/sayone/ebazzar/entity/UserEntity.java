@@ -31,19 +31,19 @@ public class UserEntity implements Serializable {
     private String password;
     @Column(nullable = false,length = 10)
     private int phoneNumber;
-    @Column(nullable = false)
+    @Column
     private String encryptedPassword;
 
     @Column(nullable = false,length = 50)
     private String userType;
 
 
-    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(
             name = "user_id",
             referencedColumnName = "userId"
     )
-    private AddressEntity address;
+    private List<AddressEntity> address;
 
     public long getUserId() {
         return userId;
@@ -89,10 +89,12 @@ public class UserEntity implements Serializable {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-    public AddressEntity getAddress() {
+
+    public List<AddressEntity> getAddress() {
         return address;
     }
-    public void setAddress(AddressEntity address) {
+
+    public void setAddress(List<AddressEntity> address) {
         this.address = address;
     }
 

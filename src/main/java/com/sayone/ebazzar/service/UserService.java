@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,36 +28,41 @@ public class UserService implements UserDetailsService {
 
 
     public UserDto createUser(UserDto user){
-
-
-
-
         if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("user already exist");
 
+        for (int i =0; i<user.getAddressDtos().size();i++){
+            AddressDto addressDto=user.getAddressDtos().get(i);
+            addressDto.setUser(user);
+            user.getAddressDtos().set(i,addressDto);
+        }
 
-        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity=new UserEntity();
         BeanUtils.copyProperties(user,userEntity);
 
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
+        List<AddressEntity> addressEntities = new ArrayList<AddressEntity>();
+        for (int i=0;i<user.getAddressDtos().size();i++){
+            AddressDto addressDto=user.getAddressDtos().get(i);
+            AddressEntity addressEntity=new AddressEntity();
+            BeanUtils.copyProperties(addressDto,addressEntity);
+            addressEntities.add(addressEntity);
+        }
 
-        AddressDto addressDto = new AddressDto();
-        addressDto=user.getAddress();
-
-        AddressEntity addressEntity= new AddressEntity();
-        BeanUtils.copyProperties(addressDto,addressEntity);
-        addressEntity.setUser(userEntity);
-        userEntity.setAddress(addressEntity);
-
-       UserEntity storedUserDetails =  userRepository.save(userEntity);
-
+        userEntity.setAddress(addressEntities);
+        UserEntity storedUserDetails=userRepository.save(userEntity);
+        List<AddressDto> addressDtos = new ArrayList<AddressDto>();
+        for (int i =0;i<storedUserDetails.getAddress().size();i++){
+            AddressEntity addressEntity = storedUserDetails.getAddress().get(i);
+            AddressDto addressDto = new AddressDto();
+            BeanUtils.copyProperties(addressEntity,addressDto);
+            addressDtos.add(addressDto);
+        }
 
         UserDto returnValue= new UserDto();
         BeanUtils.copyProperties(storedUserDetails,returnValue);
-
-
+        returnValue.setAddressDtos(addressDtos);
         return returnValue;
-
 
     }
 

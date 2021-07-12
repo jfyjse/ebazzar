@@ -40,10 +40,6 @@ public class AddressEntity implements Serializable {
     private String type;
 
 
-
-    @OneToOne
-    private UserEntity user;
-
     public Long getAddressId() {
         return addressId;
     }
@@ -88,30 +84,9 @@ public class AddressEntity implements Serializable {
         return type;
     }
 
+
     public void setType(String type) {
         this.type = type;
     }
 
-    public UserEntity getUser() {
-
-
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "AddressEntity{" +
-//                "addressId=" + addressId +
-//                ", lane='" + lane + '\'' +
-//                ", street='" + street + '\'' +
-//                ", city='" + city + '\'' +
-//                ", zip='" + zip + '\'' +
-//                ", type='" + type + '\'' +
-//                ", user=" + user +
-//                '}';
-//    }
 }

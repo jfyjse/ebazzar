@@ -2,6 +2,8 @@ package com.sayone.ebazzar.model.request;
 
 import com.sayone.ebazzar.dto.AddressDto;
 
+import java.util.List;
+
 public class UserDetailsRequestModel {
     private String firstName;
     private String lastName;
@@ -9,7 +11,7 @@ public class UserDetailsRequestModel {
     private String password;
     private int phoneNumber;
     private String userType;
-    private AddressDto address;
+    private List<AddressRequestModel> address;
 
 
     public String getFirstName() {
@@ -61,11 +63,11 @@ public class UserDetailsRequestModel {
 
     }
 
-    public AddressDto getAddress() {
+    public List<AddressRequestModel> getAddress() {
         return address;
     }
 
-    public void setAddress(AddressDto address) {
+    public void setAddress(List<AddressRequestModel> address) {
         this.address = address;
     }
 }

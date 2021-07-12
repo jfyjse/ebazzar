@@ -2,6 +2,7 @@ package com.sayone.ebazzar.dto;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserDto implements Serializable {
     private long userId;
@@ -11,7 +12,7 @@ public class UserDto implements Serializable {
     private String password;
     private int phoneNumber;
     private String userType;
-    private AddressDto address;
+    private List<AddressDto> addressDtos;
     private String encryptedPassword;
 
 
@@ -74,12 +75,12 @@ public class UserDto implements Serializable {
         this.userType = userType;
     }
 
-    public AddressDto getAddress() {
-        return address;
+    public List<AddressDto> getAddressDtos() {
+        return addressDtos;
     }
 
-    public void setAddress(AddressDto address) {
-        this.address = address;
+    public void setAddressDtos(List<AddressDto> addressDtos) {
+        this.addressDtos = addressDtos;
     }
 
     public String getEncryptedPassword() {

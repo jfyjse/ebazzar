@@ -1,19 +1,14 @@
 package com.sayone.ebazzar.model.response;
 
+import java.util.List;
+
 public class UserRestModel {
 
-  //  private Long userId;
     private String firstName;
     private String lastName;
     private String email;
+    private List<AddressResponseModel> addressResponseModels;
 
-//    public Long getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(Long userId) {
-//        this.userId = userId;
-//    }
 
     public String getFirstName() {
         return firstName;
@@ -37,5 +32,13 @@ public class UserRestModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<AddressResponseModel> getAddressResponseModels() {
+        return addressResponseModels;
+    }
+
+    public void setAddressResponseModels(List<AddressResponseModel> addressResponseModels) {
+        this.addressResponseModels = addressResponseModels;
     }
 }
