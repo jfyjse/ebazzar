@@ -1,19 +1,34 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table
+@Table(name = "cart")
 public class CartEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cartId;
     private long userId;
-    private long productId;
-    private int totalAmount;
+    private String cartStatus;
+
+    @OneToMany(cascade = CascadeType.ALL ,targetEntity = CartItemEntity.class)
+    @JoinColumn(name="cart_id",referencedColumnName = "cartId")
+    private List <CartItemEntity> cartItemEntities;
+
+    private double grantTotal;
+
+    public CartEntity(){
+        cartItemEntities= new ArrayList<CartItemEntity>();
+        this.grantTotal=0;
+    }
+
+
+    public CartEntity(long cartId) {
+        super();
+        this.cartId = cartId;
+    }
 
     public long getCartId() {
         return cartId;
@@ -31,21 +46,29 @@ public class CartEntity {
         this.userId = userId;
     }
 
-    public long getProductId() {
-        return productId;
+
+
+    public double getGrantTotal() {
+        return grantTotal;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setGrantTotal(double grantTotal) {
+        this.grantTotal = grantTotal;
     }
 
-    public int getTotalAmount() {
-        return totalAmount;
+    public List<CartItemEntity> getCartItemEntities() {
+        return cartItemEntities;
     }
 
-    public void setTotalAmount(int totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setCartItemEntities(List<CartItemEntity> cartItemEntities) {
+        this.cartItemEntities = cartItemEntities;
     }
 
+    public String getCartStatus() {
+        return cartStatus;
+    }
 
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
+    }
 }
