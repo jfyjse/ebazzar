@@ -2,7 +2,7 @@ package com.sayone.ebazzar.model.response;
 
 import java.util.List;
 
-public class UserRestModel {
+public class  UserRestModel {
 
     private String firstName;
     private String lastName;

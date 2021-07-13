@@ -66,15 +66,37 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public UserDto getUserByEmail(String email){
+        UserEntity userEntity=userRepository.findByEmail(email);
+
+        if (userEntity==null) throw new UsernameNotFoundException(email);
+        UserDto returnValue=new UserDto();
+        BeanUtils.copyProperties(userEntity, returnValue);
+        List<AddressDto> addressDtos = new ArrayList<AddressDto>();
+        for(AddressEntity addressEntity:userEntity.getAddress()){
+            AddressDto addressDto= new AddressDto();
+            BeanUtils.copyProperties(addressEntity,addressDto);
+            addressDtos.add(addressDto);
+
+        }
+
+        returnValue.setAddressDtos(addressDtos);
+
+
+        return returnValue;
+
+    }
+
     public UserDto getUser(String email){
         UserEntity userEntity=userRepository.findByEmail(email);
 
         if (userEntity==null) throw new UsernameNotFoundException(email);
-
         UserDto returnValue=new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
+
+
 
 
     @Override

@@ -39,6 +39,8 @@ public class AddressEntity implements Serializable {
     @Column(nullable = false,length = 20)
     private String type;
 
+    private UserEntity userDetails;
+
 
     public Long getAddressId() {
         return addressId;
@@ -89,4 +91,11 @@ public class AddressEntity implements Serializable {
         this.type = type;
     }
 
+    public UserEntity getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserEntity userDetails) {
+        this.userDetails = userDetails;
+    }
 }
