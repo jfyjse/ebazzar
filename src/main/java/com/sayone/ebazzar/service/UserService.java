@@ -4,6 +4,11 @@ import com.sayone.ebazzar.dto.AddressDto;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.AddressEntity;
 import com.sayone.ebazzar.entity.UserEntity;
+import com.sayone.ebazzar.model.request.UserDetailsRequestModel;
+import com.sayone.ebazzar.model.request.UserUpdateRequestModel;
+import com.sayone.ebazzar.model.response.AddressResponseModel;
+import com.sayone.ebazzar.model.response.UserRestModel;
+import com.sayone.ebazzar.model.response.UserUpdateResponseModel;
 import com.sayone.ebazzar.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +32,18 @@ public class UserService implements UserDetailsService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public UserDto createUser(UserDto user){
+    public UserRestModel createUser(UserDetailsRequestModel userDetailsRequestModel){
+        UserRestModel returnValue = new UserRestModel();
+        UserDto user= new UserDto();
+        BeanUtils.copyProperties(userDetailsRequestModel,user);
+        List<AddressDto> addressDtos = new ArrayList<AddressDto>();
+        for (int i = 0; i < userDetailsRequestModel.getAddress().size(); i++) {
+            AddressDto addressDto = new AddressDto();
+            BeanUtils.copyProperties(userDetailsRequestModel.getAddress().get(i), addressDto);       //
+            addressDto.setUser(user);
+            addressDtos.add(addressDto);
+        }
+        user.setAddressDtos(addressDtos);
         if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("user already exist");
 
         for (int i =0; i<user.getAddressDtos().size();i++){
@@ -35,7 +51,6 @@ public class UserService implements UserDetailsService {
             addressDto.setUser(user);
             user.getAddressDtos().set(i,addressDto);
         }
-
         UserEntity userEntity=new UserEntity();
         BeanUtils.copyProperties(user,userEntity);
 
@@ -51,7 +66,6 @@ public class UserService implements UserDetailsService {
 
         userEntity.setAddress(addressEntities);
         UserEntity storedUserDetails=userRepository.save(userEntity);
-        List<AddressDto> addressDtos = new ArrayList<AddressDto>();
         for (int i =0;i<storedUserDetails.getAddress().size();i++){
             AddressEntity addressEntity = storedUserDetails.getAddress().get(i);
             AddressDto addressDto = new AddressDto();
@@ -59,33 +73,71 @@ public class UserService implements UserDetailsService {
             addressDtos.add(addressDto);
         }
 
-        UserDto returnValue= new UserDto();
-        BeanUtils.copyProperties(storedUserDetails,returnValue);
-        returnValue.setAddressDtos(addressDtos);
+        UserDto userDto=new UserDto();
+        BeanUtils.copyProperties(storedUserDetails,userDto);
+        BeanUtils.copyProperties(userDto,returnValue);
+
+        userDto.setAddressDtos(addressDtos);
+
+        List<AddressResponseModel> addressResponseModels = new ArrayList<AddressResponseModel>();
+        for (AddressDto addressDto : userDto.getAddressDtos()) {
+            AddressResponseModel addressResponseModel = new AddressResponseModel();
+            BeanUtils.copyProperties(addressDto, addressResponseModel);
+            addressResponseModels.add(addressResponseModel);
+        }
+        returnValue.setAddressResponseModels(addressResponseModels);
         return returnValue;
+
+
 
     }
 
-    public UserDto getUserByEmail(String email){
-        UserEntity userEntity=userRepository.findByEmail(email);
+    public UserUpdateResponseModel updateUser(UserUpdateRequestModel updateRequestModel, String email){
+        UserUpdateResponseModel returnValue = new UserUpdateResponseModel();
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(updateRequestModel,userEntity);
+        UserEntity userToUpdate=userRepository.findByEmail(email);
+        if (userToUpdate==null) throw new UsernameNotFoundException(email);
+        userToUpdate.setFirstName(updateRequestModel.getFirstName());
+        userToUpdate.setLastName(updateRequestModel.getLastName());
+        userToUpdate.setPhoneNumber(updateRequestModel.getPhoneNumber());
+        userToUpdate.setEmail(updateRequestModel.getEmail());
 
+        userRepository.save(userToUpdate);
+
+        BeanUtils.copyProperties(userToUpdate,returnValue);
+
+
+        return returnValue;
+    }
+
+
+ public UserRestModel getUserByEmail(String email){
+
+        UserRestModel returnValue = new UserRestModel();
+        UserEntity userEntity=userRepository.findByEmail(email);
         if (userEntity==null) throw new UsernameNotFoundException(email);
-        UserDto returnValue=new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
+
         List<AddressDto> addressDtos = new ArrayList<AddressDto>();
         for(AddressEntity addressEntity:userEntity.getAddress()){
-            AddressDto addressDto= new AddressDto();
-            BeanUtils.copyProperties(addressEntity,addressDto);
-            addressDtos.add(addressDto);
-
+         AddressDto addressDto= new AddressDto();
+         BeanUtils.copyProperties(addressEntity,addressDto);
+         addressDtos.add(addressDto);
         }
-
-        returnValue.setAddressDtos(addressDtos);
-
-
+        UserDto userAddress = new UserDto();
+        userAddress.setAddressDtos(addressDtos);
+     List<AddressResponseModel> addressResponseModels = new ArrayList<AddressResponseModel>();
+     for (AddressDto addressDto : userAddress.getAddressDtos()) {
+         AddressResponseModel addressResponseModel = new AddressResponseModel();
+         BeanUtils.copyProperties(addressDto, addressResponseModel);
+         addressResponseModels.add(addressResponseModel);
+     }
+        returnValue.setAddressResponseModels(addressResponseModels);
         return returnValue;
 
-    }
+ }
+
 
     public UserDto getUser(String email){
         UserEntity userEntity=userRepository.findByEmail(email);
@@ -95,10 +147,6 @@ public class UserService implements UserDetailsService {
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
-
-
-
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
