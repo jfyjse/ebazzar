@@ -1,15 +1,14 @@
 package com.sayone.ebazzar.service;
 
 import com.sayone.ebazzar.dto.ProductDto;
-import com.sayone.ebazzar.entity.Product;
-import com.sayone.ebazzar.entity.SubCategory;
+import com.sayone.ebazzar.entity.ProductEntity;
+import com.sayone.ebazzar.entity.SubCategoryEntity;
 import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.SubCategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,42 +21,64 @@ public class ProductService {
     @Autowired
     SubCategoryRepository subCategoryRepository;
 
-    public List<Product> getProduct(){
+    public List<ProductEntity> getProduct() {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(Long id){
+    public Optional<ProductEntity> getProductById(String name) {
 
-        return productRepository.findById(id);
+        return productRepository.findByProductName(name);
     }
 
-    public ProductDto addProductt(ProductDto addProduct){
-        Product product=new Product();
+
+    public ProductDto addProduct(ProductDto addProduct) {
+        ProductEntity product = new ProductEntity();
         ProductDto returnValue = new ProductDto();
-        BeanUtils.copyProperties(addProduct,product);
-        product.setSubCategory(subCategoryRepository.findBySubCategoryName(addProduct.getSubCategoryName()));
-        Product saveProduct = productRepository.save(product);
-        BeanUtils.copyProperties(saveProduct,returnValue);
-        return returnValue;
-    }
 
-    public ProductDto updateProduct(ProductDto body){
-        Product updateProduct = new Product();
-        BeanUtils.copyProperties(body,updateProduct);
-        productRepository.save(updateProduct);
-
-        ProductDto returnValue= new ProductDto();
-        BeanUtils.copyProperties(updateProduct,returnValue);
-        return returnValue;
-    }
-
-    public String deleteProduct(Long id){
-        try{
-        productRepository.deleteById(id);
-        return "DELETED";}
-        catch (Exception e){
-            System.out.println(e);
+        SubCategoryEntity getSubcategoryName = subCategoryRepository.findBySubCategoryName(addProduct.getSubCategoryName());
+        if(getSubcategoryName != null) {
+            product.setSubCategory(getSubcategoryName);
+            product.setProductName(addProduct.getProductName());
+            product.setPrice(addProduct.getPrice());
+            product.setQuantity(addProduct.getQuantity());
+            product.setDescription(addProduct.getDescription());
+            ProductEntity saveProduct = productRepository.save(product);
+            BeanUtils.copyProperties(saveProduct, returnValue);
+            returnValue.setSubCategoryName(saveProduct.getSubCategory().getSubCategoryName());
+            return returnValue;
+        } else {
+            product.setSubCategory(subCategoryRepository.findBySubCategoryName("Others"));
+            product.setProductName(addProduct.getProductName());
+            product.setPrice(addProduct.getPrice());
+            product.setQuantity(addProduct.getQuantity());
+            product.setDescription(addProduct.getDescription());
+            ProductEntity saveProduct = productRepository.save(product);
+            BeanUtils.copyProperties(saveProduct, returnValue);
+            returnValue.setSubCategoryName("Others");
+            return returnValue;
         }
-        return "ERROR";
+    }
+
+
+    public ProductDto updateProduct(ProductDto body, Long Id) {
+        ProductEntity product = new ProductEntity();
+        BeanUtils.copyProperties(body, product);
+        ProductEntity productToUpdate = productRepository.findByProductId(Id);
+        productToUpdate.setSubCategory(subCategoryRepository.findBySubCategoryName(body.getSubCategoryName()));
+        productToUpdate.setProductName(body.getProductName());
+        productToUpdate.setDescription(body.getDescription());
+        productToUpdate.setPrice(body.getPrice());
+        productToUpdate.setQuantity(body.getQuantity());
+        productRepository.save(productToUpdate);
+
+
+        ProductDto returnValue = new ProductDto();
+        BeanUtils.copyProperties(productToUpdate, returnValue);
+        returnValue.setSubCategoryName(productToUpdate.getSubCategory().getSubCategoryName());
+        return returnValue;
+    }
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }

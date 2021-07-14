@@ -7,6 +7,7 @@ public class ProductDto implements Serializable {
     private String productName;
     private String description;
     private Integer price;
+    private Integer quantity;
     private String subCategoryName;
 
     public Long getProductId() {
@@ -22,6 +23,7 @@ public class ProductDto implements Serializable {
     }
 
     public void setSubCategoryName(String subCategoryName) {
+
         this.subCategoryName = subCategoryName;
     }
 
@@ -57,5 +59,20 @@ public class ProductDto implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getQuantity() { return quantity; }
+
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", subCategoryName=" + subCategoryName +
+                '}';
     }
 }
