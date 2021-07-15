@@ -5,7 +5,6 @@ import java.util.List;
 public class UserUpdateRequestModel {
     private String firstName;
     private String lastName;
-    private String email;
     private int phoneNumber;
 
     public String getFirstName() {
@@ -24,13 +23,6 @@ public class UserUpdateRequestModel {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public int getPhoneNumber() {
         return phoneNumber;

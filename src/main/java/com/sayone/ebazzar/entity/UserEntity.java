@@ -1,7 +1,11 @@
 package com.sayone.ebazzar.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -36,6 +40,12 @@ public class UserEntity implements Serializable {
 
     @Column(nullable = false,length = 50)
     private String userType;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
 
 
     @OneToMany(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)

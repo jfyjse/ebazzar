@@ -1,5 +1,6 @@
 package com.sayone.ebazzar;
 
+import com.sayone.ebazzar.security.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +22,11 @@ public class EbazzarApplication {
 	public  SpringApplicationContext springApplicationContext(){
 		return new SpringApplicationContext();
 	}
+
+	@Bean(name = "AppProperties")
+	public AppProperties getProperties(){
+		return new AppProperties();
+	}
+
 
 }

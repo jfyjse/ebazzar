@@ -1,8 +1,12 @@
 package com.sayone.ebazzar.entity;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="address")
@@ -38,6 +42,12 @@ public class AddressEntity implements Serializable {
 
     @Column(nullable = false,length = 20)
     private String type;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
 
 
     public Long getAddressId() {
