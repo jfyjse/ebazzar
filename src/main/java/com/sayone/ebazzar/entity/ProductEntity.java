@@ -14,19 +14,25 @@ public class ProductEntity implements Serializable {
     private String description;
     @Column(nullable = false)
     private Integer price;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private  CartEntity cartEntity;
+    private Integer quantity;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(String productName, String description, Integer price,CartEntity cartEntity) {
+    public ProductEntity(String productName, Integer quantity,String description,
+                         Integer price) {
         this.productName = productName;
         this.description = description;
-        this.cartEntity = cartEntity;
         this.price = price;
+        this.quantity = quantity;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Long getProductId() {

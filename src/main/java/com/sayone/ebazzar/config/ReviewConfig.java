@@ -1,13 +1,7 @@
 package com.sayone.ebazzar.config;
 
-import com.sayone.ebazzar.entity.AddressEntity;
-import com.sayone.ebazzar.entity.CartEntity;
-import com.sayone.ebazzar.entity.ProductEntity;
-import com.sayone.ebazzar.entity.UserEntity;
-import com.sayone.ebazzar.repository.AddressRepository;
-import com.sayone.ebazzar.repository.CartRepository;
-import com.sayone.ebazzar.repository.ProductRepository;
-import com.sayone.ebazzar.repository.UserRepository;
+import com.sayone.ebazzar.entity.*;
+import com.sayone.ebazzar.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +14,8 @@ public class ReviewConfig {
     CommandLineRunner commandLineRunner1(AddressRepository addressRepository,
                                          UserRepository userRepository,
                                          ProductRepository productRepository,
-                                         CartRepository cartRepository){
+                                         CartRepository cartRepository,
+                                         CartItemRepository cartItemRepository){
         return args -> {
 
             UserEntity userEntity = new UserEntity("Merry","Joseph",
@@ -39,16 +34,18 @@ public class ReviewConfig {
             addressRepository.saveAll(List.of(addressEntity,addressEntity1,addressEntity2,addressEntity3,addressEntity4));
 
 
-            CartEntity cartEntity = new CartEntity(3000,userEntity,"open");
-            CartEntity cartEntity1 = new CartEntity(5555,userEntity,"open");
+            CartEntity cartEntity = new CartEntity(userEntity,"open");
+            CartEntity cartEntity1 = new CartEntity(userEntity,"open");
             cartRepository.saveAll(List.of(cartEntity,cartEntity1));
 
-            ProductEntity productEntity = new ProductEntity("Soap","Lux Body Wash",40,cartEntity);
-            ProductEntity productEntity1 = new ProductEntity("Mobile","Redmi",40000,cartEntity);
-            ProductEntity productEntity2 = new ProductEntity("Laptop","HP",50000,cartEntity1);
+            ProductEntity productEntity = new ProductEntity("Soap",150,"Lux Body Wash",40);
+            ProductEntity productEntity1 = new ProductEntity("Mobile",50,"Redmi",40000);
+            ProductEntity productEntity2 = new ProductEntity("Laptop",30,"HP",50000);
             productRepository.saveAll(List.of(productEntity,productEntity1,productEntity2));
 
-
+            CartItemEntity cartItemEntity = new CartItemEntity(productEntity,10,cartEntity);
+            CartItemEntity cartItemEntity1 = new CartItemEntity(productEntity1,1,cartEntity);
+            cartItemRepository.saveAll(List.of(cartItemEntity,cartItemEntity1));
 
 
 

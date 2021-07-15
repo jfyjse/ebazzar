@@ -1,6 +1,7 @@
 package com.sayone.ebazzar.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class AddressEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
+    @JsonIgnore
     private UserEntity user;
 
     public AddressEntity() {

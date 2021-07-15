@@ -1,15 +1,19 @@
 package com.sayone.ebazzar.controller;
 
 import com.sayone.ebazzar.common.RestResources;
-import com.sayone.ebazzar.dto.ProductDto;
 import com.sayone.ebazzar.dto.ReviewDto;
-import com.sayone.ebazzar.dto.UserDto;
+import com.sayone.ebazzar.entity.ReviewEntity;
+import com.sayone.ebazzar.exception.CustomException;
+import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.model.request.ReviewRequestModel;
 import com.sayone.ebazzar.service.ReviewService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(RestResources.REVIEW_ROOT)
@@ -20,54 +24,46 @@ public class ReviewController {
 
    // http://localhost:8080/reviews
     @PostMapping
-    public ReviewDto createReview(@RequestBody ReviewRequestModel reviewRequestModel) {
+    public ResponseEntity<ReviewEntity> createReview(@RequestBody ReviewRequestModel reviewRequestModel) throws Exception {
 
-        if (reviewRequestModel.getProductId() == null)
-            throw new NullPointerException("Please specify the product for which review is to be added");
+        if (reviewRequestModel.getProductId() == null || reviewRequestModel.getUserId() == null)
+            throw new CustomException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-        if (reviewRequestModel.getUserId() == null)
-            throw new NullPointerException("Please specify the user who is adding the review");
-
-        ProductDto productDto = reviewService.getProductById(reviewRequestModel.getProductId());
-        UserDto userDto = reviewService.getUserById(reviewRequestModel.getUserId());
-
-        ReviewDto reviewDto = new ReviewDto();
-        BeanUtils.copyProperties(reviewRequestModel, reviewDto);
-
-        reviewDto.setUserDto(userDto);
-        reviewDto.setProductDto(productDto);
-
-        ReviewDto returnValue = reviewService.createReview(reviewDto);
-
-        return returnValue;
-
-
+        return new ResponseEntity(reviewService.createReview(reviewRequestModel),HttpStatus.CREATED);
     }
 
    // http://localhost:8080/reviews/update/1
     @PutMapping(path = RestResources.UPDATE_RATING_BY_ID)
-    public ReviewDto updateRating(@PathVariable Long reviewId,
+    public ResponseEntity<ReviewEntity> updateRating(@PathVariable Long reviewId,
                                   @RequestBody ReviewRequestModel reviewRequestModel) {
 
         ReviewDto reviewDto = new ReviewDto();
         BeanUtils.copyProperties(reviewRequestModel,reviewDto);
-        ReviewDto returnValue = reviewService.updateReview(reviewId,reviewDto);
-        return returnValue;
+        return new ResponseEntity<>(reviewService.updateReview(reviewId,reviewDto),HttpStatus.OK);
     }
 
     // http://localhost:8080/reviews/1
     @GetMapping(path = RestResources.GET_RATING_PID)
-    public ReviewDto getRatingUsingPid(@PathVariable Long productId){
+    public ResponseEntity<List<ReviewEntity>> getRatingUsingPid(@PathVariable Long pid){
 
-        return null;
+       List<ReviewEntity> reviewEntityList = reviewService.findRatingByProductId(pid);
+       if(reviewEntityList.isEmpty()){
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       }
+       else
+       {
+           return new ResponseEntity<>(reviewEntityList,HttpStatus.OK);
+       }
     }
 
     // http://localhost:8080/reviews/delete?pid=1&uid=2
     @DeleteMapping(path = RestResources.DELETE_REVIEW)
-    public ReviewDto deleteRating(@RequestParam(value = "pid") Long productId,
+    public ResponseEntity<?> deleteRating(@RequestParam(value = "pid") Long productId,
                                   @RequestParam(value = "uid") Long userId) {
 
-        return null;
+        reviewService.deleteReview(productId,userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 

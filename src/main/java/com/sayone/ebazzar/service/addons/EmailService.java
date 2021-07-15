@@ -23,9 +23,9 @@ public class EmailService {
         String toAddress = orderEntity.getCartEntity().getUserEntity().getEmail();
         String fromAddress = "merryjoseph00@gmail.com";
         String senderName = "E-BAZZAR";
-        String subject = "You Order is Confirmed";
+        String subject = "Your Order is [[status]]";
         String content = "Dear [[name]],<br>"
-                + " <b>Your Order is Confirmed.</b><br>"
+                + " <b>Your Order is [[status]].</b><br>"
                 + "Please Find below the details :<br>"
                 + "<p>Order Id :</p>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">[[orderId]]</a></h3>"
@@ -39,8 +39,11 @@ public class EmailService {
 
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
+        subject = subject.replace("[[status]]", orderEntity.getOrderStatus());
         helper.setSubject(subject);
 
+
+        content = content.replace("[[status]]", orderEntity.getOrderStatus());
         content = content.replace("[[name]]", orderEntity.getCartEntity().getUserEntity().getFirstName()+" "
                                                             +orderEntity.getCartEntity().getUserEntity().getLastName());
         String verifyURL = url + "/orders/" + orderEntity.getOrderId().toString();

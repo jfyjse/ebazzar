@@ -1,7 +1,11 @@
 package com.sayone.ebazzar.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
@@ -11,11 +15,17 @@ public class OrderEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
     @Column(nullable = false, length = 120)
     private String orderStatus;
 
     @Column(nullable = false)
-    private int orderAmount;
+    private double orderAmount;
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "billing_address")
@@ -58,11 +68,11 @@ public class OrderEntity implements Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public int getOrderAmount() {
+    public double getOrderAmount() {
         return orderAmount;
     }
 
-    public void setOrderAmount(int orderAmount) {
+    public void setOrderAmount(double orderAmount) {
         this.orderAmount = orderAmount;
     }
 
@@ -93,7 +103,7 @@ public class OrderEntity implements Serializable {
     @Override
     public String toString() {
         return "OrderEntity{" + "orderId=" + orderId + ", orderStatus='" + orderStatus +
-                '\'' + ", orderAmount=" + orderAmount + ", billingAddress=" + billingAddress +
+                ", orderAmount=" + orderAmount + ", billingAddress=" + billingAddress +
                 ", shippingAddress=" + shippingAddress + ", cartEntity=" + cartEntity +'}';
     }
 }
