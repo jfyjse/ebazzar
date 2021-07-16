@@ -13,7 +13,7 @@ public interface RestResources {
     String CUSTOMER_GET_ME = "/{id}";
 
     /*
-     * API Endpoints for Product related operations
+     * API Endpoints for ProductEntity related operations
      * */
 
     String PRODUCT_ROOT = "/property";

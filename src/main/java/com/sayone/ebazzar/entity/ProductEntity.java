@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Product implements Serializable {
+public class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
@@ -19,6 +19,15 @@ public class Product implements Serializable {
 
     public SubCategory getSubCategory() {
         return subCategory;
+    }
+    private Integer quantity;
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public void setSubCategory(SubCategory subCategory) {
@@ -62,5 +71,15 @@ public class Product implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public ProductEntity() {
+    }
+
+    public ProductEntity(String productName, Integer price, String description, Integer quantity) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
     }
 }

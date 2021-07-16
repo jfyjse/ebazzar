@@ -20,24 +20,24 @@ public class SubCategory implements Serializable {
         if (this == o) return true;
         if (!(o instanceof SubCategory)) return false;
         SubCategory that = (SubCategory) o;
-        return Objects.equals(subCategoryId, that.subCategoryId) && Objects.equals(subCategoryName, that.subCategoryName) && Objects.equals(products, that.products);
+        return Objects.equals(subCategoryId, that.subCategoryId) && Objects.equals(subCategoryName, that.subCategoryName) && Objects.equals(productEntities, that.productEntities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(subCategoryId, subCategoryName, products);
+        return Objects.hash(subCategoryId, subCategoryName, productEntities);
     }
 
-    @OneToMany(targetEntity =Product.class,mappedBy = "subCategory",cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = ProductEntity.class,mappedBy = "subCategory",cascade = CascadeType.ALL)
 //    @JoinColumn(name="sub_id",referencedColumnName ="subCategoryId" )
-    public List<Product> products = new ArrayList<Product>();
+    public List<ProductEntity> productEntities = new ArrayList<ProductEntity>();
 
-    public List<Product> getProducts() {
-        return products;
+    public List<ProductEntity> getProducts() {
+        return productEntities;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProducts(List<ProductEntity> productEntities) {
+        this.productEntities = productEntities;
     }
 
     public SubCategory(){

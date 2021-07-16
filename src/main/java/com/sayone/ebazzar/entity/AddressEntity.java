@@ -86,4 +86,13 @@ public class AddressEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
+    public AddressEntity(String lane, String street, String city, String zip, String type, UserEntity user) {
+        this.lane = lane;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+        this.type = type;
+        this.user = user;
+    }
 }

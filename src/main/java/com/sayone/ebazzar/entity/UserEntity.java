@@ -69,4 +69,13 @@ public class UserEntity {
     public void setAddress(AddressEntity address) {
         this.address = address;
     }
+
+    public UserEntity(String firstName, String lastName, String email, String password, int phoneNumber, String userType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.userType = userType;
+    }
 }
