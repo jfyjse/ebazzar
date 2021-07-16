@@ -75,7 +75,6 @@ public class UserService implements UserDetailsService {
             BeanUtils.copyProperties(addressEntity,addressDto);
             addressDtos.add(addressDto);
         }
-        System.out.println("1"+ returnValue.getAddressResponseModels());                //
 
         UserDto userDto=new UserDto();
         BeanUtils.copyProperties(storedUserDetails,userDto);
@@ -89,9 +88,9 @@ public class UserService implements UserDetailsService {
             BeanUtils.copyProperties(addressDto, addressResponseModel);
             addressResponseModels.add(addressResponseModel);
         }
-        System.out.println("2"+addressResponseModels);            //
+
+
         returnValue.setAddressResponseModels(addressResponseModels);
-        System.out.println("3"+returnValue.getAddressResponseModels());            //
         return returnValue;
 
     }
