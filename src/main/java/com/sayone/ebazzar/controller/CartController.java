@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(name = "cart")
+@RequestMapping("/cart")
 public class CartController {
     @Autowired
     CartService cartService;
@@ -21,6 +23,24 @@ public class CartController {
         CartEntity cartEntity = cartService.addCartItem(userId,productId,quantity);
         System.out.println("2");
         return new ResponseEntity<>(cartEntity, HttpStatus.CREATED);
+
+    }
+
+    @GetMapping
+    public List<CartEntity> getCartItems(){
+
+        return null;
+    }
+
+    @DeleteMapping
+    public CartEntity deleteProductFromCart(){
+        return null;
+    }
+
+    @DeleteMapping(value = "/delete/{uid}")
+    public void deleteEntireCart(@PathVariable(value = "uid") Long userId){
+         cartService.deleteCart(userId);
+
 
     }
 

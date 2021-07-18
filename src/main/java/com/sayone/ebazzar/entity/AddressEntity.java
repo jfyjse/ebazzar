@@ -31,6 +31,9 @@ public class AddressEntity {
     @JoinColumn(name="userId")
     private UserEntity user;
 
+    public AddressEntity() {
+    }
+
     public Long getAddressId() {
         return addressId;
     }

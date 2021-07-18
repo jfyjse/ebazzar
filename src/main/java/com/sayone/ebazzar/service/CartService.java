@@ -23,9 +23,15 @@ public class CartService {
     @Autowired
     CartRepository cartRepository;
     public CartEntity addCartItem(Long userId, Long productId, Integer quantity) {
+        System.out.println("start");
 
         CartEntity cartEntity = cartRepository.findByUserId(userId,"open");
         System.out.println("3");
+
+        //CartEntity productIdInCart = cartItemRepository.findProductExist(productId);
+
+
+
         if(cartEntity == null){
             System.out.println("4");
             cartEntity.setCartStatus("open");
@@ -52,5 +58,10 @@ public class CartService {
         }
 
 
+    }
+
+    public void deleteCart(Long userId) {
+
+        cartRepository.deleteEntireCart(userId);
     }
 }

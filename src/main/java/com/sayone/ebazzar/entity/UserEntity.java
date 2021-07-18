@@ -21,6 +21,10 @@ public class UserEntity {
     private String userType;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private AddressEntity address;
+
+    public UserEntity() {
+    }
+
     public long getId() {
         return userId;
     }
