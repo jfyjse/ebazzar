@@ -1,26 +1,38 @@
 package com.sayone.ebazzar.service;
 
+import com.sayone.ebazzar.SpringApplicationContext;
 import com.sayone.ebazzar.dto.AddressDto;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.AddressEntity;
+import com.sayone.ebazzar.entity.PasswordResetTokenEntity;
 import com.sayone.ebazzar.entity.UserEntity;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
+import com.sayone.ebazzar.model.request.PasswordResetRequestModel;
+import com.sayone.ebazzar.model.request.RequestOperationStatus;
 import com.sayone.ebazzar.model.request.UserDetailsRequestModel;
 import com.sayone.ebazzar.model.request.UserUpdateRequestModel;
 import com.sayone.ebazzar.model.response.AddressResponseModel;
+import com.sayone.ebazzar.model.response.OperationStatusModel;
 import com.sayone.ebazzar.model.response.UserRestModel;
 import com.sayone.ebazzar.model.response.UserUpdateResponseModel;
+import com.sayone.ebazzar.repository.PasswordResetTokenRepository;
 import com.sayone.ebazzar.repository.UserRepository;
+import com.sayone.ebazzar.security.AppProperties;
+import com.sayone.ebazzar.utilities.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +43,16 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
 
     @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
+
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    @Autowired
+    EmailService emailService;
+
 
 
     public UserRestModel createUser(UserDetailsRequestModel userDetailsRequestModel){
@@ -144,6 +165,129 @@ public class UserService implements UserDetailsService {
         return "user deleted";
 
     }
+
+    public String logout(String email,String authHeader){
+
+        UserEntity userEntity=userRepository.findByEmail(email);
+        if(userEntity == null) throw new UsernameNotFoundException(email);
+
+        String reset="Bearer ";
+        String replacement="try";
+
+         authHeader=authHeader.replace(reset,replacement);
+
+        return "Token deleted";
+    }
+
+
+    public boolean requestPasswordReset(UserDto userDto,String url) throws MessagingException,UnsupportedEncodingException{
+
+        boolean returnValue = false;
+        UserEntity userEntity = new UserEntity();
+
+
+        BeanUtils.copyProperties(userDto,userEntity);
+
+        String token=new Utils().generatePasswordResetToken(userEntity.getEmail());
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUserDetails(userEntity);
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        triggerMailForPasswordReset(passwordResetTokenEntity,userEntity,url);
+        returnValue=true;
+
+        return  returnValue;
+
+    }
+
+    public void triggerMailForPasswordReset(
+            PasswordResetTokenEntity passwordResetTokenEntity,
+            UserEntity userEntity,
+            String url)
+            throws MessagingException, UnsupportedEncodingException {
+
+        emailService.sendSimpleEmailForPasswordReset(passwordResetTokenEntity,userEntity,url);
+
+    }
+
+
+
+    public boolean verifyEmailToken(String token) {
+        boolean returnValue = false;
+        UserEntity userEntity = userRepository.findUserByEmailVerificationToken(token);
+
+        if (userEntity != null) {
+            boolean hastokenExpired = Utils.hasTokenExpired(token);
+            if (!hastokenExpired) {
+                userEntity.setEmailVerificationToken(null);
+                userEntity.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(userEntity);
+                returnValue = true;
+            }
+        }
+        return returnValue;
+    }
+
+
+
+    public boolean verifyPasswordResetToken(String email, String token, PasswordResetRequestModel passwordResetRequestModel){
+
+        boolean returnValue = false;
+
+        UserEntity userEntity=userRepository.findByEmail(email);
+
+        String encryptedNewPassword=bCryptPasswordEncoder.encode(passwordResetRequestModel.getNewPassword());
+
+        if(bCryptPasswordEncoder.matches(
+                passwordResetRequestModel.getCurrentPassword(),
+                userEntity.getEncryptedPassword())) {
+            System.out.println("Matched");
+            boolean hastokenExpired = Utils.hasTokenExpired(token);
+
+            if (!hastokenExpired) {
+                System.out.println("Not Expired");
+                userEntity.setEncryptedPassword(encryptedNewPassword);
+                userRepository.save(userEntity);
+                returnValue = true;
+            }
+        }
+        return returnValue;
+
+    }
+
+
+
+
+
+//    public String updatePassword(PasswordResetRequestModel passwordResetRequestModel,String email){
+//
+//        UserEntity userEntity=userRepository.findByEmail(email);
+//
+//      //  userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//
+//
+//        String currentEncryptedPassword=new UserEntity();
+//        userEntity.getEncryptedPassword();
+//
+//        String encryptedNewPassword=bCryptPasswordEncoder.encode(passwordResetRequestModel.getNewPassword());
+//
+//        if(bCryptPasswordEncoder.matches(
+//                passwordResetRequestModel.getCurrentPassword(),
+//                userEntity.getEncryptedPassword())) {
+//                System.out.println("Matched");
+//                userEntity.setEncryptedPassword(encryptedNewPassword);
+//                userRepository.save(userEntity);
+//                operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.name());
+//
+//        }
+//
+//        return operationStatusModel;
+//
+//    }
+//
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -13,6 +13,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.Assert;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -72,4 +73,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         res.addHeader("Email",userDto.getEmail());
 
     }
+
+
+
 }

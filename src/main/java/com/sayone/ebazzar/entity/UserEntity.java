@@ -41,6 +41,12 @@ public class UserEntity implements Serializable {
     @Column(nullable = false,length = 50)
     private String userType;
 
+    private String emailVerificationToken;
+
+    @Column
+    private Boolean emailVerificationStatus=false;
+
+
     @UpdateTimestamp
     private LocalDateTime updatedTime;
     @CreationTimestamp
@@ -114,5 +120,21 @@ public class UserEntity implements Serializable {
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public Boolean getEmailVerificationStatus() {
+        return emailVerificationStatus;
+    }
+
+    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+        this.emailVerificationStatus = emailVerificationStatus;
     }
 }

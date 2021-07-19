@@ -9,5 +9,11 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     UserEntity findByEmail(String email);
 
-    UserEntity deleteByEmail(String email);
+    UserEntity findUserByEmailVerificationToken(String token);
+
+
+
+
+
+
 }
