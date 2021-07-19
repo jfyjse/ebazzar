@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-
     public UserRestModel createUser(UserDetailsRequestModel userDetailsRequestModel){
         UserRestModel returnValue = new UserRestModel();
         UserDto user= new UserDto();
@@ -66,34 +65,23 @@ public class UserService implements UserDetailsService {
             BeanUtils.copyProperties(addressDto,addressEntity);
             addressEntities.add(addressEntity);
         }
-
         userEntity.setAddress(addressEntities);
         UserEntity storedUserDetails=userRepository.save(userEntity);
-        for (int i =0;i<storedUserDetails.getAddress().size();i++){
-            AddressEntity addressEntity = storedUserDetails.getAddress().get(i);
-            AddressDto addressDto = new AddressDto();
-            BeanUtils.copyProperties(addressEntity,addressDto);
-            addressDtos.add(addressDto);
-        }
-
-        UserDto userDto=new UserDto();
-        BeanUtils.copyProperties(storedUserDetails,userDto);
-        BeanUtils.copyProperties(userDto,returnValue);
-        userDto.setAddressDtos(addressDtos);
         List<AddressResponseModel> addressResponseModels = new ArrayList<AddressResponseModel>();
-
-        for (AddressDto addressDto : userDto.getAddressDtos())
-        {
-            AddressResponseModel addressResponseModel = new AddressResponseModel();
-            BeanUtils.copyProperties(addressDto, addressResponseModel);
+        for (int i =0;i<storedUserDetails.getAddress().size();i++){
+            AddressResponseModel addressResponseModel=new AddressResponseModel();
+            AddressEntity addressEntity = storedUserDetails.getAddress().get(i);
+            BeanUtils.copyProperties(addressEntity,addressResponseModel);
             addressResponseModels.add(addressResponseModel);
+
         }
-
-
         returnValue.setAddressResponseModels(addressResponseModels);
-        return returnValue;
+        BeanUtils.copyProperties(storedUserDetails,returnValue);
 
+        return returnValue;
     }
+
+
 
     public UserUpdateResponseModel updateUser(UserUpdateRequestModel updateRequestModel, String email){
         UserUpdateResponseModel returnValue = new UserUpdateResponseModel();

@@ -1,5 +1,7 @@
 package com.sayone.ebazzar.model.response;
 
+import com.sayone.ebazzar.dto.AddressDto;
+
 import java.util.List;
 
 public class  UserRestModel {
@@ -33,11 +35,9 @@ public class  UserRestModel {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public List<AddressResponseModel> getAddressResponseModels() {
+        public List<AddressResponseModel> getAddressResponseModels() {
         return addressResponseModels;
     }
-
     public void setAddressResponseModels(List<AddressResponseModel> addressResponseModels) {
         this.addressResponseModels = addressResponseModels;
     }
