@@ -13,10 +13,10 @@ public interface CartRepository extends JpaRepository<CartEntity,Long> {
     CartEntity findByUserId(Long userId, String status);
 //    @Query(value = "select * from cart c where c.product_id = ?1",nativeQuery = true)
 //    CartEntity findProductExist(Long productId);
-    @Transactional
-    @Modifying
-    @Query(value = "Delete from cart c where c.user_id= ?1",nativeQuery = true)
-    void deleteEntireCart(Long userId);
+
+
+    @Query(value = "select cart_id from cart c where c.user_id = ?1",nativeQuery = true)
+    CartEntity getCartId(Long userId);
 
 }
 

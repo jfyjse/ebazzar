@@ -20,7 +20,7 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @OneToMany(targetEntity = CartItemEntity.class,cascade = CascadeType.MERGE)
+    @OneToMany(targetEntity = CartItemEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
     private List<CartItemEntity> cartItemEntityList;
 
@@ -32,6 +32,8 @@ public class CartEntity {
         this.cartStatus = cartStatus;
 
     }
+
+    public long getUserId(){return userEntity.getId();}
 
     public long getCartId() {
         return cartId;

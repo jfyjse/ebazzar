@@ -1,7 +1,8 @@
 package com.sayone.ebazzar.controller;
 
-import com.sayone.ebazzar.dto.CartDto;
 import com.sayone.ebazzar.entity.CartEntity;
+import com.sayone.ebazzar.entity.CartItemEntity;
+import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,17 +33,16 @@ public class CartController {
         return null;
     }
 
-    @DeleteMapping
-    public CartEntity deleteProductFromCart(){
-        return null;
+    @DeleteMapping(value = "/delete/{pid}")
+    public void deleteProductFromCart(@PathVariable(value = "pid") Long productId){
+        cartService.deleteProductFromCart(productId);
     }
 
-    @DeleteMapping(value = "/delete/{uid}")
-    public void deleteEntireCart(@PathVariable(value = "uid") Long userId){
-         cartService.deleteCart(userId);
-
-
+    @DeleteMapping(value = "/delete/all/{cid}")
+    public void deleteAllProductFromCart(@PathVariable(value = "cid") Long cartId){
+        cartService.deleteAllProductsFromCart(cartId);
     }
+
 
     }
 

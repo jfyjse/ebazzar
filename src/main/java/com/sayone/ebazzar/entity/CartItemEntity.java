@@ -13,7 +13,7 @@ public class CartItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartItemId;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id",
             referencedColumnName = "productId")
     private ProductEntity productEntity;
@@ -21,7 +21,7 @@ public class CartItemEntity {
     private int quantity;
     private double totalPrice;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     @JsonIgnore
     private CartEntity cartEntity;

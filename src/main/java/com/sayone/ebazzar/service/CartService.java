@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.service;
 
-import com.sayone.ebazzar.dto.CartDto;
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
@@ -60,8 +59,12 @@ public class CartService {
 
     }
 
-    public void deleteCart(Long userId) {
+    public void deleteProductFromCart(Long productId) {
+        cartItemRepository.deleteProduct(productId);
 
-        cartRepository.deleteEntireCart(userId);
+    }
+
+    public void deleteAllProductsFromCart(Long cartId){
+        cartItemRepository.deleteAllProducts(cartId);
     }
 }
