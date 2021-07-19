@@ -167,22 +167,7 @@ public class UserController {
     }
 
 
-    @DeleteMapping(path ="logout/{email}")
-    public ResponseEntity<?> logout(@PathVariable String email, @RequestHeader (name="Authorization") String authHeader ){
-        try {
-
-            userService.logout(email,authHeader);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        catch (Exception e){
-            e.printStackTrace();
-            throw new RequestException(ErrorMessages.COULD_NOT_DELETE_RECORD.getErrorMessages());
-
-        }
-
-    }
-
+  
 
 
 
