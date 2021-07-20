@@ -1,5 +1,7 @@
 package com.sayone.ebazzar.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","address"})
 @Table(name = "user")
 public class UserEntity implements Serializable {
 
@@ -24,6 +27,7 @@ public class UserEntity implements Serializable {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -46,13 +50,10 @@ public class UserEntity implements Serializable {
     @Column
     private Boolean emailVerificationStatus=false;
 
-
     @UpdateTimestamp
     private LocalDateTime updatedTime;
     @CreationTimestamp
     private LocalDateTime createTime;
-
-
 
     @OneToMany(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(
@@ -61,7 +62,25 @@ public class UserEntity implements Serializable {
     )
     private List<AddressEntity> address;
 
+
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String firstName, String lastName, String email,
+                      String password, int phoneNumber, String userType) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.userType = userType;
+
+    }
+
+
     public long getUserId() {
+
         return userId;
     }
 

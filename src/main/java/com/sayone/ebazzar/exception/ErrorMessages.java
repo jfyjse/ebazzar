@@ -1,32 +1,31 @@
 package com.sayone.ebazzar.exception;
 
 public enum ErrorMessages {
+    MISSING_REQUIRED_FIELD("MISSING REQUIRED FIELD"),
+    CART_ALREADY_CHECKED_OUT("record already exists.Please debug."),
+    OUT_OF_STOCK("required quantity not available. Please update Cart Quantity/ Please wait for the seller to add products"),
+    INTERNAL_SERVER_ERROR("internal error.Please debug."),
+    NO_RECORD_FOUND("no record found.Please debug."),
+    NO_ORDER_FOUND("There are no orders for this user"),
+    COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
+    COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
+    RECORD_ALREADY_EXISTS("Record already exists");
 
-    MISSING_REQUIRED_FIELD("Missing Required field. Please check documentation for required fields"),
+    private String errorMessage;
 
-    RECORD_ALREADY_EXISTS("Record already exists"),
+    ErrorMessages(String errorMessage){
+        this.errorMessage=errorMessage;
+    }
 
-    NO_RECORD_FOUND("Record with provided id is not found"),
-
-    COULD_NOT_DELETE_RECORD("Could not delete record"),
-
-    INTERNAL_SERVER_ERROR("Internal server error"),
-
-
-    COULD_NOT_UPDATE_RECORD("Could not update record");
-
-    private String errorMessages;
-
-
-    ErrorMessages(String errorMessages) {
-        this.errorMessages = errorMessages;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     public String getErrorMessages() {
-        return errorMessages;
+        return errorMessage;
     }
 
-    public void setErrorMessages(String errorMessages) {
-        this.errorMessages = errorMessages;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

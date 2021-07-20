@@ -1,19 +1,37 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table
+@Table(name = "cart")
 public class CartEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cartId;
-    private long userId;
-    private long productId;
-    private int totalAmount;
+
+    private double totalAmount;
+
+    private String cartStatus;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @OneToMany(targetEntity = CartItemEntity.class,cascade = CascadeType.MERGE)
+    @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
+    private List<CartItemEntity> cartItemEntityList;
+
+    public CartEntity() {
+    }
+
+    public CartEntity(UserEntity userEntity, String cartStatus) {
+        this.userEntity = userEntity;
+        this.cartStatus = cartStatus;
+
+    }
 
     public long getCartId() {
         return cartId;
@@ -23,29 +41,40 @@ public class CartEntity {
         this.cartId = cartId;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getCartStatus() {
+        return cartStatus;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
     }
 
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
-
-    public int getTotalAmount() {
+    public double getTotalAmount()
+    {
+        for(CartItemEntity cartItemEntity:cartItemEntityList){
+            totalAmount +=  cartItemEntity.getTotalPrice();
+        }
         return totalAmount;
     }
 
-    public void setTotalAmount(int totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public List<CartItemEntity> getCartItemEntityList() {
+        return cartItemEntityList;
+    }
+
+    public void setCartItemEntityList(List<CartItemEntity> cartItemEntityList) {
+        this.cartItemEntityList = cartItemEntityList;
+
+    }
 }

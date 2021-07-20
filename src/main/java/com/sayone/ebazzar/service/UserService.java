@@ -15,6 +15,7 @@ import com.sayone.ebazzar.model.response.UserRestModel;
 import com.sayone.ebazzar.model.response.UserUpdateResponseModel;
 import com.sayone.ebazzar.repository.PasswordResetTokenRepository;
 import com.sayone.ebazzar.repository.UserRepository;
+import com.sayone.ebazzar.service.EmailService;
 import com.sayone.ebazzar.utilities.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

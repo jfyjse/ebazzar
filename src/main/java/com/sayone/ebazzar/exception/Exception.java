@@ -3,7 +3,7 @@ package com.sayone.ebazzar.exception;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
-public class Exception {
+public class Exception extends  Throwable{
 
     private final String message;
     private final Throwable throwable;

@@ -1,13 +1,18 @@
 package com.sayone.ebazzar.entity;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+
+@Table(name = "products")
+
 public class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +25,19 @@ public class ProductEntity implements Serializable {
     @Column(nullable = false)
     private Integer price;
     private Integer quantity;
+
+
+    public ProductEntity() {
+    }
+
+    public ProductEntity(String productName, Integer quantity,String description,
+                         Integer price) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     @UpdateTimestamp
     private LocalDateTime updatedTime;
     @CreationTimestamp
@@ -36,6 +54,7 @@ public class ProductEntity implements Serializable {
     public void setSubCategory(SubCategoryEntity subCategory) {
 
         this.subCategory = subCategory;
+
 
     }
 

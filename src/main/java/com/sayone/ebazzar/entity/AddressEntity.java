@@ -1,6 +1,9 @@
 package com.sayone.ebazzar.entity;
 
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,10 +12,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","user"})
 @Table(name="address")
 public class AddressEntity implements Serializable {
 
     private static final long serialVersionUID= -4988491775034367092L;
+
 
 
     @Id
@@ -48,7 +53,20 @@ public class AddressEntity implements Serializable {
     @CreationTimestamp
     private LocalDateTime createTime;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity user;
 
+    public AddressEntity() {
+    }
+
+    public AddressEntity(String lane, String street, String city, String zip, String type, UserEntity user) {
+        this.lane = lane;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+        this.type = type;
+        this.user = user;
+    }
 
     public Long getAddressId() {
         return addressId;
