@@ -5,7 +5,7 @@ import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.model.request.OrderRequestModel;
 import com.sayone.ebazzar.repository.*;
-import com.sayone.ebazzar.service.addons.EmailService;
+import com.sayone.ebazzar.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;

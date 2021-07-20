@@ -7,10 +7,9 @@ public enum ErrorMessages {
     INTERNAL_SERVER_ERROR("internal error.Please debug."),
     NO_RECORD_FOUND("no record found.Please debug."),
     NO_ORDER_FOUND("There are no orders for this user"),
-    AUTHENTICATION_FAILED("authentication failed.Please debug."),
     COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
-    EMAIL_NOT_VERIFIED("email could not be verified.Please debug.");
+    RECORD_ALREADY_EXISTS("Record already exists");
 
     private String errorMessage;
 
@@ -19,6 +18,10 @@ public enum ErrorMessages {
     }
 
     public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public String getErrorMessages() {
         return errorMessage;
     }
 

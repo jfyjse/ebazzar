@@ -1,18 +1,35 @@
 package com.sayone.ebazzar.entity;
 
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","user"})
 @Table(name="address")
-public class AddressEntity {
+public class AddressEntity implements Serializable {
+
+    private static final long serialVersionUID= -4988491775034367092L;
+
+
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name="address_sequence",
+            sequenceName = "address_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "address_sequence"
+    )
     private Long addressId;
 
 
@@ -31,10 +48,12 @@ public class AddressEntity {
     @Column(nullable = false,length = 20)
     private String type;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
     public AddressEntity() {
@@ -93,15 +112,9 @@ public class AddressEntity {
         return type;
     }
 
+
     public void setType(String type) {
         this.type = type;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
 }

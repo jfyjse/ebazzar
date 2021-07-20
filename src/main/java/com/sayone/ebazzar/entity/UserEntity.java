@@ -1,15 +1,33 @@
 package com.sayone.ebazzar.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","address"})
-@Table(name="user")
-public class UserEntity {
+@Table(name = "user")
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID= 5174137885820647783L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name="user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -21,14 +39,28 @@ public class UserEntity {
     private String password;
     @Column(nullable = false,length = 10)
     private int phoneNumber;
+    @Column
+    private String encryptedPassword;
+
     @Column(nullable = false,length = 50)
     private String userType;
-    @OneToOne(targetEntity = AddressEntity.class,cascade = CascadeType.MERGE)
+
+    private String emailVerificationToken;
+
+    @Column
+    private Boolean emailVerificationStatus=false;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
+    @OneToMany(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(
             name = "user_id",
             referencedColumnName = "userId"
     )
-    private AddressEntity address;
+    private List<AddressEntity> address;
 
 
 
@@ -46,12 +78,16 @@ public class UserEntity {
 
     }
 
-    public long getId() {
+
+    public long getUserId() {
+
         return userId;
     }
-    public void setId(long id) {
-        this.userId = id;
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -88,10 +124,36 @@ public class UserEntity {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-    public AddressEntity getAddress() {
+
+    public List<AddressEntity> getAddress() {
         return address;
     }
-    public void setAddress(AddressEntity address) {
+
+    public void setAddress(List<AddressEntity> address) {
         this.address = address;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public Boolean getEmailVerificationStatus() {
+        return emailVerificationStatus;
+    }
+
+    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+        this.emailVerificationStatus = emailVerificationStatus;
     }
 }
