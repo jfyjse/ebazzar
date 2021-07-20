@@ -1,8 +1,10 @@
 package com.sayone.ebazzar.dto;
 
-import com.sayone.ebazzar.entity.AddressEntity;
 
-public class UserDto {
+import java.io.Serializable;
+import java.util.List;
+
+public class UserDto implements Serializable {
     private long userId;
     private String firstName;
     private String lastName;
@@ -10,7 +12,9 @@ public class UserDto {
     private String password;
     private int phoneNumber;
     private String userType;
-    private AddressEntity address;
+    private List<AddressDto> addressDtos;
+    private String encryptedPassword;
+
 
     private static final long serialVersionUID= -9039122762070330566L;
 
@@ -71,11 +75,19 @@ public class UserDto {
         this.userType = userType;
     }
 
-    public AddressEntity getAddress() {
-        return address;
+    public List<AddressDto> getAddressDtos() {
+        return addressDtos;
     }
 
-    public void setAddress(AddressEntity address) {
-        this.address = address;
+    public void setAddressDtos(List<AddressDto> addressDtos) {
+        this.addressDtos = addressDtos;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 }

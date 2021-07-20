@@ -1,38 +1,47 @@
 package com.sayone.ebazzar.entity;
 
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "review")
-public class ReviewEntity {
+@Table(name = "reviews")
+public class ReviewEntity implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
-    // one review belongs to only one product
-    // one product can have multiple reviews
-//    @ManyToOne
-//    @JoinColumn(name = "product_id", referencedColumnName = "productId")
-//    private ProductEntity productEntity;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "userId")
-//    private UserEntity userEntity;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+
+    @CreationTimestamp
+    private LocalDateTime createTime;
 
     private Integer rating;
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productId")
+    private ProductEntity productEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    private UserEntity userEntity;
+
     public ReviewEntity() {
     }
 
-//    public ReviewEntity(Long reviewId, ProductEntity productEntity, UserEntity userEntity, Integer rating, String description) {
-//        this.reviewId = reviewId;
-//        this.productEntity = productEntity;
-//        this.userEntity = userEntity;
-//        this.rating = rating;
-//        this.description = description;
-//    }
+    public ReviewEntity(ProductEntity productEntity, UserEntity userEntity, Integer rating, String description) {
+        this.productEntity = productEntity;
+        this.userEntity = userEntity;
+        this.rating = rating;
+        this.description = description;
+    }
 
     public Long getReviewId() {
         return reviewId;
@@ -42,21 +51,21 @@ public class ReviewEntity {
         this.reviewId = reviewId;
     }
 
-//    public ProductEntity getProductEntity() {
-//        return productEntity;
-//    }
-//
-//    public void setProductEntity(ProductEntity productEntity) {
-//        this.productEntity = productEntity;
-//    }
-//
-//    public UserEntity getUserEntity() {
-//        return userEntity;
-//    }
-//
-//    public void setUserEntity(UserEntity userEntity) {
-//        this.userEntity = userEntity;
-//    }
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
     public Integer getRating() {
         return rating;
@@ -74,9 +83,5 @@ public class ReviewEntity {
         this.description = description;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Review{" + "reviewId=" + reviewId + ", productEntity=" + productEntity +
-//                ", userEntity=" + userEntity + ", rating=" + rating + ", description='" + description + '\'' + '}';
-//    }
+
 }

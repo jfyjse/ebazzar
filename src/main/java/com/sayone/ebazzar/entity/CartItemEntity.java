@@ -1,8 +1,5 @@
 package com.sayone.ebazzar.entity;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -13,15 +10,19 @@ public class CartItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartItemId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id",
-            referencedColumnName = "productId")
+                referencedColumnName = "productId")
+
     private ProductEntity productEntity;
 
     private int quantity;
     private double totalPrice;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne
+
     @JoinColumn(name = "cart_id")
     @JsonIgnore
     private CartEntity cartEntity;
@@ -72,3 +73,4 @@ public class CartItemEntity {
         return "CartItem [product=" + productEntity + ", quantity=" + quantity + ", totalPrice=" + totalPrice + "]";
     }
 }
+

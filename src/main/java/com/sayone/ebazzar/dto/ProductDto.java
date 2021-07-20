@@ -8,7 +8,9 @@ public class ProductDto implements Serializable {
     private String description;
     private Integer price;
     private Integer quantity;
+
     private String subCategoryName;
+
 
     public Long getProductId() {
         return productId;

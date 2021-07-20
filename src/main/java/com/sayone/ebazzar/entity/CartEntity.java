@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.entity;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,7 +19,8 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @OneToMany(targetEntity = CartItemEntity.class,cascade = CascadeType.ALL)
+
+    @OneToMany(targetEntity = CartItemEntity.class,cascade = CascadeType.MERGE)
     @JoinColumn(name = "cart_id", referencedColumnName = "cartId")
     private List<CartItemEntity> cartItemEntityList;
 
@@ -33,7 +33,6 @@ public class CartEntity {
 
     }
 
-    public long getUserId(){return userEntity.getId();}
 
     public long getCartId() {
         return cartId;
@@ -80,3 +79,4 @@ public class CartEntity {
 
     }
 }
+

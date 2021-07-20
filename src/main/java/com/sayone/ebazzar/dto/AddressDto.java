@@ -1,8 +1,5 @@
 package com.sayone.ebazzar.dto;
 
-import com.sayone.ebazzar.entity.UserEntity;
-
-
 
 public class AddressDto {
 
@@ -10,10 +7,12 @@ public class AddressDto {
 
     private Long addressId;
     private String lane;
+    private  String street;
     private String city;
     private String zip;
     private String type;
-    private UserEntity user;
+
+    private UserDto user;
 
     public Long getAddressId() {
         return addressId;
@@ -55,11 +54,19 @@ public class AddressDto {
         this.type = type;
     }
 
-    public UserEntity getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserDto user) {
         this.user = user;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 }

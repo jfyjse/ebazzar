@@ -1,5 +1,6 @@
 package com.sayone.ebazzar.service;
 
+
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
@@ -21,17 +22,17 @@ public class CartService {
     CartItemRepository cartItemRepository;
     @Autowired
     CartRepository cartRepository;
+
     public CartEntity addCartItem(Long userId, Long productId, Integer quantity) {
         System.out.println("start");
 
-        CartEntity cartEntity = cartRepository.findByUserId(userId,"open");
+        CartEntity cartEntity = cartRepository.findByUserIdCart(userId, "open");
         System.out.println("3");
 
         //CartEntity productIdInCart = cartItemRepository.findProductExist(productId);
 
 
-
-        if(cartEntity == null){
+        if (cartEntity == null) {
             System.out.println("4");
             cartEntity.setCartStatus("open");
             cartEntity.setUserEntity(userRepository.findById(userId).get());
@@ -43,9 +44,7 @@ public class CartService {
             cartItemEntity.setTotalPrice(quantity * productEntity.getPrice());
             cartEntity.setCartItemEntityList(List.of(cartItemEntity));
             return cartRepository.save(cartEntity);
-        }
-        else
-        {
+        } else {
             System.out.println("5");
             CartItemEntity cartItemEntity = new CartItemEntity();
             ProductEntity productEntity = productRepository.findById(productId).get();
@@ -53,7 +52,7 @@ public class CartService {
             cartItemEntity.setQuantity(quantity);
             cartItemEntity.setTotalPrice(quantity * productEntity.getPrice());
             cartEntity.getCartItemEntityList().add(cartItemEntity);
-            return  cartRepository.save(cartEntity);
+            return cartRepository.save(cartEntity);
         }
 
 
@@ -64,7 +63,7 @@ public class CartService {
 
     }
 
-    public void deleteAllProductsFromCart(Long cartId){
+    public void deleteAllProductsFromCart(Long cartId) {
         cartItemRepository.deleteAllProducts(cartId);
     }
 }
