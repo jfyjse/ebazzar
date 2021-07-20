@@ -13,18 +13,12 @@ import com.sayone.ebazzar.model.response.RequestOperationName;
 import com.sayone.ebazzar.model.response.UserRestModel;
 import com.sayone.ebazzar.model.response.UserUpdateResponseModel;
 import com.sayone.ebazzar.service.UserService;
-import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -34,16 +28,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-
-//    @Autowired
-//    private DefaultTokenServices tokenServices;
-//
-//
-//    @Autowired
-//    private TokenStore tokenStore;
-//
-
 
     @PostMapping
     public ResponseEntity<UserRestModel>  createUser(@RequestBody UserDetailsRequestModel userDetails){
