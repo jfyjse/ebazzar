@@ -30,13 +30,7 @@ public class ProductEntity implements Serializable {
     public ProductEntity() {
     }
 
-    public ProductEntity(String productName, Integer quantity,String description,
-                         Integer price) {
-        this.productName = productName;
-        this.description = description;
-        this.price = price;
-        this.quantity = quantity;
-    }
+
 
     @UpdateTimestamp
     private LocalDateTime updatedTime;
@@ -46,6 +40,7 @@ public class ProductEntity implements Serializable {
     @ManyToOne(targetEntity = SubCategoryEntity.class)
     @JoinColumn(name ="subcategory_id")
     public SubCategoryEntity subCategory;
+
 
     public SubCategoryEntity getSubCategory() {
         return subCategory;
@@ -91,6 +86,13 @@ public class ProductEntity implements Serializable {
     }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public ProductEntity(String productName, Integer price, String description, Integer quantity) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+    }
 
 }
 

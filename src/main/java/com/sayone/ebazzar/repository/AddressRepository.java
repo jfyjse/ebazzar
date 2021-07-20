@@ -11,8 +11,4 @@ public interface AddressRepository extends JpaRepository<AddressEntity,Long> {
 
     Optional<AddressEntity> findByAddressId(Long shippingAddress);
 
-
-
-
-
 }
