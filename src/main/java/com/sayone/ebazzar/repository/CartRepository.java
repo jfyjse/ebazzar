@@ -15,4 +15,9 @@ public interface CartRepository extends JpaRepository<CartEntity,Long> {
 
     @Query(value = "select * from cart c where c.user_id = ?1 and c.cart_status = ?2",nativeQuery = true)
     List<CartEntity> findByUserIdAndStatus(Long userId, String status);
+
+    @Query(value = "select * from cart c where c.user_id = ?1 and c.cart_status = ?2",nativeQuery = true)
+    Optional<CartEntity> findByUserId(Long userId,String status);
+
+
 }

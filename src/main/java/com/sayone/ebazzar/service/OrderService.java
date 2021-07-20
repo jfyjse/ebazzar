@@ -66,10 +66,9 @@ public class OrderService {
 
         OrderEntity storedEntity = orderRepository.save(orderEntity);
         for(CartItemEntity cartItemEntity:storedEntity.getCartEntity().getCartItemEntityList()){
-            Optional<ProductEntity> productEntity=productRepository.findByProductId(cartItemEntity.getProductEntity().getProductId());
-            ProductEntity productEntity1 = productEntity.get();
-            productEntity1.setQuantity((productEntity1.getQuantity())-(cartItemEntity.getQuantity()));
-            productRepository.save(productEntity1);
+            ProductEntity productEntity=productRepository.findByProductId(cartItemEntity.getProductEntity().getProductId());
+            productEntity.setQuantity((productEntity.getQuantity())-(cartItemEntity.getQuantity()));
+            productRepository.save(productEntity);
         }
         triggerMailForOrderPlacement(orderEntity,url);
 

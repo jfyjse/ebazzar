@@ -1,10 +1,18 @@
 package com.sayone.ebazzar.entity;
 
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
+
 @Table(name = "products")
+
 public class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,9 +20,12 @@ public class ProductEntity implements Serializable {
     @Column(nullable = false)
     private String productName;
     private String description;
+
+
     @Column(nullable = false)
     private Integer price;
     private Integer quantity;
+
 
     public ProductEntity() {
     }
@@ -27,12 +38,24 @@ public class ProductEntity implements Serializable {
         this.quantity = quantity;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
+    @ManyToOne(targetEntity = SubCategoryEntity.class)
+    @JoinColumn(name ="subcategory_id")
+    public SubCategoryEntity subCategory;
+
+    public SubCategoryEntity getSubCategory() {
+        return subCategory;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setSubCategory(SubCategoryEntity subCategory) {
+
+        this.subCategory = subCategory;
+
+
     }
 
     public Long getProductId() {
@@ -66,4 +89,8 @@ public class ProductEntity implements Serializable {
     public void setPrice(Integer price) {
         this.price = price;
     }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
 }
+
