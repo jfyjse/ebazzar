@@ -1,7 +1,5 @@
 package com.sayone.ebazzar.entity;
 
-import jdk.dynalink.linker.LinkerServices;
-
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -18,15 +16,15 @@ public class Category implements Serializable {
     @Column(nullable = false,length = 100)
     private String categoryName;
 
-    @OneToMany(targetEntity = SubCategory.class,cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = SubCategoryEntity.class,cascade = CascadeType.ALL)
     @JoinColumn(name="category_id",referencedColumnName = "categoryId")
-    private List<SubCategory> subCategories = new ArrayList<SubCategory>();
+    private List<SubCategoryEntity> subCategories = new ArrayList<SubCategoryEntity>();
 
-    public List<SubCategory> getSubCategories() {
+    public List<SubCategoryEntity> getSubCategories() {
         return subCategories;
     }
 
-    public void setSubCategories(List<SubCategory> subCategories) {
+    public void setSubCategories(List<SubCategoryEntity> subCategories) {
         this.subCategories = subCategories;
     }
 
