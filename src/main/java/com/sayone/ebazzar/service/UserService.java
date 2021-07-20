@@ -18,11 +18,15 @@ import com.sayone.ebazzar.repository.UserRepository;
 import com.sayone.ebazzar.utilities.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -46,7 +50,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     EmailService emailService;
-
 
 
     public UserRestModel createUser(UserDetailsRequestModel userDetailsRequestModel){
