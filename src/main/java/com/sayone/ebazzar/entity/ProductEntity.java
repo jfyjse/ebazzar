@@ -29,6 +29,10 @@ public class ProductEntity implements Serializable {
     @JoinColumn(name ="subcategory_id")
     public SubCategoryEntity subCategory;
 
+    public ProductEntity() {
+
+    }
+
     public SubCategoryEntity getSubCategory() {
         return subCategory;
     }
@@ -72,6 +76,13 @@ public class ProductEntity implements Serializable {
     }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public ProductEntity(String productName, Integer price, String description, Integer quantity) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+    }
 
 }
 
