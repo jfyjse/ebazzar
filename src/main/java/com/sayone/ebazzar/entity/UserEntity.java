@@ -1,11 +1,29 @@
 package com.sayone.ebazzar.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
-@Entity(name="userEntity")
-public class UserEntity {
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Table(name = "user")
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID= 5174137885820647783L;
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name="user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private long userId;
     @Column(nullable = false,length = 50)
     private String firstName;
@@ -17,16 +35,40 @@ public class UserEntity {
     private String password;
     @Column(nullable = false,length = 10)
     private int phoneNumber;
+    @Column
+    private String encryptedPassword;
+
     @Column(nullable = false,length = 50)
     private String userType;
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private AddressEntity address;
-    public long getId() {
+
+    private String emailVerificationToken;
+
+    @Column
+    private Boolean emailVerificationStatus=false;
+
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
+
+
+
+    @OneToMany(targetEntity = AddressEntity.class,cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "userId"
+    )
+    private List<AddressEntity> address;
+
+    public long getUserId() {
         return userId;
     }
-    public void setId(long id) {
-        this.userId = id;
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -63,10 +105,36 @@ public class UserEntity {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-    public AddressEntity getAddress() {
+
+    public List<AddressEntity> getAddress() {
         return address;
     }
-    public void setAddress(AddressEntity address) {
+
+    public void setAddress(List<AddressEntity> address) {
         this.address = address;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public Boolean getEmailVerificationStatus() {
+        return emailVerificationStatus;
+    }
+
+    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+        this.emailVerificationStatus = emailVerificationStatus;
     }
 }

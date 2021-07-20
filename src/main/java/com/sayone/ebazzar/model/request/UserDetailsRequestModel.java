@@ -1,31 +1,18 @@
-package com.sayone.ebazzar.dto;
+package com.sayone.ebazzar.model.request;
 
+import com.sayone.ebazzar.dto.AddressDto;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class UserDto implements Serializable {
-    private long userId;
+public class UserDetailsRequestModel {
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private int phoneNumber;
     private String userType;
-    private List<AddressDto> addressDtos;
-    private String encryptedPassword;
+    private List<AddressRequestModel> address;
 
-
-    private static final long serialVersionUID= -9039122762070330566L;
-
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -73,21 +60,14 @@ public class UserDto implements Serializable {
 
     public void setUserType(String userType) {
         this.userType = userType;
+
     }
 
-    public List<AddressDto> getAddressDtos() {
-        return addressDtos;
+    public List<AddressRequestModel> getAddress() {
+        return address;
     }
 
-    public void setAddressDtos(List<AddressDto> addressDtos) {
-        this.addressDtos = addressDtos;
-    }
-
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
+    public void setAddress(List<AddressRequestModel> address) {
+        this.address = address;
     }
 }

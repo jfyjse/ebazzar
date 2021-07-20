@@ -1,27 +1,12 @@
-package com.sayone.ebazzar.dto;
+package com.sayone.ebazzar.model.request;
 
+public class AddressRequestModel {
 
-
-
-public class AddressDto {
-
-    private static final long serialVersionUID= 7972379581449181725L;
-
-    private Long addressId;
     private String lane;
     private String city;
     private String zip;
     private String type;
     private String street;
-    private UserDto user;
-
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
-    }
 
     public String getLane() {
         return lane;
@@ -53,14 +38,6 @@ public class AddressDto {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public UserDto getUser() {
-        return user;
-    }
-
-    public void setUser(UserDto user) {
-        this.user = user;
     }
 
     public String getStreet() {
