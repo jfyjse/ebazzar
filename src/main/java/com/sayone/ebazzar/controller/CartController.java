@@ -27,10 +27,11 @@ public class CartController {
 
     }
 
-    @GetMapping
-    public List<CartEntity> getCartItems(){
+    @GetMapping(value = "/get/{uid}")
+    public List<CartItemEntity> getCartItems(@PathVariable (value = "uid") Long userId){
+        List<CartItemEntity> cartItemEntityList = cartService.getCartItems(userId);
 
-        return null;
+        return cartItemEntityList;
     }
 
     @DeleteMapping(value = "/delete/{pid}")
