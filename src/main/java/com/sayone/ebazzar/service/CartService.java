@@ -4,6 +4,7 @@ package com.sayone.ebazzar.service;
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
+import com.sayone.ebazzar.entity.UserEntity;
 import com.sayone.ebazzar.repository.CartItemRepository;
 import com.sayone.ebazzar.repository.CartRepository;
 import com.sayone.ebazzar.repository.ProductRepository;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CartService {
     @Autowired
@@ -65,5 +68,11 @@ public class CartService {
 
     public void deleteAllProductsFromCart(Long cartId) {
         cartItemRepository.deleteAllProducts(cartId);
+    }
+
+    public List<CartItemEntity> getCartItems(Long userId) {
+
+        CartEntity cartEntity= cartRepository.getCartByUserId(userId,"open");
+        return cartEntity.getCartItemEntityList();
     }
 }
