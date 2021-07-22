@@ -54,7 +54,6 @@ public class CartEntity {
 
     public double getTotalAmount()
     {
-
         for(CartItemEntity cartItemEntity:cartItemEntityList){
             totalAmount +=  cartItemEntity.getTotalPrice();
         }

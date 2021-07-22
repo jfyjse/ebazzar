@@ -44,20 +44,6 @@ public class OrderController {
 
     }
 
-    // http:localhost:8080/orders/1/all
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping(path = RestResources.VIEW_ALL_ORDERS)
-    public ResponseEntity<List<OrderDetailsModel>> getAllOrders(@PathVariable Long userId) throws Exception {
-
-       List<OrderDetailsModel> orderDetailsModels = orderService.findAllOrders(userId);
-        if(orderDetailsModels.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else
-        {
-            return new ResponseEntity<>(orderDetailsModels,HttpStatus.OK);
-        }
-    }
 
     // http:localhost:8080/orders/all
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
@@ -77,12 +63,12 @@ public class OrderController {
         }
     }
 
-    //http:localhost:8080/orders/1
+    //http:localhost:8080/orders/all/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ORDER_BY_ID)
-    public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long orderId) {
 
-        OrderDetailsModel orderDetailsModel = orderService.getOrderById(id);
+        OrderDetailsModel orderDetailsModel = orderService.getOrderById(orderId);
         return new ResponseEntity<>(orderDetailsModel, HttpStatus.OK);
 
     }
@@ -105,7 +91,10 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderDetailsModel>> getOrderByStatus(@RequestParam(value = "status") String status) {
 
-        List<OrderDetailsModel> orderDetailsModels = orderService.findOrderByStatus(status);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        List<OrderDetailsModel> orderDetailsModels = orderService.findOrderByStatus(user.getUserId(),status);
         if(orderDetailsModels.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

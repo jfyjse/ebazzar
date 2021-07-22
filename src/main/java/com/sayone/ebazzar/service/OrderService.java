@@ -81,38 +81,6 @@ public class OrderService {
         return orderResponsemodel;
     }
 
-
-    public OrderDetailsModel getOrderById(Long id) {
-
-        Optional<OrderEntity> orderEntity= orderRepository.findByOrderId(id);
-        if(!orderEntity.isPresent())
-            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessage());
-
-        OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
-        BeanUtils.copyProperties(orderEntity.get(),orderDetailsModel);
-
-        List<CartItemDetails> cartItemDetails = new ArrayList<CartItemDetails>();
-        for(CartItemEntity cartItemEntity:orderEntity.get().getCartEntity().getCartItemEntityList())
-        {
-            CartItemDetails cartItemDetail = new CartItemDetails();
-            cartItemDetail.setProductName(cartItemEntity.getProductEntity().getProductName());
-            cartItemDetail.setQuantity(cartItemEntity.getQuantity());
-            cartItemDetail.setTotalPrice(cartItemEntity.getTotalPrice());
-            cartItemDetails.add(cartItemDetail);
-        }
-        orderDetailsModel.setCartItemDetailsList(cartItemDetails);
-
-        AddressResponseModel billingAddress = new AddressResponseModel();
-        BeanUtils.copyProperties(orderEntity.get().getBillingAddress(),billingAddress);
-        orderDetailsModel.setBillingAddress(billingAddress);
-
-        AddressResponseModel shippingAddress = new AddressResponseModel();
-        BeanUtils.copyProperties(orderEntity.get().getShippingAddress(),shippingAddress);
-        orderDetailsModel.setShippingAddress(shippingAddress);
-
-        return orderDetailsModel;
-    }
-
     public List<OrderDetailsModel> findAllOrders(Long userId) throws Exception {
 
         List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId,"closed");
@@ -149,8 +117,41 @@ public class OrderService {
             orderDetailsModels.add(orderDetailsModel);
         }
 
-         return orderDetailsModels;
+        return orderDetailsModels;
     }
+
+    public OrderDetailsModel getOrderById(Long id) {
+
+        Optional<OrderEntity> orderEntity= orderRepository.findByOrderId(id);
+        if(!orderEntity.isPresent())
+            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessage());
+
+        OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
+        BeanUtils.copyProperties(orderEntity.get(),orderDetailsModel);
+
+        List<CartItemDetails> cartItemDetails = new ArrayList<CartItemDetails>();
+        for(CartItemEntity cartItemEntity:orderEntity.get().getCartEntity().getCartItemEntityList())
+        {
+            CartItemDetails cartItemDetail = new CartItemDetails();
+            cartItemDetail.setProductName(cartItemEntity.getProductEntity().getProductName());
+            cartItemDetail.setQuantity(cartItemEntity.getQuantity());
+            cartItemDetail.setTotalPrice(cartItemEntity.getTotalPrice());
+            cartItemDetails.add(cartItemDetail);
+        }
+        orderDetailsModel.setCartItemDetailsList(cartItemDetails);
+
+        AddressResponseModel billingAddress = new AddressResponseModel();
+        BeanUtils.copyProperties(orderEntity.get().getBillingAddress(),billingAddress);
+        orderDetailsModel.setBillingAddress(billingAddress);
+
+        AddressResponseModel shippingAddress = new AddressResponseModel();
+        BeanUtils.copyProperties(orderEntity.get().getShippingAddress(),shippingAddress);
+        orderDetailsModel.setShippingAddress(shippingAddress);
+
+        return orderDetailsModel;
+    }
+
+
 
     public OrderResponsemodel updateStatus(Long orderId, String status,String url) throws Exception {
         String status1 = status.toLowerCase();
@@ -173,36 +174,44 @@ public class OrderService {
         return orderResponsemodel;
     }
 
-    public List<OrderDetailsModel> findOrderByStatus(String status) {
+    public List<OrderDetailsModel> findOrderByStatus(Long userId,String status) {
 
         String status1 = status.toLowerCase();
         List<OrderDetailsModel> orderDetailsModels = new ArrayList<OrderDetailsModel>();
-        List<OrderEntity> orderEntityList = orderRepository.findByOrderStatus(status1);
-        for(OrderEntity orderEntity:orderEntityList)
+        List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId,"closed");
+
+        if(cartEntityList.isEmpty())
+            throw new CustomException(ErrorMessages.NO_ORDER_FOUND.getErrorMessage());
+
+        for(CartEntity cartEntity : cartEntityList)
         {
-            OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
-            BeanUtils.copyProperties(orderEntity,orderDetailsModel);
+            OrderEntity orderEntity = orderRepository.findBycartIdandStatus(cartEntity.getCartId(),status1);
+            if(orderEntity != null){
+                OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
+                BeanUtils.copyProperties(orderEntity,orderDetailsModel);
 
-            List<CartItemDetails> cartItemDetails = new ArrayList<CartItemDetails>();
-            for(CartItemEntity cartItemEntity:orderEntity.getCartEntity().getCartItemEntityList())
-            {
-                CartItemDetails cartItemDetail = new CartItemDetails();
-                cartItemDetail.setProductName(cartItemEntity.getProductEntity().getProductName());
-                cartItemDetail.setQuantity(cartItemEntity.getQuantity());
-                cartItemDetail.setTotalPrice(cartItemEntity.getTotalPrice());
-                cartItemDetails.add(cartItemDetail);
+                List<CartItemDetails> cartItemDetails = new ArrayList<CartItemDetails>();
+                for(CartItemEntity cartItemEntity:orderEntity.getCartEntity().getCartItemEntityList())
+                {
+                    CartItemDetails cartItemDetail = new CartItemDetails();
+                    cartItemDetail.setProductName(cartItemEntity.getProductEntity().getProductName());
+                    cartItemDetail.setQuantity(cartItemEntity.getQuantity());
+                    cartItemDetail.setTotalPrice(cartItemEntity.getTotalPrice());
+                    cartItemDetails.add(cartItemDetail);
+                }
+                orderDetailsModel.setCartItemDetailsList(cartItemDetails);
+
+                AddressResponseModel billingAddress = new AddressResponseModel();
+                BeanUtils.copyProperties(orderEntity.getBillingAddress(),billingAddress);
+                orderDetailsModel.setBillingAddress(billingAddress);
+
+                AddressResponseModel shippingAddress = new AddressResponseModel();
+                BeanUtils.copyProperties(orderEntity.getShippingAddress(),shippingAddress);
+                orderDetailsModel.setShippingAddress(shippingAddress);
+
+                orderDetailsModels.add(orderDetailsModel);
             }
-            orderDetailsModel.setCartItemDetailsList(cartItemDetails);
 
-            AddressResponseModel billingAddress = new AddressResponseModel();
-            BeanUtils.copyProperties(orderEntity.getBillingAddress(),billingAddress);
-            orderDetailsModel.setBillingAddress(billingAddress);
-
-            AddressResponseModel shippingAddress = new AddressResponseModel();
-            BeanUtils.copyProperties(orderEntity.getShippingAddress(),shippingAddress);
-            orderDetailsModel.setShippingAddress(shippingAddress);
-
-            orderDetailsModels.add(orderDetailsModel);
         }
         return orderDetailsModels;
     }
@@ -216,6 +225,15 @@ public class OrderService {
         OrderEntity orderEntity1 = orderEntity.get();
         orderEntity1.setOrderStatus("cancelled");
         OrderEntity cancelledOrder = orderRepository.save(orderEntity1);
+
+        for(CartItemEntity cartItemEntity : orderEntity1.getCartEntity().getCartItemEntityList())
+        {
+            ProductEntity productEntity = productRepository.findByProductId(cartItemEntity.getProductEntity().getProductId());
+            productEntity.setQuantity(productEntity.getQuantity()+cartItemEntity.getQuantity());
+            productRepository.save(productEntity);
+        }
+
+
         triggerMailForOrderPlacement(cancelledOrder,url);
 
         return cancelledOrder;

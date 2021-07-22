@@ -13,13 +13,14 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity,Long> {
 
-    List<ReviewEntity> findByRating(Integer rating);
-
-    List<ReviewEntity> findByProductEntity(ProductEntity productEntity);
-
     @Transactional
     @Modifying      // to mark delete or update query
     @Query(value = "DELETE FROM reviews r WHERE r.product_id = ?1 and r.user_id = ?2",nativeQuery = true)
-    void deleteReview(Long productId, Long userId);
+    Integer deleteReview(Long productId, Long userId);
 
+    @Query(value = "select * from reviews r where r.product_id = ?1 and r.user_id = ?2",nativeQuery = true)
+    ReviewEntity findByProductAndUser(Long productId, long userId);
+
+    @Query(value = "select * from reviews r where r.user_id = ?1",nativeQuery = true)
+    List<ReviewEntity> findByUserId(long userId);
 }

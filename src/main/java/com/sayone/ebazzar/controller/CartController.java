@@ -16,7 +16,6 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-
     @PutMapping(value = "/add/{productId}")
     public ResponseEntity<CartEntity> addCartItem(@PathVariable (value = "productId") Long productId,
                                                   @RequestParam (value = "quantity") Integer quantity) throws Exception {

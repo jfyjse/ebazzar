@@ -13,7 +13,11 @@ public enum ErrorMessages {
     NO_ORDER_FOUND("There are no orders for this user"),
     COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
-    RECORD_ALREADY_EXISTS("Record already exists");
+    RECORD_ALREADY_EXISTS("Record already exists"),
+    REVIEW_ALREADY_GIVEN("User has Already given review for this product"),
+    NO_REVIEW_GIVEN("There are no reviews given "),
+    NO_REVIEW_FOUND("There is no review given for the specified product");
+
 
     private String errorMessage;
 

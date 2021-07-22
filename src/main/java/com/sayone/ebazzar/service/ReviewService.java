@@ -7,7 +7,6 @@ import com.sayone.ebazzar.entity.UserEntity;
 import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.model.request.ReviewRequestModel;
-import com.sayone.ebazzar.model.response.ReviewListModel;
 import com.sayone.ebazzar.model.response.ReviewResponseModel;
 import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.ReviewRepository;
@@ -33,10 +32,14 @@ public class ReviewService {
     @Autowired
     UserRepository userRepository;
 
-    public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel) throws Exception {
+    public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel,Long userId) throws Exception {
 
         ProductEntity productEntity = getProductById(reviewRequestModel.getProductId());
-        UserEntity userEntity = getUserById(reviewRequestModel.getUserId());
+        UserEntity userEntity = getUserById(userId);
+
+        ReviewEntity reviewEntity1 = reviewRepository.findByProductAndUser(productEntity.getProductId(),userEntity.getUserId());
+        if(reviewEntity1 != null)
+            throw new CustomException(ErrorMessages.REVIEW_ALREADY_GIVEN.getErrorMessage());
 
         ReviewEntity reviewEntity = new ReviewEntity();
         BeanUtils.copyProperties(reviewRequestModel,reviewEntity);
@@ -49,7 +52,7 @@ public class ReviewService {
         BeanUtils.copyProperties(storedReview,reviewResponseModel);
         reviewResponseModel.setProductName(storedReview.getProductEntity().getProductName());
         reviewResponseModel.setProductDescription(storedReview.getProductEntity().getDescription());
-        reviewResponseModel.setUserEmail(storedReview.getUserEntity().getEmail());
+
 
         return reviewResponseModel;
     }
@@ -87,29 +90,46 @@ public class ReviewService {
         BeanUtils.copyProperties(updatedReview,reviewResponseModel);
         reviewResponseModel.setProductName(updatedReview.getProductEntity().getProductName());
         reviewResponseModel.setProductDescription(updatedReview.getProductEntity().getDescription());
-        reviewResponseModel.setUserEmail(updatedReview.getUserEntity().getEmail());
+
 
         return reviewResponseModel;
     }
 
-    public List<ReviewListModel> findRatingByProductId(Long productId) {
+    public ReviewResponseModel findReviewForProduct(Long productId,Long userId) {
 
-        Optional<ProductEntity> productEntity = productRepository.findById(productId);
+        ReviewEntity reviewEntity= reviewRepository.findByProductAndUser(productId,userId);
+        if(reviewEntity == null)
+            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessage());
 
-        List<ReviewEntity> reviewEntityList = reviewRepository.findByProductEntity(productEntity.get());
-        List<ReviewListModel> reviewListModels = new ArrayList<ReviewListModel>();
-        for(ReviewEntity reviewEntity:reviewEntityList)
-        {
-            ReviewListModel reviewListModel = new ReviewListModel();
-            BeanUtils.copyProperties(reviewEntity,reviewListModel);
-            reviewListModel.setUserEmail(reviewEntity.getUserEntity().getEmail());
-            reviewListModels.add(reviewListModel);
-        }
-        return reviewListModels;
+        ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
+        BeanUtils.copyProperties(reviewEntity,reviewResponseModel);
+        reviewResponseModel.setProductName(reviewEntity.getProductEntity().getProductName());
+        reviewResponseModel.setProductDescription(reviewEntity.getProductEntity().getDescription());
+
+        return reviewResponseModel;
     }
 
     public void deleteReview(Long productId, Long userId) {
 
-        reviewRepository.deleteReview(productId,userId);
+        Integer status = reviewRepository.deleteReview(productId,userId);
+        if(status == 0)
+            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessage());
+    }
+
+    public List<ReviewResponseModel> findReviewsByUser(long userId) {
+        List<ReviewEntity> reviewEntityList = reviewRepository.findByUserId(userId);
+        if(reviewEntityList.isEmpty())
+            throw new CustomException(ErrorMessages.NO_REVIEW_GIVEN.getErrorMessage());
+
+        List<ReviewResponseModel> reviewResponseModels = new ArrayList<ReviewResponseModel>();
+        for(ReviewEntity reviewEntity:reviewEntityList)
+        {
+            ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
+            BeanUtils.copyProperties(reviewEntity,reviewResponseModel);
+            reviewResponseModel.setProductName(reviewEntity.getProductEntity().getProductName());
+            reviewResponseModel.setProductDescription(reviewEntity.getProductEntity().getDescription());
+            reviewResponseModels.add(reviewResponseModel);
+        }
+        return reviewResponseModels;
     }
 }
