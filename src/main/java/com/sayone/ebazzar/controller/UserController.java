@@ -18,6 +18,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,12 +45,15 @@ public class UserController {
 
     }
 
+
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @PutMapping(path = "/{email}")
-    public ResponseEntity<UserUpdateResponseModel> updateUser(@PathVariable String email, @RequestBody UserUpdateRequestModel updateRequestModel){
+    @PutMapping(path = "/update")
+    public ResponseEntity<UserUpdateResponseModel> updateUser(@RequestBody UserUpdateRequestModel updateRequestModel){
 
         try {
-            UserUpdateResponseModel returnValue=userService.updateUser(updateRequestModel,email);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            UserUpdateResponseModel returnValue=userService.updateUser(updateRequestModel,userDto.getEmail());
             return new ResponseEntity<>(returnValue,HttpStatus.ACCEPTED);
 
         }
@@ -61,15 +66,15 @@ public class UserController {
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping(path = "/{email}")
-    public ResponseEntity<UserRestModel> getUser(@PathVariable String email){
+    @GetMapping(path = "/profile")
+    public ResponseEntity<UserRestModel> getUserDetails(){
 
         try{
-            UserRestModel returnValue = userService.getUserByEmail(email);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            UserRestModel returnValue = userService.getUserByEmail(userDto.getEmail());
             return new ResponseEntity<>(returnValue,HttpStatus.OK);
-
         }
-
         catch (Exception e){
             e.printStackTrace();
             throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
@@ -78,27 +83,8 @@ public class UserController {
 
 
 
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @DeleteMapping(path ="/{email}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String email){
-
-        try {
-            userService.deleteUser(email);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        catch (Exception e){
-            e.printStackTrace();
-            throw new RequestException(ErrorMessages.COULD_NOT_DELETE_RECORD.getErrorMessages());
-
-        }
-
-    }
-
-
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping(path = "/{email}/password-reset-request")
-    public OperationStatusModel passwordResetRequest(@PathVariable String email, HttpServletRequest request) throws Exception{
+    @GetMapping(path = "/{email}/forgot-password")
+    public OperationStatusModel forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
         OperationStatusModel returnValue=new OperationStatusModel();
         UserDto userDto=userService.getUser(email);
@@ -115,8 +101,6 @@ public class UserController {
         return returnValue;
     }
 
-
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = "/verify")
     public OperationStatusModel verifyEmailToken(@RequestParam(value = "code") String token){
 
@@ -136,15 +120,7 @@ public class UserController {
 
     }
 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-
-        return siteURL.replace(request.getServletPath(), "");
-    }
-
-
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping(path = "/{email}/resetpassword")
+    @PostMapping(path = "/{email}/resetpassword")
     public OperationStatusModel verifyPasswordResetToken(
             @PathVariable String email,
             @RequestParam(value = "token") String token,
@@ -165,5 +141,29 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    @DeleteMapping(path ="/delete")
+    public ResponseEntity<?> deleteUser(){
+
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            userService.deleteUser(userDto.getEmail());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            throw new RequestException(ErrorMessages.COULD_NOT_DELETE_RECORD.getErrorMessages());
+
+        }
+
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+
+        return siteURL.replace(request.getServletPath(), "");
+    }
 
 }
