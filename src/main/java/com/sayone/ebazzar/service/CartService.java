@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.service;
 
-
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class CartService {
     @Autowired
@@ -22,6 +22,7 @@ public class CartService {
     CartItemRepository cartItemRepository;
     @Autowired
     CartRepository cartRepository;
+
 
     public CartEntity addCartItem(Long userId, Long productId, Integer quantity) {
         System.out.println("start");
