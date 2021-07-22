@@ -1,6 +1,7 @@
 package com.sayone.ebazzar.controller;
 
 import com.sayone.ebazzar.entity.CartEntity;
+import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,11 @@ public class CartController {
 
     }
 
-    @GetMapping
-    public List<CartEntity> getCartItems(){
+    @GetMapping(value = "/get/{uid}")
+    public List<CartItemEntity> getCartItems(@PathVariable (value = "uid") Long userId){
+        List<CartItemEntity> cartItemEntityList = cartService.getCartItems(userId);
 
-        return null;
+        return cartItemEntityList;
     }
 
     @DeleteMapping(value = "/delete/{pid}")

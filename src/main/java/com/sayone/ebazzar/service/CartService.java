@@ -67,4 +67,10 @@ public class CartService {
     public void deleteAllProductsFromCart(Long cartId) {
         cartItemRepository.deleteAllProducts(cartId);
     }
+
+    public List<CartItemEntity> getCartItems(Long userId) {
+
+        CartEntity cartEntity= cartRepository.getCartByUserId(userId,"open");
+        return cartEntity.getCartItemEntityList();
+    }
 }
