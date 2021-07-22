@@ -1,12 +1,15 @@
 package com.sayone.ebazzar.model.response;
 
-import com.sayone.ebazzar.dto.AddressDto;
+import java.util.List;
 
-public class OrderResponsemodel {
+public class OrderDetailsModel {
+
     private Long orderId;
     private String orderStatus;
     private double orderAmount;
     private AddressResponseModel shippingAddress;
+    private AddressResponseModel billingAddress;
+    private List<CartItemDetails> cartItemDetailsList;
 
     public Long getOrderId() {
         return orderId;
@@ -40,5 +43,19 @@ public class OrderResponsemodel {
         this.shippingAddress = shippingAddress;
     }
 
+    public AddressResponseModel getBillingAddress() {
+        return billingAddress;
+    }
 
+    public void setBillingAddress(AddressResponseModel billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public List<CartItemDetails> getCartItemDetailsList() {
+        return cartItemDetailsList;
+    }
+
+    public void setCartItemDetailsList(List<CartItemDetails> cartItemDetailsList) {
+        this.cartItemDetailsList = cartItemDetailsList;
+    }
 }

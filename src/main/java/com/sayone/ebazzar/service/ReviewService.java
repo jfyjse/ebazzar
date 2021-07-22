@@ -7,6 +7,8 @@ import com.sayone.ebazzar.entity.UserEntity;
 import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.model.request.ReviewRequestModel;
+import com.sayone.ebazzar.model.response.ReviewListModel;
+import com.sayone.ebazzar.model.response.ReviewResponseModel;
 import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.ReviewRepository;
 import com.sayone.ebazzar.repository.UserRepository;
@@ -15,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +33,7 @@ public class ReviewService {
     @Autowired
     UserRepository userRepository;
 
-    public ReviewEntity createReview(ReviewRequestModel reviewRequestModel) throws Exception {
+    public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel) throws Exception {
 
         ProductEntity productEntity = getProductById(reviewRequestModel.getProductId());
         UserEntity userEntity = getUserById(reviewRequestModel.getUserId());
@@ -41,7 +44,14 @@ public class ReviewService {
         reviewEntity.setProductEntity(productEntity);
         reviewEntity.setUserEntity(userEntity);
 
-        return reviewRepository.save(reviewEntity);
+        ReviewEntity storedReview = reviewRepository.save(reviewEntity);
+        ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
+        BeanUtils.copyProperties(storedReview,reviewResponseModel);
+        reviewResponseModel.setProductName(storedReview.getProductEntity().getProductName());
+        reviewResponseModel.setProductDescription(storedReview.getProductEntity().getDescription());
+        reviewResponseModel.setUserEmail(storedReview.getUserEntity().getEmail());
+
+        return reviewResponseModel;
     }
 
     public ProductEntity getProductById(Long productId) throws Exception {
@@ -61,7 +71,7 @@ public class ReviewService {
 
     }
 
-    public ReviewEntity updateReview(Long reviewId, ReviewDto reviewDto) {
+    public ReviewResponseModel updateReview(Long reviewId, ReviewDto reviewDto) {
 
         ModelMapper modelMapper = new ModelMapper();
 
@@ -72,15 +82,30 @@ public class ReviewService {
         reviewEntity.get().setRating(reviewDto.getRating());
         reviewEntity.get().setDescription(reviewDto.getDescription());
 
-        return reviewRepository.save(reviewEntity.get());
+        ReviewEntity updatedReview =  reviewRepository.save(reviewEntity.get());
+        ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
+        BeanUtils.copyProperties(updatedReview,reviewResponseModel);
+        reviewResponseModel.setProductName(updatedReview.getProductEntity().getProductName());
+        reviewResponseModel.setProductDescription(updatedReview.getProductEntity().getDescription());
+        reviewResponseModel.setUserEmail(updatedReview.getUserEntity().getEmail());
 
+        return reviewResponseModel;
     }
 
-    public List<ReviewEntity> findRatingByProductId(Long productId) {
+    public List<ReviewListModel> findRatingByProductId(Long productId) {
 
         Optional<ProductEntity> productEntity = productRepository.findById(productId);
-        return reviewRepository.findByProductEntity(productEntity.get());
 
+        List<ReviewEntity> reviewEntityList = reviewRepository.findByProductEntity(productEntity.get());
+        List<ReviewListModel> reviewListModels = new ArrayList<ReviewListModel>();
+        for(ReviewEntity reviewEntity:reviewEntityList)
+        {
+            ReviewListModel reviewListModel = new ReviewListModel();
+            BeanUtils.copyProperties(reviewEntity,reviewListModel);
+            reviewListModel.setUserEmail(reviewEntity.getUserEntity().getEmail());
+            reviewListModels.add(reviewListModel);
+        }
+        return reviewListModels;
     }
 
     public void deleteReview(Long productId, Long userId) {

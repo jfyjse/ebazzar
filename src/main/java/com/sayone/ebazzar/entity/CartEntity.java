@@ -1,4 +1,5 @@
 package com.sayone.ebazzar.entity;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class CartEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private UserEntity userEntity;
 
 
@@ -52,6 +54,7 @@ public class CartEntity {
 
     public double getTotalAmount()
     {
+
         for(CartItemEntity cartItemEntity:cartItemEntityList){
             totalAmount +=  cartItemEntity.getTotalPrice();
         }

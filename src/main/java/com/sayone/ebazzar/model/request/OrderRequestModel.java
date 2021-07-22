@@ -8,20 +8,14 @@ import java.util.List;
 
 public class OrderRequestModel {
 
-    private Long cartId;
+
     private Long shippingAddress;
     private Long billingAddress;
 
     public OrderRequestModel() {
     }
 
-    public Long getCartId() {
-        return cartId;
-    }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
 
     public Long getShippingAddress() {
         return shippingAddress;
