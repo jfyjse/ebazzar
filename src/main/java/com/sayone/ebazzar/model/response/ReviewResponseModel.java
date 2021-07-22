@@ -6,7 +6,7 @@ public class ReviewResponseModel {
     private String description;
     private String productName;
     private String productDescription;
-    private String userEmail;
+
 
     public ReviewResponseModel() {
     }
@@ -16,7 +16,7 @@ public class ReviewResponseModel {
         this.description = description;
         this.productName = productName;
         this.productDescription = productDescription;
-        this.userEmail = userEmail;
+
     }
 
     public Integer getRating() {
@@ -51,11 +51,5 @@ public class ReviewResponseModel {
         this.productDescription = productDescription;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
 }
