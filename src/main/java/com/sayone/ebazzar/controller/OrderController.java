@@ -1,18 +1,23 @@
 package com.sayone.ebazzar.controller;
 
 import com.sayone.ebazzar.common.RestResources;
-import com.sayone.ebazzar.entity.OrderEntity;
+import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.model.request.OrderRequestModel;
+import com.sayone.ebazzar.model.response.OrderDetailsModel;
+import com.sayone.ebazzar.model.response.OrderResponsemodel;
 import com.sayone.ebazzar.service.OrderService;
+import com.sayone.ebazzar.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import javax.mail.MessagingException;
+
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(RestResources.ORDER_ROOT)
@@ -21,48 +26,57 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    UserService userService;
+
     //http:localhost:8080/orders
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
-    public ResponseEntity<OrderEntity> createOrder(@RequestBody OrderRequestModel orderRequestModel, HttpServletRequest request) throws Exception {
+    public ResponseEntity<OrderResponsemodel> createOrder(@RequestBody OrderRequestModel orderRequestModel, HttpServletRequest request) throws Exception {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
 
         String url = orderService.getSiteURL(request);
-        OrderEntity orderEntity = orderService.createOrder(orderRequestModel, url);
+        OrderResponsemodel orderResponsemodel = orderService.createOrder(user.getUserId(),orderRequestModel, url);
 
-        return new ResponseEntity<>(orderEntity,HttpStatus.CREATED);
+        return new ResponseEntity<>(orderResponsemodel,HttpStatus.CREATED);
 
     }
 
-    // http:localhost:8080/orders/users/1
-    @GetMapping(path = RestResources.VIEW_ALL_ORDERS)
-    public ResponseEntity<List<OrderEntity>> getAllOrders(@PathVariable Long userid) throws Exception {
 
-        List<OrderEntity> orderEntityList = orderService.findAllOrders(userid);
-        if(orderEntityList.isEmpty()){
+    // http:localhost:8080/orders/all
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    @GetMapping(path = RestResources.VIEW_ORDERS)
+    public ResponseEntity<List<OrderDetailsModel>> getLoggedInUserOrders() throws Exception {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        List<OrderDetailsModel> orderDetailsModels = orderService.findAllOrders(user.getUserId());
+        if(orderDetailsModels.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         else
         {
-            return new ResponseEntity<>(orderEntityList,HttpStatus.OK);
+            return new ResponseEntity<>(orderDetailsModels,HttpStatus.OK);
         }
     }
 
-    //http:localhost:8080/orders/1
+    //http:localhost:8080/orders/all/1
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ORDER_BY_ID)
-    public ResponseEntity<OrderEntity> getOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long orderId) {
 
-        Optional<OrderEntity> orderEntity = orderService.getOrderById(id);
-        if(orderEntity.isPresent()){
-            return new ResponseEntity<>(orderEntity.get(), HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        OrderDetailsModel orderDetailsModel = orderService.getOrderById(orderId);
+        return new ResponseEntity<>(orderDetailsModel, HttpStatus.OK);
+
     }
 
     //http:localhost:8080/orders/1?status="Shipped"
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_ORDER_STATUS)
-    public ResponseEntity<OrderEntity> updateOrderStatus(@PathVariable Long orderId,
+    public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId,
                                       @RequestParam(value = "status") String status,
                                       HttpServletRequest request) throws Exception {
 
@@ -72,27 +86,38 @@ public class OrderController {
 
     }
 
-    // http://localhost:8080/orders/users?status=Confirmed
-    @GetMapping(path = RestResources.GET_ORDER_BY_STATUS)
-    public ResponseEntity<List<OrderEntity>> getOrderByStatus(@RequestParam(value = "status") String status) {
+    // http://localhost:8080/orders?status=Confirmed
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    @GetMapping
+    public ResponseEntity<List<OrderDetailsModel>> getOrderByStatus(@RequestParam(value = "status") String status) {
 
-        List<OrderEntity> orderEntityList = orderService.findOrderByStatus(status);
-        if(orderEntityList.isEmpty()){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        List<OrderDetailsModel> orderDetailsModels = orderService.findOrderByStatus(user.getUserId(),status);
+        if(orderDetailsModels.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else
         {
-            return new ResponseEntity<>(orderEntityList,HttpStatus.OK);
+            return new ResponseEntity<>(orderDetailsModels,HttpStatus.OK);
         }
     }
 
+
+
     // http:localhost:8080/orders/1
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.CANCEL_ORDER)
-    public ResponseEntity<OrderEntity> cancelOrder(@PathVariable Long orderId,
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId,
                                           HttpServletRequest request) throws Exception {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
         String url = orderService.getSiteURL(request);
-        return new ResponseEntity<>(orderService.cancelOrder(orderId,url),HttpStatus.OK);
+        orderService.cancelOrder(orderId,url,user.getUserId());
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
 

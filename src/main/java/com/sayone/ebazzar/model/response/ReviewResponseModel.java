@@ -2,25 +2,21 @@ package com.sayone.ebazzar.model.response;
 
 public class ReviewResponseModel {
 
-    private Long reviewId;
     private Integer rating;
     private String description;
+    private String productName;
+    private String productDescription;
+
 
     public ReviewResponseModel() {
     }
 
-    public ReviewResponseModel(Long reviewId, Integer rating, String description) {
-        this.reviewId = reviewId;
+    public ReviewResponseModel(Integer rating, String description, String productName, String productDescription, String userEmail) {
         this.rating = rating;
         this.description = description;
-    }
+        this.productName = productName;
+        this.productDescription = productDescription;
 
-    public Long getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
     }
 
     public Integer getRating() {
@@ -38,4 +34,22 @@ public class ReviewResponseModel {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+
 }

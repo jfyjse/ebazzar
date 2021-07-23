@@ -1,9 +1,7 @@
 package com.sayone.ebazzar.controller;
-
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
-import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.service.CartService;
@@ -38,6 +36,7 @@ public class CartController {
             CartEntity cartEntity = cartService.addCartItem(user.getUserId(), productId, quantity);
             return new ResponseEntity<>(cartEntity, HttpStatus.CREATED);
         }
+
 
     }
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})

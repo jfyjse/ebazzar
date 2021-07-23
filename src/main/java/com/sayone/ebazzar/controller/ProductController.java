@@ -1,24 +1,31 @@
 package com.sayone.ebazzar.controller;
 
 
-import com.sayone.ebazzar.Exception.ErrorMessages;
-import com.sayone.ebazzar.Exception.RequestException;
+import com.sayone.ebazzar.common.RestResources;
+import com.sayone.ebazzar.exception.ErrorMessages;
+import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.dto.ProductDto;
 import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.service.ProductService;
 
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping(RestResources.GET_ALL_PRODUCTS)
 
 public class ProductController {
     @Autowired
@@ -26,18 +33,24 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<ProductEntity>> getProduct() throws Exception {
-        List<ProductEntity> products = productService.getProduct();
+    public ResponseEntity<List<ProductDto>> getProduct(@RequestParam(value = "page", defaultValue = "0")int page, @RequestParam(value = "limit",defaultValue = "2")int limit,@RequestParam(value = "sortby",defaultValue = "productName")String sortBy) throws Exception {
+        Page<ProductEntity> products = productService.getProduct(page,limit,sortBy);
         if (products.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
-            System.out.println(products);
-            return ResponseEntity.of(Optional.of(products));
+            List<ProductDto>returnValue = new ArrayList<>();
+            for(ProductEntity productValue: products){
+                ProductDto product = new ProductDto();
+                product.setSubCategoryName(productValue.getSubCategory().getSubCategoryName());
+                BeanUtils.copyProperties(productValue,product);
+                returnValue.add(product);
+            }
+            return ResponseEntity.of(Optional.of(returnValue));
         }
     }
 
 
-    @GetMapping("/{name}")
+    @GetMapping(RestResources.GET_PRODUCT_BY_NAME)
     public ResponseEntity<Optional<ProductEntity>> getProductById(@PathVariable("name") String name) {
         Optional<ProductEntity> product = productService.getProductById(name);
         if (product.isEmpty()) {
@@ -46,20 +59,21 @@ public class ProductController {
         return ResponseEntity.of(Optional.of(product));
     }
 
+
     @PostMapping
     @ResponseBody
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto addProduct) throws RequestException {
 
-            try{
-                ProductDto product = productService.addProduct(addProduct);
-                return ResponseEntity.status(HttpStatus.CREATED).body(product);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw  new RequestException(ErrorMessages.MISSING_REQURED_FIELD.getErrorMessages());
-            }
+        try{
+            ProductDto product = productService.addProduct(addProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  new RequestException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
+        }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(RestResources.UPDATE_PRODUCT)
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto body,@PathVariable Long id){
         try {
             ProductDto product = productService.updateProduct(body,id);
@@ -67,11 +81,11 @@ public class ProductController {
         }
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException((ErrorMessages.MISSING_REQURED_FIELD.getErrorMessages()));
+            throw new RequestException((ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages()));
         }
 
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping(RestResources.DELETE_PRODUCT)
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try {
             this.productService.deleteProduct(id);

@@ -4,7 +4,6 @@ public class AddressResponseModel{
     private String lane;
     private String city;
     private String zip;
-    private String type;
     private String street;
 
     public String getLane() {
@@ -29,14 +28,6 @@ public class AddressResponseModel{
 
     public void setZip(String zip) {
         this.zip = zip;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getStreet() {

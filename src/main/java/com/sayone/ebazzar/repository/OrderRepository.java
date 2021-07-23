@@ -16,5 +16,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
     @Query(value = "select * from orders o where o.cart_id = ?1",nativeQuery = true)
     OrderEntity findByCartId(long cartId);
 
-    List<OrderEntity> findByOrderStatus(String status);
+    @Query(value = "select * from orders o where o.cart_id = ?1 and o.order_status = ?2",nativeQuery = true)
+    OrderEntity findBycartIdandStatus(long cartId, String status);
 }

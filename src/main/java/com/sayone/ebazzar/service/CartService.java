@@ -1,10 +1,7 @@
 package com.sayone.ebazzar.service;
-
-
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
-import com.sayone.ebazzar.entity.UserEntity;
 import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.repository.CartItemRepository;
