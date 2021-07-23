@@ -8,6 +8,8 @@ import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.service.CartService;
 import com.sayone.ebazzar.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ public class CartController {
     CartService cartService;
     @Autowired
     UserService userService;
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(value = "/add/{productId}")
     public ResponseEntity<CartEntity> addCartItem(@PathVariable (value = "productId") Long productId,
                                                   @RequestParam (value = "quantity") Integer quantity) throws Exception {
@@ -37,14 +40,14 @@ public class CartController {
         }
 
     }
-
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(value = "/get/{uid}")
     public List<CartItemEntity> getCartItems(@PathVariable (value = "uid") Long userId){
         List<CartItemEntity> cartItemEntityList = cartService.getCartItems(userId);
 
         return cartItemEntityList;
     }
-
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(value = "/remove/{pid}")
     public void removeProductFromCart(@PathVariable(value = "pid") Long productId){
         if (productId == null ){
@@ -57,7 +60,7 @@ public class CartController {
         }
 
     }
-
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(value = "/delete/all/{cid}")
     public void deleteAllProductFromCart(@PathVariable(value = "cid") Long cartId){
         cartService.deleteAllProductsFromCart(cartId);
