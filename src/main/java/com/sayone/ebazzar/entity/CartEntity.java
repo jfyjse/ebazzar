@@ -76,6 +76,9 @@ public class CartEntity {
     public List<CartItemEntity> getCartItemEntityList() {
         return cartItemEntityList;
     }
+    public List<CartItemEntity> getCartItemEntityListProd() {
+        return cartItemEntityList;
+    }
 
     public void setCartItemEntityList(List<CartItemEntity> cartItemEntityList) {
         this.cartItemEntityList = cartItemEntityList;
