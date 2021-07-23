@@ -2,8 +2,8 @@ package com.sayone.ebazzar.service;
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
-import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
+import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.repository.CartItemRepository;
 import com.sayone.ebazzar.repository.CartRepository;
 import com.sayone.ebazzar.repository.ProductRepository;
@@ -38,7 +38,7 @@ public class CartService {
             CartItemEntity cartItemEntity = new CartItemEntity();
             ProductEntity productEntity = productRepository.findById(productId).get();
             if(productEntity.getQuantity()<quantity)
-                throw new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessage());
+                throw new RequestException(ErrorMessages.OUT_OF_STOCK.getErrorMessages());
 
             cartItemEntity.setProductEntity(productEntity);
             cartItemEntity.setQuantity(quantity);
@@ -59,7 +59,7 @@ public class CartService {
 
             ProductEntity productEntity = productRepository.findById(productId).get();
             if(productEntity.getQuantity()<quantity)
-                throw new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessage());
+                throw new RequestException(ErrorMessages.OUT_OF_STOCK.getErrorMessages());
 
             for(int i=0;i< cartEntity1.getCartItemEntityList().size();i++){
                 if(productEntity == cartEntity1.getCartItemEntityList().get(i).getProductEntity())
