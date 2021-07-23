@@ -117,4 +117,11 @@ public class AddressEntity implements Serializable {
         this.type = type;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 }

@@ -83,63 +83,106 @@ public class UserController {
 
 
 
+//    @GetMapping(path = "/{email}/forgot-password")
+//    public OperationStatusModel forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
+//
+//        OperationStatusModel returnValue=new OperationStatusModel();
+//        UserDto userDto=userService.getUser(email);
+//
+//        boolean operationResult=userService.requestPasswordReset(userDto,getSiteURL(request));
+//
+//        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+//        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+//
+//        if(operationResult){
+//            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+//        }
+//
+//        return returnValue;
+//    }
+
+
     @GetMapping(path = "/{email}/forgot-password")
-    public OperationStatusModel forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
+    public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
-        OperationStatusModel returnValue=new OperationStatusModel();
-        UserDto userDto=userService.getUser(email);
+        try {
+            OperationStatusModel returnValue=new OperationStatusModel();
+            UserDto userDto=userService.getUser(email);
 
-        boolean operationResult=userService.requestPasswordReset(userDto,getSiteURL(request));
+            boolean operationResult=userService.requestPasswordReset(userDto,getSiteURL(request));
 
-        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
-        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
-
-        if(operationResult){
-            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-        }
-
-        return returnValue;
-    }
-
-    @GetMapping(path = "/verify")
-    public OperationStatusModel verifyEmailToken(@RequestParam(value = "code") String token){
-
-        OperationStatusModel returnValue = new OperationStatusModel();
-        returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
-
-        boolean isVerified=userService.verifyEmailToken(token);
-
-        if(isVerified){
-            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-        }
-        else {
+            returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
             returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+            if(operationResult){
+                returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+            }
+
+            return new ResponseEntity<>(returnValue,HttpStatus.ACCEPTED);
         }
 
-        return returnValue;
+        catch (Exception e){
+            e.printStackTrace();
+            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
 
     }
+
+
+
+
+
+
+//    @PostMapping(path = "/{email}/resetpassword")
+//    public OperationStatusModel verifyPasswordResetToken(
+//            @PathVariable String email,
+//            @RequestParam(value = "token") String token,
+//            @RequestBody PasswordResetRequestModel passwordResetRequestModel
+//    ) {
+//
+//        OperationStatusModel returnValue = new OperationStatusModel();
+//        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+//
+//        boolean isVerified=userService.verifyPasswordResetToken(email,token,passwordResetRequestModel);
+//        if(isVerified){
+//            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+//        }
+//        else{
+//            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+//        }
+//
+//        return returnValue;
+//    }
+//
+
 
     @PostMapping(path = "/{email}/resetpassword")
-    public OperationStatusModel verifyPasswordResetToken(
+    public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
             @PathVariable String email,
             @RequestParam(value = "token") String token,
             @RequestBody PasswordResetRequestModel passwordResetRequestModel
     ) {
 
-        OperationStatusModel returnValue = new OperationStatusModel();
-        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+        try {
+            OperationStatusModel returnValue = new OperationStatusModel();
+            returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
 
-        boolean isVerified=userService.verifyPasswordResetToken(email,token,passwordResetRequestModel);
-        if(isVerified){
-            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-        }
-        else{
-            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
-        }
+            boolean isVerified=userService.verifyPasswordResetToken(email,token,passwordResetRequestModel);
+            if(isVerified){
+                returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+            }
+            else{
+                returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+            }
 
-        return returnValue;
+            return new ResponseEntity<>(returnValue,HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
     }
+
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path ="/delete")
