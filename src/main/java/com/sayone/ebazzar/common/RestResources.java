@@ -20,7 +20,14 @@ public interface RestResources {
     String UPDATE_ORDER_STATUS="/{orderId}";
     String CANCEL_ORDER="/{orderId}";
 
-
+    /*
+     * API Endpoints for Products
+     * */
+    String GET_ALL_PRODUCTS = "/product";
+    String GET_PRODUCT_BY_NAME = "/{name}";
+    String ADD_PRODUCT="";
+    String UPDATE_PRODUCT="/{id}";
+    String DELETE_PRODUCT="/{id}";
 
 
 

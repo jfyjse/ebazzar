@@ -40,7 +40,7 @@ public class ReviewController {
        UserDto user = userService.getUser(auth.getName());
 
         if (reviewRequestModel.getProductId() == null)
-            throw new CustomException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+            throw new CustomException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
 
         return new ResponseEntity(reviewService.createReview(reviewRequestModel,user.getUserId()),HttpStatus.CREATED);
     }

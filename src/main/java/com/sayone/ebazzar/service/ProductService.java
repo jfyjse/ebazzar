@@ -7,9 +7,14 @@ import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.SubCategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -21,8 +26,11 @@ public class ProductService {
     @Autowired
     SubCategoryRepository subCategoryRepository;
 
-    public List<ProductEntity> getProduct() {
-        return productRepository.findAll();
+    public Page<ProductEntity> getProduct(int page, int limit,String sortBy) {
+        Sort sort=Sort.by(Sort.Direction.ASC,sortBy);
+        Pageable pageableRequest = PageRequest.of(page,limit,sort);
+        Page<ProductEntity> productpage = productRepository.findAll(pageableRequest);
+        return productpage;
     }
 
     public Optional<ProductEntity> getProductById(String name) {
