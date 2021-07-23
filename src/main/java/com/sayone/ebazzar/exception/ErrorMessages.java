@@ -9,7 +9,12 @@ public enum ErrorMessages {
     NO_ORDER_FOUND("There are no orders for this user"),
     COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
-    RECORD_ALREADY_EXISTS("Record already exists");
+    RECORD_ALREADY_EXISTS("Record already exists"),
+    CART_QUANTITY_PID_ERROR("either quantity <=0 or pid not given"),
+    CART_PRODUCTID_NOTFOUND("PROVIDE PRODUCT ID"),
+    NO_PRODUCT_TO_DELETE("NO PRODUCTS IN ENTITY FOR THE CURRENT USER"),
+    NO_CART_FOUND("NO CART FOR CURRENT USER");
+
 
     private String errorMessage;
 

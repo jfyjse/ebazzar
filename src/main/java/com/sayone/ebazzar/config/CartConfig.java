@@ -18,17 +18,17 @@ public class CartConfig {
                                          CartItemRepository cartItemRepository){
         return args -> {
 
-            UserEntity userEntity = new UserEntity("abc","def",
-                    "1@2.com","123455",87652,"customer");
-            UserEntity userEntity1 = new UserEntity("jhi","klm",
-                    "2@3.com","123435",987625,"seller");
-            UserEntity userEntity2 = new UserEntity("nop","qrs",
-                    "4@5.com","123455",983765,"customer");
-            userRepository.saveAll(List.of(userEntity1,userEntity,userEntity2));
+//            UserEntity userEntity = new UserEntity("abc","def",
+//                    "1@2.com","123455",87652,"customer");
+//            UserEntity userEntity1 = new UserEntity("jhi","klm",
+//                    "2@3.com","123435",987625,"seller");
+//            UserEntity userEntity2 = new UserEntity("nop","qrs",
+//                    "4@5.com","123455",983765,"customer");
+//            userRepository.saveAll(List.of(userEntity1,userEntity,userEntity2));
 
-            CartEntity cartEntity = new CartEntity(userEntity,"open");
+//            CartEntity cartEntity = new CartEntity(userEntity,"open");
 //            CartEntity cartEntity1 = new CartEntity(userEntity,"open");
-            cartRepository.saveAll(List.of(cartEntity));
+//            cartRepository.saveAll(List.of(cartEntity));
 //
 //            ProductEntity productEntity = new ProductEntity("Soap",150,"Lux Body Wash",40);
 //            ProductEntity productEntity1 = new ProductEntity("Mobile",50,"Redmi",40000);
