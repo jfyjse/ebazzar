@@ -83,25 +83,6 @@ public class UserController {
 
 
 
-//    @GetMapping(path = "/{email}/forgot-password")
-//    public OperationStatusModel forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
-//
-//        OperationStatusModel returnValue=new OperationStatusModel();
-//        UserDto userDto=userService.getUser(email);
-//
-//        boolean operationResult=userService.requestPasswordReset(userDto,getSiteURL(request));
-//
-//        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
-//        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
-//
-//        if(operationResult){
-//            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-//        }
-//
-//        return returnValue;
-//    }
-
-
     @GetMapping(path = "/{email}/forgot-password")
     public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
@@ -127,34 +108,6 @@ public class UserController {
         }
 
     }
-
-
-
-
-
-
-//    @PostMapping(path = "/{email}/resetpassword")
-//    public OperationStatusModel verifyPasswordResetToken(
-//            @PathVariable String email,
-//            @RequestParam(value = "token") String token,
-//            @RequestBody PasswordResetRequestModel passwordResetRequestModel
-//    ) {
-//
-//        OperationStatusModel returnValue = new OperationStatusModel();
-//        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
-//
-//        boolean isVerified=userService.verifyPasswordResetToken(email,token,passwordResetRequestModel);
-//        if(isVerified){
-//            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-//        }
-//        else{
-//            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
-//        }
-//
-//        return returnValue;
-//    }
-//
-
 
     @PostMapping(path = "/{email}/resetpassword")
     public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
