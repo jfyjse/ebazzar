@@ -1,8 +1,9 @@
 package com.sayone.ebazzar.service;
-
 import com.sayone.ebazzar.entity.CartEntity;
 import com.sayone.ebazzar.entity.CartItemEntity;
 import com.sayone.ebazzar.entity.ProductEntity;
+import com.sayone.ebazzar.exception.CustomException;
+import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.repository.CartItemRepository;
 import com.sayone.ebazzar.repository.CartRepository;
 import com.sayone.ebazzar.repository.ProductRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -23,49 +25,119 @@ public class CartService {
     @Autowired
     CartRepository cartRepository;
 
-
     public CartEntity addCartItem(Long userId, Long productId, Integer quantity) {
-        System.out.println("start");
 
-        CartEntity cartEntity = cartRepository.findByUserIdCart(userId, "open");
-        System.out.println("3");
+        Optional<CartEntity> cartEntity = cartRepository.findByUserId(userId, "open");
 
-        //CartEntity productIdInCart = cartItemRepository.findProductExist(productId);
+        if (!cartEntity.isPresent()) {
 
-
-        if (cartEntity == null) {
-            System.out.println("4");
-            cartEntity.setCartStatus("open");
-            cartEntity.setUserEntity(userRepository.findById(userId).get());
+            CartEntity cartEntity1 = new CartEntity();
+            cartEntity1.setCartStatus("open");
+            cartEntity1.setUserEntity(userRepository.findById(userId).get());
 
             CartItemEntity cartItemEntity = new CartItemEntity();
             ProductEntity productEntity = productRepository.findById(productId).get();
+            if(productEntity.getQuantity()<quantity)
+                throw new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessage());
+
             cartItemEntity.setProductEntity(productEntity);
             cartItemEntity.setQuantity(quantity);
             cartItemEntity.setTotalPrice(quantity * productEntity.getPrice());
-            cartEntity.setCartItemEntityList(List.of(cartItemEntity));
-            return cartRepository.save(cartEntity);
+
+            cartEntity1.setCartItemEntityList(List.of(cartItemEntity));
+
+            cartEntity1.setTotalAmount(cartItemEntity.getTotalPrice());
+
+            cartItemRepository.save(cartItemEntity);
+            productEntity.setQuantity(productEntity.getQuantity()-quantity);
+            productRepository.save(productEntity);
+            return cartRepository.save(cartEntity1);
+
         } else {
-            System.out.println("5");
-            CartItemEntity cartItemEntity = new CartItemEntity();
+
+            CartEntity cartEntity1 = cartEntity.get();
+
             ProductEntity productEntity = productRepository.findById(productId).get();
+            if(productEntity.getQuantity()<quantity)
+                throw new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessage());
+
+            for(int i=0;i< cartEntity1.getCartItemEntityList().size();i++){
+                if(productEntity == cartEntity1.getCartItemEntityList().get(i).getProductEntity())
+                {
+                    cartEntity1.getCartItemEntityList().get(i).setProductEntity(productEntity);
+                    cartEntity1.getCartItemEntityList().get(i).setQuantity(cartEntity1.getCartItemEntityList().get(i).getQuantity()+quantity);
+                    cartEntity1.getCartItemEntityList().get(i).setTotalPrice(cartEntity1.getCartItemEntityList().get(i).getTotalPrice() + ( quantity * productEntity.getPrice()));
+
+                    productEntity.setQuantity(productEntity.getQuantity()-quantity);
+                    productRepository.save(productEntity);
+
+                    double grandtotal = 0;
+                    for(CartItemEntity cartItemEntity:cartEntity1.getCartItemEntityList()){
+                        grandtotal += cartItemEntity.getTotalPrice();
+                    }
+                    cartEntity1.setTotalAmount(grandtotal);
+
+                    cartItemRepository.save(cartEntity1.getCartItemEntityList().get(i));
+                    return cartRepository.save(cartEntity1);
+                }
+            }
+            productEntity.setQuantity(productEntity.getQuantity()-quantity);
+            productRepository.save(productEntity);
+
+            CartItemEntity cartItemEntity = new CartItemEntity();
             cartItemEntity.setProductEntity(productEntity);
             cartItemEntity.setQuantity(quantity);
             cartItemEntity.setTotalPrice(quantity * productEntity.getPrice());
-            cartEntity.getCartItemEntityList().add(cartItemEntity);
-            return cartRepository.save(cartEntity);
+            cartEntity1.getCartItemEntityList().add(cartItemEntity);
+
+            double grandtotal = 0;
+            for(CartItemEntity cartItemEntity1:cartEntity1.getCartItemEntityList()){
+                grandtotal += cartItemEntity1.getTotalPrice();
+            }
+            cartEntity1.setTotalAmount(grandtotal);
+
+            cartItemRepository.save(cartItemEntity);
+            return cartRepository.save(cartEntity1);
         }
 
+    }
+
+    public void removeProductFromCart(Long userId,Long productId) {
+        ProductEntity productEntity = productRepository.findById(productId).get();
+        Optional<CartEntity> cartEntity = cartRepository.findCartById(userId, "open");
+        CartEntity cartEntity1 = cartEntity.get();
+        Long cartId=cartEntity1.getCartId();
+        Integer quantity= cartItemRepository.getQuantity(productId);
+        System.out.println(quantity + " quantity");
+        System.out.println("cartid= "+cartId);
+
+        productEntity.setQuantity(productEntity.getQuantity()+quantity);
+        productRepository.save(productEntity);
+
+        cartItemRepository.deleteAProduct(cartId,productId);
+
+
+        Optional<CartEntity> cartEntity2 = cartRepository.findCartById(userId, "open");
+        CartEntity cartEntity3 = cartEntity2.get();
+
+
+
+        double grandTotal = 0;
+        for(CartItemEntity cartItemEntity3:cartEntity3.getCartItemEntityList()){
+            grandTotal += cartItemEntity3.getTotalPrice();
+        }
+        cartEntity1.setTotalAmount(grandTotal);
+        cartRepository.save(cartEntity3);
+
+
 
     }
 
-    public void deleteProductFromCart(Long productId) {
-        cartItemRepository.deleteProduct(productId);
-
-    }
 
     public void deleteAllProductsFromCart(Long cartId) {
         cartItemRepository.deleteAllProducts(cartId);
+        cartRepository.deleteById(cartId);
+
     }
 
     public List<CartItemEntity> getCartItems(Long userId) {

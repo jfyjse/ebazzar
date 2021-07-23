@@ -54,6 +54,7 @@ public class CartEntity {
 
     public double getTotalAmount()
     {
+        totalAmount=0.0;
         for(CartItemEntity cartItemEntity:cartItemEntityList){
             totalAmount +=  cartItemEntity.getTotalPrice();
         }
@@ -73,6 +74,9 @@ public class CartEntity {
     }
 
     public List<CartItemEntity> getCartItemEntityList() {
+        return cartItemEntityList;
+    }
+    public List<CartItemEntity> getCartItemEntityListProd() {
         return cartItemEntityList;
     }
 

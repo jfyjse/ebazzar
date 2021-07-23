@@ -45,17 +45,21 @@ public class OrderService {
         CartEntity cartEntity = findCartByUserId(userId);
 
         if(cartEntity.getCartItemEntityList().isEmpty())
-            throw new CustomException(ErrorMessages.EMPTY_CART.getErrorMessage());
+            throw new CustomException(ErrorMessages.EMPTY_CART.getErrorMessages());
 
         for(CartItemEntity cartItemEntity : cartEntity.getCartItemEntityList()){
            if(cartItemEntity.getProductEntity().getQuantity()<cartItemEntity.getQuantity())
            {
-               throw  new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessage());
+               throw  new CustomException(ErrorMessages.OUT_OF_STOCK.getErrorMessages());
            }
         }
 
         AddressEntity shippingEntity = findAddressById(orderRequestModel.getShippingAddress());
         AddressEntity billingEntity = findAddressById(orderRequestModel.getBillingAddress());
+
+        if((shippingEntity.getUser().getUserId() != userId ) || (billingEntity.getUser().getUserId() != userId ))
+           throw new CustomException(ErrorMessages.INVALID_USER_ADDRESS.getErrorMessages());
+
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setShippingAddress(shippingEntity);
@@ -86,7 +90,7 @@ public class OrderService {
         List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId,"closed");
 
         if(cartEntityList.isEmpty())
-            throw new CustomException(ErrorMessages.NO_ORDER_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_ORDER_FOUND.getErrorMessages());
 
         List<OrderDetailsModel> orderDetailsModels = new ArrayList<OrderDetailsModel>();
         for(CartEntity cartEntity : cartEntityList)
@@ -124,7 +128,7 @@ public class OrderService {
 
         Optional<OrderEntity> orderEntity= orderRepository.findByOrderId(id);
         if(!orderEntity.isPresent())
-            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessage());
+            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
 
         OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
         BeanUtils.copyProperties(orderEntity.get(),orderDetailsModel);
@@ -159,7 +163,7 @@ public class OrderService {
 
         Optional<OrderEntity> orderEntity=orderRepository.findByOrderId(orderId);
         if(!orderEntity.isPresent())
-            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessage());
+            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
         OrderEntity orderEntity1=orderEntity.get();
         orderEntity1.setOrderStatus(status1);
 
@@ -181,7 +185,7 @@ public class OrderService {
         List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId,"closed");
 
         if(cartEntityList.isEmpty())
-            throw new CustomException(ErrorMessages.NO_ORDER_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_ORDER_FOUND.getErrorMessages());
 
         for(CartEntity cartEntity : cartEntityList)
         {
@@ -216,11 +220,13 @@ public class OrderService {
         return orderDetailsModels;
     }
 
-    public OrderEntity cancelOrder(Long orderId,String url) throws Exception {
+    public OrderEntity cancelOrder(Long orderId,String url,Long userId) throws Exception {
 
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(orderId);
         if(!orderEntity.isPresent())
-            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessage());
+            throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
+        if(orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
+            throw new CustomException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();
         orderEntity1.setOrderStatus("cancelled");
@@ -244,8 +250,9 @@ public class OrderService {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressId(shippingAddress);
 
         if(!addressEntity.isPresent()){
-            throw new CustomException(ErrorMessages.INVALID_ADDRESS.getErrorMessage());
+            throw new CustomException(ErrorMessages.INVALID_ADDRESS.getErrorMessages());
         }
+
         return addressEntity.get();
 
     }
@@ -254,7 +261,7 @@ public class OrderService {
         Optional<CartEntity> cartEntity = cartRepository.findByUserId(userId,"open");
 
         if(!cartEntity.isPresent()){
-            throw new CustomException(ErrorMessages.CART_ALREADY_CHECKED_OUT.getErrorMessage());
+            throw new CustomException(ErrorMessages.CART_ALREADY_CHECKED_OUT.getErrorMessages());
         }
         return  cartEntity.get();
     }

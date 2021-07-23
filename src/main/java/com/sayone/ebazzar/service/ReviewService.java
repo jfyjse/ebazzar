@@ -39,7 +39,7 @@ public class ReviewService {
 
         ReviewEntity reviewEntity1 = reviewRepository.findByProductAndUser(productEntity.getProductId(),userEntity.getUserId());
         if(reviewEntity1 != null)
-            throw new CustomException(ErrorMessages.REVIEW_ALREADY_GIVEN.getErrorMessage());
+            throw new CustomException(ErrorMessages.REVIEW_ALREADY_GIVEN.getErrorMessages());
 
         ReviewEntity reviewEntity = new ReviewEntity();
         BeanUtils.copyProperties(reviewRequestModel,reviewEntity);
@@ -60,7 +60,7 @@ public class ReviewService {
     public ProductEntity getProductById(Long productId) throws Exception {
         Optional<ProductEntity> productEntity= productRepository.findById(productId);
         if(!productEntity.isPresent()){
-            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
         }
         return productEntity.get();
     }
@@ -68,7 +68,7 @@ public class ReviewService {
     public UserEntity getUserById(Long userId) throws Exception {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
         if(!userEntity.isPresent()){
-            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
         }
         return  userEntity.get();
 
@@ -80,7 +80,7 @@ public class ReviewService {
 
         Optional<ReviewEntity> reviewEntity = reviewRepository.findById(reviewId);
         if(!reviewEntity.isPresent())
-            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
 
         reviewEntity.get().setRating(reviewDto.getRating());
         reviewEntity.get().setDescription(reviewDto.getDescription());
@@ -99,7 +99,7 @@ public class ReviewService {
 
         ReviewEntity reviewEntity= reviewRepository.findByProductAndUser(productId,userId);
         if(reviewEntity == null)
-            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessages());
 
         ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
         BeanUtils.copyProperties(reviewEntity,reviewResponseModel);
@@ -113,13 +113,13 @@ public class ReviewService {
 
         Integer status = reviewRepository.deleteReview(productId,userId);
         if(status == 0)
-            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessages());
     }
 
     public List<ReviewResponseModel> findReviewsByUser(long userId) {
         List<ReviewEntity> reviewEntityList = reviewRepository.findByUserId(userId);
         if(reviewEntityList.isEmpty())
-            throw new CustomException(ErrorMessages.NO_REVIEW_GIVEN.getErrorMessage());
+            throw new CustomException(ErrorMessages.NO_REVIEW_GIVEN.getErrorMessages());
 
         List<ReviewResponseModel> reviewResponseModels = new ArrayList<ReviewResponseModel>();
         for(ReviewEntity reviewEntity:reviewEntityList)

@@ -54,6 +54,7 @@ public class AddressEntity implements Serializable {
     private LocalDateTime createTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public AddressEntity() {
