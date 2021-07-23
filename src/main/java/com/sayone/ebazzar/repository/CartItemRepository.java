@@ -9,14 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
 
-    //delete product
-    @Transactional
-    @Modifying
-    @Query(value = "delete from cartitem ci where ci.product_id =?1", nativeQuery = true)
-    void deleteProduct(Long productId);
     //delete all products
     @Transactional
     @Modifying
     @Query(value = "delete from cartitem ci where ci.cart_id = ?1",nativeQuery = true)
     void deleteAllProducts(Long cartId);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from cartitem ci where ci.cart_id =?1 and ci.product_id=?2",nativeQuery = true)
+    void deleteAProduct(Long cartId,Long productId);
+
+    @Query(value = "select quantity from cartitem ci where ci.product_id=?1",nativeQuery = true)
+    Integer getQuantity(Long productId);
 }

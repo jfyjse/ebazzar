@@ -31,7 +31,7 @@ public class EmailService {
                 + "Please click the link below to reset your password:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET</a></h3>"
                 + "Thank you,<br>"
-                + "Your company name.";
+                + "Ebazzar.";
 
 
         MimeMessage message = mailSender.createMimeMessage();

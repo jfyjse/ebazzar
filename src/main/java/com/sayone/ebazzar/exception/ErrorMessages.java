@@ -20,10 +20,16 @@ public enum ErrorMessages {
     COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
     RECORD_ALREADY_EXISTS("Record already exists"),
+    CART_QUANTITY_PID_ERROR("either quantity <=0 or pid not given"),
+    CART_PRODUCTID_NOTFOUND("PROVIDE PRODUCT ID"),
     REVIEW_ALREADY_GIVEN("User has Already given review for this product"),
     INVALID_RATING("Rating should be less than 6"),
     NO_REVIEW_GIVEN("There are no reviews given "),
     NO_REVIEW_FOUND("There is no review given for the specified product");
+
+
+    private String errorMessage;
+
 
     ErrorMessages(String errorMessages) {
         this.errorMessages = errorMessages;
@@ -34,5 +40,9 @@ public enum ErrorMessages {
 
     public String getErrorMessages() {
         return errorMessages;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
