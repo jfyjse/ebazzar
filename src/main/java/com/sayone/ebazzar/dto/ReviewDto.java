@@ -13,7 +13,7 @@ public class ReviewDto implements Serializable {
     public ReviewDto() {
     }
 
-    public ReviewDto(Long reviewId, ProductDto  productDto, UserDto userDto, Integer rating, String description) {
+    public ReviewDto(Long reviewId, ProductDto productDto, UserDto userDto, Integer rating, String description) {
         this.reviewId = reviewId;
         this.productDto = productDto;
         this.userDto = userDto;
@@ -29,7 +29,7 @@ public class ReviewDto implements Serializable {
         this.reviewId = reviewId;
     }
 
-    public ProductDto  getProductDto() {
+    public ProductDto getProductDto() {
         return productDto;
     }
 
@@ -63,7 +63,6 @@ public class ReviewDto implements Serializable {
 
     @Override
     public String toString() {
-        return "ReviewDto{" + "reviewId=" + reviewId + ", productDto=" + productDto +
-                ", userDto=" + userDto + ", rating=" + rating + ", description='" + description + '\'' + '}';
+        return "ReviewDto{" + "reviewId=" + reviewId + ", productDto=" + productDto + ", userDto=" + userDto + ", rating=" + rating + ", description='" + description + '\'' + '}';
     }
 }

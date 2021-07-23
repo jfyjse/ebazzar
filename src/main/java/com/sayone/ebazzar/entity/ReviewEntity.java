@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.entity;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -82,6 +81,5 @@ public class ReviewEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 }

@@ -7,7 +7,6 @@ public class ReviewResponseModel {
     private String productName;
     private String productDescription;
 
-
     public ReviewResponseModel() {
     }
 
@@ -50,6 +49,5 @@ public class ReviewResponseModel {
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
-
 
 }

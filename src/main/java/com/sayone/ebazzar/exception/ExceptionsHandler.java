@@ -14,17 +14,10 @@ import java.util.Date;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler(value = {CustomException.class})
-    public ResponseEntity<Object> handleCustomExceptions(CustomException ex, WebRequest request)
-    {
-        ExpRepresentation exp = new ExpRepresentation(new Date(),ex.getMessage());
-        return new ResponseEntity<>(exp,new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
     @ExceptionHandler(value = {RequestException.class})
     public ResponseEntity<Object> handleRequestException(RequestException e){
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         Exception exception = new Exception(e.getMessage(),
-                e.getCause(),
                 httpStatus,
                 ZonedDateTime.now().now(ZoneId.of("Z")));
         return new ResponseEntity<>(exception,httpStatus);

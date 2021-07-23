@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,8 +42,7 @@ public class OrderEntity implements Serializable {
     public OrderEntity() {
     }
 
-    public OrderEntity(String orderStatus, int orderAmount, AddressEntity billingAddress,
-                       AddressEntity shippingAddress, CartEntity cartEntity) {
+    public OrderEntity(String orderStatus, int orderAmount, AddressEntity billingAddress, AddressEntity shippingAddress, CartEntity cartEntity) {
         this.orderStatus = orderStatus;
         this.orderAmount = orderAmount;
         this.billingAddress = billingAddress;
@@ -81,7 +79,7 @@ public class OrderEntity implements Serializable {
         return shippingAddress;
     }
 
-    public void setShippingAddress (AddressEntity shippingAddress) {
+    public void setShippingAddress(AddressEntity shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
@@ -89,7 +87,7 @@ public class OrderEntity implements Serializable {
         return billingAddress;
     }
 
-    public void setBillingAddress (AddressEntity billingAddress) {
+    public void setBillingAddress(AddressEntity billingAddress) {
         this.billingAddress = billingAddress;
     }
 
@@ -103,9 +101,7 @@ public class OrderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderEntity{" + "orderId=" + orderId + ", orderStatus='" + orderStatus +
-                ", orderAmount=" + orderAmount + ", billingAddress=" + billingAddress +
-                ", shippingAddress=" + shippingAddress + ", cartEntity=" + cartEntity +'}';
+        return "OrderEntity{" + "orderId=" + orderId + ", orderStatus='" + orderStatus + ", orderAmount=" + orderAmount + ", billingAddress=" + billingAddress + ", shippingAddress=" + shippingAddress + ", cartEntity=" + cartEntity + '}';
     }
 }
 

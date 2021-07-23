@@ -1,21 +1,12 @@
 package com.sayone.ebazzar.model.request;
 
-import com.sayone.ebazzar.dto.AddressDto;
-import com.sayone.ebazzar.dto.ProductDto;
-import com.sayone.ebazzar.dto.UserDto;
-
-import java.util.List;
-
 public class OrderRequestModel {
-
 
     private Long shippingAddress;
     private Long billingAddress;
 
     public OrderRequestModel() {
     }
-
-
 
     public Long getShippingAddress() {
         return shippingAddress;
@@ -32,6 +23,5 @@ public class OrderRequestModel {
     public void setBillingAddress(Long billingAddress) {
         this.billingAddress = billingAddress;
     }
-
 
 }
