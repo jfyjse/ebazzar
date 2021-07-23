@@ -1,7 +1,8 @@
 package com.sayone.ebazzar.exception;
 
 public enum ErrorMessages {
-    MISSING_REQUIRED_FIELD("MISSING REQUIRED FIELD"),
+
+    MISSING_REQUIRED_FIELD("Missing Required field. Please check documentation for required fields"),
     CART_ALREADY_CHECKED_OUT("Cart Already Checked Out"),
     EMPTY_CART("There are no products in the cart"),
     INVALID_CART("There is no cart with this ID"),
@@ -18,22 +19,14 @@ public enum ErrorMessages {
     NO_REVIEW_GIVEN("There are no reviews given "),
     NO_REVIEW_FOUND("There is no review given for the specified product");
 
-
-    private String errorMessage;
-
-    ErrorMessages(String errorMessage){
-        this.errorMessage=errorMessage;
+    ErrorMessages(String errorMessages) {
+        this.errorMessages = errorMessages;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+
+    private String errorMessages;
 
     public String getErrorMessages() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+        return errorMessages;
     }
 }
