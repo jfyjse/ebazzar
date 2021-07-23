@@ -54,6 +54,7 @@ public class AddressEntity implements Serializable {
     private LocalDateTime createTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public AddressEntity() {
@@ -117,4 +118,11 @@ public class AddressEntity implements Serializable {
         this.type = type;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 }
