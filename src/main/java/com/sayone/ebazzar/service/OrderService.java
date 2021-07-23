@@ -57,6 +57,10 @@ public class OrderService {
         AddressEntity shippingEntity = findAddressById(orderRequestModel.getShippingAddress());
         AddressEntity billingEntity = findAddressById(orderRequestModel.getBillingAddress());
 
+        if((shippingEntity.getUser().getUserId() != userId ) || (billingEntity.getUser().getUserId() != userId ))
+           throw new CustomException(ErrorMessages.INVALID_USER_ADDRESS.getErrorMessages());
+
+
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setShippingAddress(shippingEntity);
         orderEntity.setBillingAddress(billingEntity);
@@ -216,11 +220,13 @@ public class OrderService {
         return orderDetailsModels;
     }
 
-    public OrderEntity cancelOrder(Long orderId,String url) throws Exception {
+    public OrderEntity cancelOrder(Long orderId,String url,Long userId) throws Exception {
 
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(orderId);
         if(!orderEntity.isPresent())
             throw new CustomException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
+        if(orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
+            throw new CustomException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();
         orderEntity1.setOrderStatus("cancelled");
@@ -246,6 +252,7 @@ public class OrderService {
         if(!addressEntity.isPresent()){
             throw new CustomException(ErrorMessages.INVALID_ADDRESS.getErrorMessages());
         }
+
         return addressEntity.get();
 
     }

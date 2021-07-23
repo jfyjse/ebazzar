@@ -112,8 +112,11 @@ public class OrderController {
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId,
                                           HttpServletRequest request) throws Exception {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
         String url = orderService.getSiteURL(request);
-        orderService.cancelOrder(orderId,url);
+        orderService.cancelOrder(orderId,url,user.getUserId());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
