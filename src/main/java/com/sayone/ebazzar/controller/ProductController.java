@@ -9,6 +9,8 @@ import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.service.ProductService;
 
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +33,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<ProductDto>> getProduct(@RequestParam(value = "page", defaultValue = "0")int page, @RequestParam(value = "limit",defaultValue = "2")int limit,@RequestParam(value = "sortby",defaultValue = "productName")String sortBy) throws Exception {
@@ -49,17 +52,17 @@ public class ProductController {
         }
     }
 
-
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(RestResources.GET_PRODUCT_BY_NAME)
     public ResponseEntity<Optional<ProductEntity>> getProductById(@PathVariable("name") String name) {
-        Optional<ProductEntity> product = productService.getProductById(name);
+        Optional<ProductEntity> product = productService.getProductByName(name);
         if (product.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.of(Optional.of(product));
     }
 
-
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     @ResponseBody
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto addProduct) throws RequestException {
@@ -73,6 +76,7 @@ public class ProductController {
         }
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(RestResources.UPDATE_PRODUCT)
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto body,@PathVariable Long id){
         try {
@@ -85,6 +89,7 @@ public class ProductController {
         }
 
     }
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(RestResources.DELETE_PRODUCT)
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try {

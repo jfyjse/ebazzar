@@ -26,4 +26,17 @@ public interface RestResources {
     String UPDATE_PRODUCT = "/{id}";
     String DELETE_PRODUCT = "/{id}";
 
+    /*
+     * API Endpoints for SubCategory
+     * */
+    String GET_ALL_SUBCATEGORY = "/subCategory";
+    String GET_PRODUCTS_BY_SUBCATEGORY = "/{name}";
+
+    /*
+     * API Endpoints for Category
+     * */
+    String GET_ALL_CATEGORY = "/subCategory";
+
+
+
 }
