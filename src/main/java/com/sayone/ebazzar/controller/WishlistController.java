@@ -1,8 +1,8 @@
 package com.sayone.ebazzar.controller;
-
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.WishlistEntity;
+import com.sayone.ebazzar.entity.WishlistItemEntity;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.service.UserService;
@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(RestResources.WISHLIST_ROOT)
@@ -48,5 +50,13 @@ public class WishlistController {
 
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    @GetMapping(path = RestResources.GET_WISHLIST)
+    public List<WishlistItemEntity> getWishlistItems(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+        return wishlistService.getWishlistItems(user.getUserId());
+
+    }
 
 }

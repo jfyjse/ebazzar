@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface WishlistRepository extends JpaRepository<WishlistEntity,Long>{
     @Query(value = "select * from wishlist w where w.user_id = ?1",nativeQuery = true)
     Optional<WishlistEntity> findByUserId(Long userId);
+
+    @Query(value = "select * from wishlist w where w.user_id = ?1",nativeQuery = true)
+    WishlistEntity getByUserId(long userId);
 }

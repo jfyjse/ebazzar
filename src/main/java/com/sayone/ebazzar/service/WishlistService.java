@@ -68,4 +68,9 @@ public class WishlistService {
         return wishlistRepository.save(wishlistEntity1);
 
     }
+
+    public List<WishlistItemEntity> getWishlistItems(long userId) {
+        WishlistEntity wishlistEntity =wishlistRepository.getByUserId(userId);
+        return wishlistEntity.getWishlistItemEntityList();
+    }
 }
