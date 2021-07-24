@@ -1,6 +1,5 @@
 package com.sayone.ebazzar.service;
 
-import com.sayone.ebazzar.dto.ReviewDto;
 import com.sayone.ebazzar.entity.*;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
@@ -44,30 +43,38 @@ public class ReviewService {
             throw new RequestException(ErrorMessages.NO_ORDER_FOUND.getErrorMessages());
 
         boolean productPurchased = false;
-        for (int i=0;i<cartEntityList.size();i++)
-        {
-            for (int j=0;j<cartEntityList.get(i).getCartItemEntityList().size();j++)
-            {
-                if(cartEntityList.get(i).getCartItemEntityList().get(j).getProductEntity().getProductId() == reviewRequestModel.getProductId())
-                {
+        for (int i = 0; i < cartEntityList.size(); i++) {
+            for (int j = 0; j < cartEntityList.get(i).getCartItemEntityList().size(); j++) {
+                if (cartEntityList.get(i).getCartItemEntityList().get(j).getProductEntity().getProductId() == reviewRequestModel.getProductId()) {
                     productPurchased = true;
                     break;
                 }
             }
-            if(productPurchased == true)
+            if (productPurchased == true)
                 break;
 
         }
-        if(productPurchased == false)
+        if (productPurchased == false)
             throw new RequestException(ErrorMessages.PRODUCT_NOT_PURCHASED.getErrorMessages());
+
+        boolean orderDelivered = false;
+        for (CartEntity cartEntity : cartEntityList) {
+            OrderEntity orderEntity = orderRepository.findBycartIdandStatus(cartEntity.getCartId(), "delivered");
+            if (orderEntity != null) {
+                orderDelivered = true;
+                break;
+            }
+        }
+        if (orderDelivered == false)
+            throw new RequestException(ErrorMessages.ORDER_NOT_DELIVERED.getErrorMessages());
 
         UserEntity userEntity = getUserById(userId);
 
-        ReviewEntity reviewEntity1 = reviewRepository.findByProductAndUser(productEntity.getProductId(), userEntity.getUserId());
-        if (reviewEntity1 != null)
+        Optional<ReviewEntity> reviewEntity1 = reviewRepository.findByProductAndUser(productEntity.getProductId(), userEntity.getUserId());
+        if (reviewEntity1.isPresent())
             throw new RequestException(ErrorMessages.REVIEW_ALREADY_GIVEN.getErrorMessages());
 
-        if(reviewRequestModel.getRating() > 5)
+        if (reviewRequestModel.getRating() > 5)
             throw new RequestException(ErrorMessages.INVALID_RATING.getErrorMessages());
 
         ReviewEntity reviewEntity = new ReviewEntity();
@@ -102,16 +109,23 @@ public class ReviewService {
 
     }
 
-    public ReviewResponseModel updateReview(Long reviewId, ReviewDto reviewDto) {
+    public ReviewResponseModel updateReview(ReviewRequestModel reviewRequestModel, Long userId) {
 
         ModelMapper modelMapper = new ModelMapper();
 
-        Optional<ReviewEntity> reviewEntity = reviewRepository.findById(reviewId);
-        if (!reviewEntity.isPresent())
+        ProductEntity productEntity = productRepository.findByProductId(reviewRequestModel.getProductId());
+        if (productEntity == null)
+            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
+
+        Optional<ReviewEntity> reviewEntity = reviewRepository.findByProductAndUser(reviewRequestModel.getProductId(), userId);
+        if (reviewEntity.isEmpty())
             throw new RequestException(ErrorMessages.NO_REVIEW_ID_FOUND.getErrorMessages());
 
-        reviewEntity.get().setRating(reviewDto.getRating());
-        reviewEntity.get().setDescription(reviewDto.getDescription());
+        if (reviewRequestModel.getRating() > 5)
+            throw new RequestException(ErrorMessages.INVALID_RATING.getErrorMessages());
+
+        reviewEntity.get().setRating(reviewRequestModel.getRating());
+        reviewEntity.get().setDescription(reviewRequestModel.getDescription());
 
         ReviewEntity updatedReview = reviewRepository.save(reviewEntity.get());
         ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
@@ -124,19 +138,27 @@ public class ReviewService {
 
     public ReviewResponseModel findReviewForProduct(Long productId, Long userId) {
 
-        ReviewEntity reviewEntity = reviewRepository.findByProductAndUser(productId, userId);
-        if (reviewEntity == null)
+        ProductEntity productEntity = productRepository.findByProductId(productId);
+        if (productEntity == null)
+            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
+
+        Optional<ReviewEntity> reviewEntity = reviewRepository.findByProductAndUser(productId, userId);
+        if (reviewEntity.isEmpty())
             throw new RequestException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessages());
 
         ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
-        BeanUtils.copyProperties(reviewEntity, reviewResponseModel);
-        reviewResponseModel.setProductName(reviewEntity.getProductEntity().getProductName());
-        reviewResponseModel.setProductDescription(reviewEntity.getProductEntity().getDescription());
+        BeanUtils.copyProperties(reviewEntity.get(), reviewResponseModel);
+        reviewResponseModel.setProductName(reviewEntity.get().getProductEntity().getProductName());
+        reviewResponseModel.setProductDescription(reviewEntity.get().getProductEntity().getDescription());
 
         return reviewResponseModel;
     }
 
     public void deleteReview(Long productId, Long userId) {
+
+        ProductEntity productEntity = productRepository.findByProductId(productId);
+        if (productEntity == null)
+            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
 
         Integer status = reviewRepository.deleteReview(productId, userId);
         if (status == 0)

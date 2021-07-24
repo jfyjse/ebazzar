@@ -1,7 +1,6 @@
 package com.sayone.ebazzar.controller;
 
 import com.sayone.ebazzar.common.RestResources;
-import com.sayone.ebazzar.dto.ReviewDto;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
@@ -11,7 +10,6 @@ import com.sayone.ebazzar.service.ReviewService;
 import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,14 +43,15 @@ public class ReviewController {
         return new ResponseEntity(reviewService.createReview(reviewRequestModel, user.getUserId()), HttpStatus.CREATED);
     }
 
-    // http://localhost:8080/reviews/update/1
+    // http://localhost:8080/reviews/update
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_RATING_BY_ID)
-    public ResponseEntity<ReviewResponseModel> updateRating(@PathVariable Long reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
+    public ResponseEntity<ReviewResponseModel> updateRating(@RequestBody ReviewRequestModel reviewRequestModel) {
 
-        ReviewDto reviewDto = new ReviewDto();
-        BeanUtils.copyProperties(reviewRequestModel, reviewDto);
-        return new ResponseEntity<>(reviewService.updateReview(reviewId, reviewDto), HttpStatus.OK);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        return new ResponseEntity<>(reviewService.updateReview(reviewRequestModel, user.getUserId()), HttpStatus.OK);
     }
 
     // http://localhost:8080/reviews/all
