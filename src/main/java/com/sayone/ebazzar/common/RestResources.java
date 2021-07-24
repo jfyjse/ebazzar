@@ -52,4 +52,13 @@ public interface RestResources {
      * API Endpoints for Category
      * */ String GET_ALL_CATEGORY = "/category";
 
+
+    /*
+     * API Endpoints for Category
+     * */ String WISHLIST_ROOT = "/wishlist";
+          String GET_WISHLIST = "/get";
+          String CREATE_WISHLIST = "/add/{productId}";
+          String DELETE_FROM_WISHLIST = "/remove/{pid}";
+
+
 }
