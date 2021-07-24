@@ -6,6 +6,7 @@ public interface RestResources {
     /*
      * API Endpoints for user related operations
      * */
+    String USER_ROOT="/users";
     String UPDATE_USER_DETAILS = "/update";
     String GET_USER_DETAILS="/profile";
     String FORGET_PASSWORD="/{email}/forgot-password";
@@ -52,7 +53,7 @@ public interface RestResources {
     /*
      * API Endpoints for Category
      * */
-    String GET_ALL_CATEGORY = "/subCategory";
+    String GET_ALL_CATEGORY = "/category";
 
 
 
