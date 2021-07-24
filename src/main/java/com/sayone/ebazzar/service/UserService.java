@@ -24,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -148,15 +147,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public String deleteUser(String email)
-    {
-        UserEntity userEntity=userRepository.findByEmail(email);
-        if(userEntity == null) throw new UsernameNotFoundException(email);
-        userRepository.delete(userEntity);
-        return "user deleted";
-
-    }
-
 
     public boolean requestPasswordReset(UserDto userDto,String url) throws MessagingException,UnsupportedEncodingException{
 
@@ -211,7 +201,14 @@ public class UserService implements UserDetailsService {
       return  returnValue;
     }
 
+    public String deleteUser(String email)
+    {
+        UserEntity userEntity=userRepository.findByEmail(email);
+        if(userEntity == null) throw new UsernameNotFoundException(email);
+        userRepository.delete(userEntity);
+        return "user deleted";
 
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

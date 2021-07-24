@@ -31,7 +31,9 @@ public class CartController {
     public ResponseEntity<CartEntity> addCartItem(@PathVariable (value = "productId") Long productId,
                                                   @RequestParam (value = "quantity") Integer quantity) throws Exception {
         if (productId == null || !(quantity>0)){
+
             throw new RequestException(ErrorMessages.CART_QUANTITY_PID_ERROR.getErrorMessages());}
+
         else {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto user = userService.getUser(auth.getName());
@@ -55,6 +57,7 @@ public class CartController {
     public void removeProductFromCart(@PathVariable(value = "pid") Long productId){
         if (productId == null ){
             throw new RequestException(ErrorMessages.CART_PRODUCTID_NOTFOUND.getErrorMessages());}
+
         else {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto user = userService.getUser(auth.getName());

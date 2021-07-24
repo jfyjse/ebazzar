@@ -2,6 +2,16 @@ package com.sayone.ebazzar.common;
 
 public interface RestResources {
 
+
+    /*
+     * API Endpoints for user related operations
+     * */
+    String UPDATE_USER_DETAILS = "/update";
+    String GET_USER_DETAILS="/profile";
+    String FORGET_PASSWORD="/{email}/forgot-password";
+    String RESET_PASSWORD="/{email}/resetpassword";
+    String DELETE_USER="/delete";
+
     /*
      * API Endpoints for Review related operations
      * */ String REVIEW_ROOT = "/reviews";
@@ -43,6 +53,7 @@ public interface RestResources {
      * API Endpoints for Category
      * */
     String GET_ALL_CATEGORY = "/subCategory";
+
 
 
 }

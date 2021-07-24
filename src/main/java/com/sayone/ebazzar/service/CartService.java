@@ -38,6 +38,7 @@ public class CartService {
             CartItemEntity cartItemEntity = new CartItemEntity();
             ProductEntity productEntity = productRepository.findById(productId).get();
             if(productEntity.getQuantity()<quantity)
+
                 throw new RequestException(ErrorMessages.OUT_OF_STOCK.getErrorMessages());
 
             cartItemEntity.setProductEntity(productEntity);
@@ -59,7 +60,9 @@ public class CartService {
 
             ProductEntity productEntity = productRepository.findById(productId).get();
             if(productEntity.getQuantity()<quantity)
+
                 throw new RequestException(ErrorMessages.OUT_OF_STOCK.getErrorMessages());
+
 
             for(int i=0;i< cartEntity1.getCartItemEntityList().size();i++){
                 if(productEntity == cartEntity1.getCartItemEntityList().get(i).getProductEntity())
