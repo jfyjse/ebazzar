@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
@@ -18,8 +19,8 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     Integer deleteReview(Long productId, Long userId);
 
     @Query(value = "select * from reviews r where r.product_id = ?1 and r.user_id = ?2", nativeQuery = true)
-    ReviewEntity findByProductAndUser(Long productId, long userId);
+    Optional<ReviewEntity> findByProductAndUser(Long productId, Long userId);
 
     @Query(value = "select * from reviews r where r.user_id = ?1", nativeQuery = true)
-    List<ReviewEntity> findByUserId(long userId);
+    List<ReviewEntity> findByUserId(Long userId);
 }

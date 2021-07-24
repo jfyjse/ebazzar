@@ -12,27 +12,19 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
-
 @Service
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendSimpleEmailForPasswordReset(
-            PasswordResetTokenEntity passwordResetTokenEntity, UserEntity userEntity, String url)
-            throws MessagingException, UnsupportedEncodingException {
+    public void sendSimpleEmailForPasswordReset(PasswordResetTokenEntity passwordResetTokenEntity, UserEntity userEntity, String url) throws MessagingException, UnsupportedEncodingException {
 
         String toAddress = passwordResetTokenEntity.getUserDetails().getEmail();
         String fromAddress = "demouser3101@gmail.com";
         String senderName = "Ebazzar";
         String subject = "Please reset your password here";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to reset your password:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET</a></h3>"
-                + "Thank you,<br>"
-                + "Ebazzar.";
-
+        String content = "Dear [[name]],<br>" + "Please click the link below to reset your password:<br>" + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET</a></h3>" + "Thank you,<br>" + "Ebazzar.";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -42,7 +34,7 @@ public class EmailService {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", passwordResetTokenEntity.getUserDetails().getFirstName());
-        String resetURL = url + "/users/"+userEntity.getEmail()+"/resetpassword?token=" + passwordResetTokenEntity.getToken();
+        String resetURL = url + "/users/" + userEntity.getEmail() + "/resetpassword?token=" + passwordResetTokenEntity.getToken();
 
         content = content.replace("[[URL]]", resetURL);
 
@@ -53,21 +45,14 @@ public class EmailService {
         System.out.println("Password Reset Mail Sent.............");
     }
 
-    public void sendOrderConfirmedEmail(OrderEntity orderEntity,
-                                        String url) throws MessagingException, UnsupportedEncodingException {
+    public void sendOrderConfirmedEmail(OrderEntity orderEntity, String url) throws MessagingException, UnsupportedEncodingException {
         String toAddress = orderEntity.getCartEntity().getUserEntity().getEmail();
         String fromAddress = "merryjoseph00@gmail.com";
         String senderName = "E-BAZZAR";
         String subject = "Your Order is [[status]]";
-        String content = "Dear [[name]],<br>"
-                + " <b>Your Order is [[status]].</b><br>"
-                + "Please Find below the details :<br>"
-                + "<p>Order Id :</p>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">[[orderId]]</a></h3>"
+        String content = "Dear [[name]],<br>" + " <b>Your Order is [[status]].</b><br>" + "Please Find below the details :<br>" + "<p>Order Id :</p>" + "<h3><a href=\"[[URL]]\" target=\"_self\">[[orderId]]</a></h3>"
 
-                + "Thank you for Shopping with us.. <br>"
-                + "EBAZZAR";
-
+                + "Thank you for Shopping with us.. <br>" + "EBAZZAR";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -77,11 +62,9 @@ public class EmailService {
         subject = subject.replace("[[status]]", orderEntity.getOrderStatus());
         helper.setSubject(subject);
 
-
         content = content.replace("[[status]]", orderEntity.getOrderStatus());
-        content = content.replace("[[name]]", orderEntity.getCartEntity().getUserEntity().getFirstName()+" "
-                +orderEntity.getCartEntity().getUserEntity().getLastName());
-        String verifyURL = url + "/orders/" + orderEntity.getOrderId().toString();
+        content = content.replace("[[name]]", orderEntity.getCartEntity().getUserEntity().getFirstName() + " " + orderEntity.getCartEntity().getUserEntity().getLastName());
+        String verifyURL = url + "/orders/all/" + orderEntity.getOrderId().toString();
 
         content = content.replace("[[URL]]", verifyURL);
         content = content.replace("[[orderId]]", orderEntity.getOrderId().toString());
@@ -90,7 +73,6 @@ public class EmailService {
 
         mailSender.send(message);
 
-        System.out.println("Order Confirmation Mail Sent.............");
     }
 
 }

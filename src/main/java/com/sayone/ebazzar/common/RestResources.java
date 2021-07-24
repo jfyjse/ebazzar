@@ -2,21 +2,19 @@ package com.sayone.ebazzar.common;
 
 public interface RestResources {
 
-
     /*
      * API Endpoints for user related operations
-     * */
-    String USER_ROOT="/users";
+     * */ String USER_ROOT = "/users";
     String UPDATE_USER_DETAILS = "/update";
-    String GET_USER_DETAILS="/profile";
-    String FORGET_PASSWORD="/{email}/forgot-password";
-    String RESET_PASSWORD="/{email}/resetpassword";
-    String DELETE_USER="/delete";
+    String GET_USER_DETAILS = "/profile";
+    String FORGET_PASSWORD = "/{email}/forgot-password";
+    String RESET_PASSWORD = "/{email}/resetpassword";
+    String DELETE_USER = "/delete";
 
     /*
      * API Endpoints for Review related operations
      * */ String REVIEW_ROOT = "/reviews";
-    String UPDATE_RATING_BY_ID = "/update/{reviewId}";
+    String UPDATE_RATING_BY_ID = "/update";
     String GET_ALL_REVIEWS = "/all";
     String GET_RATING_FOR_PRODUCT = "/all/{pid}";
     String DELETE_REVIEW = "/delete";
@@ -36,8 +34,8 @@ public interface RestResources {
     String ADD_PRODUCT = "";
     String UPDATE_PRODUCT = "/{id}";
     String DELETE_PRODUCT = "/{id}";
-  
-   /*
+
+    /*
      * API Endpoints for Cart
      * */ String CART_ROOT = "/cart";
           String GET_ALL_CART_ITEMS = "/get";
@@ -46,15 +44,11 @@ public interface RestResources {
   
   /*
      * API Endpoints for SubCategory
-     * */
-    String GET_ALL_SUBCATEGORY = "/subCategory";
+     * */ String GET_ALL_SUBCATEGORY = "/subCategory";
     String GET_PRODUCTS_BY_SUBCATEGORY = "/{name}";
 
     /*
      * API Endpoints for Category
-     * */
-    String GET_ALL_CATEGORY = "/category";
-
-
+     * */ String GET_ALL_CATEGORY = "/category";
 
 }
