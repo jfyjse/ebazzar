@@ -25,8 +25,15 @@ public interface RestResources {
     String ADD_PRODUCT = "";
     String UPDATE_PRODUCT = "/{id}";
     String DELETE_PRODUCT = "/{id}";
-
-    /*
+  
+   /*
+     * API Endpoints for Cart
+     * */ String CART_ROOT = "/cart";
+          String GET_ALL_CART_ITEMS = "/get/{uid}";
+          String ADD_TO_CART = "/add/{productId}";
+          String REMOVE_PRODUCT_FROM_CART = "/remove/{pid}";
+  
+  /*
      * API Endpoints for SubCategory
      * */
     String GET_ALL_SUBCATEGORY = "/subCategory";
@@ -36,7 +43,6 @@ public interface RestResources {
      * API Endpoints for Category
      * */
     String GET_ALL_CATEGORY = "/subCategory";
-
 
 
 }
