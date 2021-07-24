@@ -44,10 +44,12 @@ public class CartController {
 
     }
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    //http://localhost:8080/cart/get/1?
+    //http://localhost:8080/cart/get?
     @GetMapping( path = RestResources.GET_ALL_CART_ITEMS)
-    public List<CartItemEntity> getCartItems(@PathVariable (value = "uid") Long userId){
-        List<CartItemEntity> cartItemEntityList = cartService.getCartItems(userId);
+    public List<CartItemEntity> getCartItems(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+        List<CartItemEntity> cartItemEntityList = cartService.getCartItems(user.getUserId());
 
         return cartItemEntityList;
     }
