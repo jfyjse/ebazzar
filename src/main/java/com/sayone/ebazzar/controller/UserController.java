@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
-@RequestMapping("users")
+@RequestMapping(RestResources.USER_ROOT)
 
 public class UserController {
 
