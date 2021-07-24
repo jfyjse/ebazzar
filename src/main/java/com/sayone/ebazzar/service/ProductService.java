@@ -33,7 +33,7 @@ public class ProductService {
         return productpage;
     }
 
-    public Optional<ProductEntity> getProductById(String name) {
+    public Optional<ProductEntity> getProductByName(String name) {
 
         return productRepository.findByProductName(name);
     }
