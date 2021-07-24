@@ -26,7 +26,8 @@ public enum ErrorMessages {
     REVIEW_ALREADY_GIVEN("User has Already given review for this product"),
     INVALID_RATING("Rating should be less than 6"),
     NO_REVIEW_GIVEN("There are no reviews given "),
-    NO_REVIEW_FOUND("There is no review given for the specified product");
+    NO_REVIEW_FOUND("There is no review given for the specified product"),
+    PRODUCT_EXISTS("PRODUCT ALREADY IN WISH");
 
 
     ErrorMessages(String errorMessages) {
