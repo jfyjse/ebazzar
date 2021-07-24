@@ -28,13 +28,9 @@ public enum ErrorMessages {
     NO_REVIEW_FOUND("There is no review given for the specified product");
 
 
-    private String errorMessage;
-
-
     ErrorMessages(String errorMessages) {
         this.errorMessages = errorMessages;
     }
-
 
     private String errorMessages;
 

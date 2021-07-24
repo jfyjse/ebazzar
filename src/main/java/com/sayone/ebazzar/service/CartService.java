@@ -116,10 +116,8 @@ public class CartService {
 
         cartItemRepository.deleteAProduct(cartId,productId);
 
-
         Optional<CartEntity> cartEntity2 = cartRepository.findCartById(userId, "open");
         CartEntity cartEntity3 = cartEntity2.get();
-
 
 
         double grandTotal = 0;
@@ -128,15 +126,6 @@ public class CartService {
         }
         cartEntity1.setTotalAmount(grandTotal);
         cartRepository.save(cartEntity3);
-
-
-
-    }
-
-
-    public void deleteAllProductsFromCart(Long cartId) {
-        cartItemRepository.deleteAllProducts(cartId);
-        cartRepository.deleteById(cartId);
 
     }
 

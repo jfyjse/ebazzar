@@ -26,4 +26,13 @@ public interface RestResources {
     String UPDATE_PRODUCT = "/{id}";
     String DELETE_PRODUCT = "/{id}";
 
+
+    /*
+     * API Endpoints for Cart
+     * */ String CART_ROOT = "/cart";
+          String GET_ALL_CART_ITEMS = "/get/{uid}";
+          String ADD_TO_CART = "/add/{productId}";
+          String REMOVE_PRODUCT_FROM_CART = "/remove/{pid}";
+
+
 }
