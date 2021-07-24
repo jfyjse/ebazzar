@@ -3,8 +3,8 @@ package com.sayone.ebazzar.controller;
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.ReviewDto;
 import com.sayone.ebazzar.dto.UserDto;
-import com.sayone.ebazzar.exception.CustomException;
 import com.sayone.ebazzar.exception.ErrorMessages;
+import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.model.request.ReviewRequestModel;
 import com.sayone.ebazzar.model.response.ReviewResponseModel;
 import com.sayone.ebazzar.service.ReviewService;
@@ -31,63 +31,59 @@ public class ReviewController {
     @Autowired
     UserService userService;
 
-   // http://localhost:8080/reviews
-   @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    // http://localhost:8080/reviews
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     public ResponseEntity<ReviewResponseModel> createReview(@RequestBody ReviewRequestModel reviewRequestModel) throws Exception {
 
-       Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-       UserDto user = userService.getUser(auth.getName());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
 
         if (reviewRequestModel.getProductId() == null)
-            throw new CustomException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
+            throw new RequestException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
 
-        return new ResponseEntity(reviewService.createReview(reviewRequestModel,user.getUserId()),HttpStatus.CREATED);
+        return new ResponseEntity(reviewService.createReview(reviewRequestModel, user.getUserId()), HttpStatus.CREATED);
     }
 
-   // http://localhost:8080/reviews/update/1
-   @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    // http://localhost:8080/reviews/update/1
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_RATING_BY_ID)
-    public ResponseEntity<ReviewResponseModel> updateRating(@PathVariable Long reviewId,
-                                  @RequestBody ReviewRequestModel reviewRequestModel) {
+    public ResponseEntity<ReviewResponseModel> updateRating(@PathVariable Long reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
 
         ReviewDto reviewDto = new ReviewDto();
-        BeanUtils.copyProperties(reviewRequestModel,reviewDto);
-        return new ResponseEntity<>(reviewService.updateReview(reviewId,reviewDto),HttpStatus.OK);
+        BeanUtils.copyProperties(reviewRequestModel, reviewDto);
+        return new ResponseEntity<>(reviewService.updateReview(reviewId, reviewDto), HttpStatus.OK);
     }
 
     // http://localhost:8080/reviews/all
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ALL_REVIEWS)
-    public ResponseEntity<List<ReviewResponseModel>> getAllReview(){
+    public ResponseEntity<List<ReviewResponseModel>> getAllReview() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
         List<ReviewResponseModel> reviewResponseModels = reviewService.findReviewsByUser(user.getUserId());
-        if(reviewResponseModels.isEmpty()){
+        if (reviewResponseModels.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else
-        {
-            return new ResponseEntity<>(reviewResponseModels,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(reviewResponseModels, HttpStatus.OK);
         }
     }
+
     // http://localhost:8080/reviews/all/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_RATING_FOR_PRODUCT)
-    public ResponseEntity<ReviewResponseModel> getRatingUsingPid(@PathVariable Long pid){
+    public ResponseEntity<ReviewResponseModel> getRatingUsingPid(@PathVariable Long pid) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        ReviewResponseModel reviewResponseModel = reviewService.findReviewForProduct(pid,user.getUserId());
-       if(reviewResponseModel == null ){
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-       }
-       else
-       {
-           return new ResponseEntity<>(reviewResponseModel,HttpStatus.OK);
-       }
+        ReviewResponseModel reviewResponseModel = reviewService.findReviewForProduct(pid, user.getUserId());
+        if (reviewResponseModel == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(reviewResponseModel, HttpStatus.OK);
+        }
     }
 
     // http://localhost:8080/reviews/delete?pid=1
@@ -98,10 +94,9 @@ public class ReviewController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        reviewService.deleteReview(productId,user.getUserId());
+        reviewService.deleteReview(productId, user.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
-
 
 }

@@ -15,7 +15,7 @@ public class ReviewRequestModel implements Serializable {
         return productId;
     }
 
-    public void setProductId(Long  productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
@@ -34,6 +34,5 @@ public class ReviewRequestModel implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 }

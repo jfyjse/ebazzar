@@ -38,12 +38,11 @@ public class OrderController {
         UserDto user = userService.getUser(auth.getName());
 
         String url = orderService.getSiteURL(request);
-        OrderResponsemodel orderResponsemodel = orderService.createOrder(user.getUserId(),orderRequestModel, url);
+        OrderResponsemodel orderResponsemodel = orderService.createOrder(user.getUserId(), orderRequestModel, url);
 
-        return new ResponseEntity<>(orderResponsemodel,HttpStatus.CREATED);
+        return new ResponseEntity<>(orderResponsemodel, HttpStatus.CREATED);
 
     }
-
 
     // http:localhost:8080/orders/all
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
@@ -54,12 +53,10 @@ public class OrderController {
         UserDto user = userService.getUser(auth.getName());
 
         List<OrderDetailsModel> orderDetailsModels = orderService.findAllOrders(user.getUserId());
-        if(orderDetailsModels.isEmpty()){
+        if (orderDetailsModels.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else
-        {
-            return new ResponseEntity<>(orderDetailsModels,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(orderDetailsModels, HttpStatus.OK);
         }
     }
 
@@ -76,13 +73,10 @@ public class OrderController {
     //http:localhost:8080/orders/1?status="Shipped"
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_ORDER_STATUS)
-    public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId,
-                                      @RequestParam(value = "status") String status,
-                                      HttpServletRequest request) throws Exception {
+    public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId, @RequestParam(value = "status") String status, HttpServletRequest request) throws Exception {
 
         String url = orderService.getSiteURL(request);
-        return new ResponseEntity<>(orderService.updateStatus(orderId, status,url),HttpStatus.ACCEPTED);
-
+        return new ResponseEntity<>(orderService.updateStatus(orderId, status, url), HttpStatus.ACCEPTED);
 
     }
 
@@ -94,29 +88,24 @@ public class OrderController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        List<OrderDetailsModel> orderDetailsModels = orderService.findOrderByStatus(user.getUserId(),status);
-        if(orderDetailsModels.isEmpty()){
+        List<OrderDetailsModel> orderDetailsModels = orderService.findOrderByStatus(user.getUserId(), status);
+        if (orderDetailsModels.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        else
-        {
-            return new ResponseEntity<>(orderDetailsModels,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(orderDetailsModels, HttpStatus.OK);
         }
     }
-
-
 
     // http:localhost:8080/orders/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.CANCEL_ORDER)
-    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId,
-                                          HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, HttpServletRequest request) throws Exception {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
         String url = orderService.getSiteURL(request);
-        orderService.cancelOrder(orderId,url,user.getUserId());
+        orderService.cancelOrder(orderId, url, user.getUserId());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }

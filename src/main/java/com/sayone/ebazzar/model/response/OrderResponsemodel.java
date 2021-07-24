@@ -1,7 +1,5 @@
 package com.sayone.ebazzar.model.response;
 
-import com.sayone.ebazzar.dto.AddressDto;
-
 public class OrderResponsemodel {
     private Long orderId;
     private String orderStatus;
@@ -39,6 +37,5 @@ public class OrderResponsemodel {
     public void setShippingAddress(AddressResponseModel shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
-
 
 }
