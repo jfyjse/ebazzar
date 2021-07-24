@@ -3,6 +3,7 @@ package com.sayone.ebazzar.service;
 import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.entity.WishlistEntity;
 import com.sayone.ebazzar.entity.WishlistItemEntity;
+import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.UserRepository;
@@ -26,10 +27,18 @@ public class WishlistService {
     @Autowired
     WishlistItemRepository wishlistItemRepository;
 
+    public  void removeProductFromWishlist(long userId, Long productId) {
+        Optional<WishlistEntity> wishlistEntity =wishlistRepository.findByUserId(userId);
+        WishlistEntity wishlistEntity1 = wishlistEntity.get();
+        Long wishlistId =wishlistEntity1.getWishlistId();
+        wishlistItemRepository.deleteProductFromWishlist(wishlistId,productId);
+    }
+
     public WishlistEntity addProductToWishlist(Long userId,Long productId) {
         Optional<WishlistEntity> wishlistEntity = wishlistRepository.findByUserId(userId);
+        WishlistEntity wishlistEntity1;
         if(wishlistEntity.isEmpty()){
-            WishlistEntity wishlistEntity1 = new WishlistEntity();
+            wishlistEntity1 = new WishlistEntity();
             WishlistItemEntity wishlistItemEntity = new WishlistItemEntity();
             wishlistEntity1.setUserEntity(userRepository.findById(userId).get());
             ProductEntity productEntity = productRepository.findById(productId).get();
@@ -37,17 +46,16 @@ public class WishlistService {
             wishlistItemEntity.setProductEntity(productEntity);
             wishlistEntity1.setWishlistItemEntityList(List.of(wishlistItemEntity));
             wishlistItemRepository.save(wishlistItemEntity);
-            return wishlistRepository.save(wishlistEntity1);
 
         }
         else{
 
-            WishlistEntity wishlistEntity1= wishlistEntity.get();
+            wishlistEntity1 = wishlistEntity.get();
             ProductEntity productEntity = productRepository.findById(productId).get();
 
             for (int i=0;i<wishlistEntity1.getWishlistItemEntityList().size();i++){
                 if(productEntity == wishlistEntity1.getWishlistItemEntityList().get(i).getProductEntity()){
-                    throw new RequestException("product exist");
+                    throw new RequestException(ErrorMessages.WISH_PRODUCT_EXISTS.getErrorMessages());
                 }
             }
 
@@ -55,9 +63,9 @@ public class WishlistService {
             wishlistItemEntity.setProductEntity(productEntity);
             wishlistEntity1.getWishlistItemEntityList().add(wishlistItemEntity);
             wishlistItemRepository.save(wishlistItemEntity);
-            return wishlistRepository.save(wishlistEntity1);
 
         }
+        return wishlistRepository.save(wishlistEntity1);
 
     }
 }

@@ -57,7 +57,7 @@ public interface RestResources {
      * */ String WISHLIST_ROOT = "/wishlist";
           String GET_WISHLIST = "/get";
           String CREATE_WISHLIST = "/add/{productId}";
-          String DELETE_WISHLIST = "/remove";
+          String DELETE_FROM_WISHLIST = "/remove/{pid}";
 
 
 }
