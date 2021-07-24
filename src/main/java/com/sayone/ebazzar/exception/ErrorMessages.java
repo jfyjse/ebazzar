@@ -37,7 +37,4 @@ public enum ErrorMessages {
         return errorMessages;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
 }

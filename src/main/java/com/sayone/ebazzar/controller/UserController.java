@@ -1,6 +1,7 @@
 package com.sayone.ebazzar.controller;
 
 
+import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("users")
+
 public class UserController {
 
     @Autowired
@@ -40,14 +42,15 @@ public class UserController {
         }
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException(ErrorMessages.INTERNAL_SERVER_ERROR.getErrorMessages());
+            throw new RequestException(e.getMessage());
         }
 
     }
 
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @PutMapping(path = "/update")
+    @PutMapping(path = RestResources.UPDATE_USER_DETAILS)
+
     public ResponseEntity<UserUpdateResponseModel> updateUser(@RequestBody UserUpdateRequestModel updateRequestModel){
 
         try {
@@ -66,7 +69,7 @@ public class UserController {
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping(path = "/profile")
+    @GetMapping(path = RestResources.GET_USER_DETAILS)
     public ResponseEntity<UserRestModel> getUserDetails(){
 
         try{
@@ -83,8 +86,8 @@ public class UserController {
 
 
 
-    @GetMapping(path = "/{email}/forgot-password")
-    public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
+@GetMapping(path = RestResources.FORGET_PASSWORD)
+public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
         try {
             OperationStatusModel returnValue=new OperationStatusModel();
@@ -104,12 +107,12 @@ public class UserController {
 
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
         }
 
     }
 
-    @PostMapping(path = "/{email}/resetpassword")
+    @PostMapping(path = RestResources.RESET_PASSWORD)
     public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
             @PathVariable String email,
             @RequestParam(value = "token") String token,
@@ -132,13 +135,13 @@ public class UserController {
         }
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
         }
     }
 
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
-    @DeleteMapping(path ="/delete")
+    @DeleteMapping(path =RestResources.DELETE_USER)
     public ResponseEntity<?> deleteUser(){
 
         try {
