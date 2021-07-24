@@ -5,14 +5,8 @@ import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
-import com.sayone.ebazzar.model.request.PasswordResetRequestModel;
-import com.sayone.ebazzar.model.request.RequestOperationStatus;
-import com.sayone.ebazzar.model.request.UserDetailsRequestModel;
-import com.sayone.ebazzar.model.request.UserUpdateRequestModel;
-import com.sayone.ebazzar.model.response.OperationStatusModel;
-import com.sayone.ebazzar.model.response.RequestOperationName;
-import com.sayone.ebazzar.model.response.UserRestModel;
-import com.sayone.ebazzar.model.response.UserUpdateResponseModel;
+import com.sayone.ebazzar.model.request.*;
+import com.sayone.ebazzar.model.response.*;
 import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,6 +27,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+//    http://localhost:8080/users
     @PostMapping
     public ResponseEntity<UserRestModel>  createUser(@RequestBody UserDetailsRequestModel userDetails){
 
@@ -47,7 +42,7 @@ public class UserController {
 
     }
 
-
+//    http://localhost:8080/users/update
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_USER_DETAILS)
 
@@ -68,6 +63,7 @@ public class UserController {
 
     }
 
+    //    http://localhost:8080/users/profile
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_USER_DETAILS)
     public ResponseEntity<UserRestModel> getUserDetails(){
@@ -85,9 +81,9 @@ public class UserController {
     }
 
 
-
-@GetMapping(path = RestResources.FORGET_PASSWORD)
-public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
+    //    http://localhost:8080/users/teena@gmail.com/forgot-password
+    @GetMapping(path = RestResources.FORGET_PASSWORD)
+    public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
         try {
             OperationStatusModel returnValue=new OperationStatusModel();
@@ -112,6 +108,7 @@ public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String 
 
     }
 
+    //    http://localhost:8080/users/teena@gmail.com/resetpassword
     @PostMapping(path = RestResources.RESET_PASSWORD)
     public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
             @PathVariable String email,
@@ -139,7 +136,26 @@ public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String 
         }
     }
 
+    //    http://localhost:8080/users/add-address
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+    @PostMapping(path = RestResources.ADD_ADDRESS)
+    public ResponseEntity<AddressResponseModel>  createUser(@RequestBody AddressRequestModel newAddress){
 
+        try {
+
+            Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            AddressResponseModel returnValue=userService.addAddress(userDto.getUserId(),newAddress);
+            return new ResponseEntity<>(returnValue,HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new RequestException(e.getMessage());
+        }
+
+    }
+
+    //    http://localhost:8080/users/delete
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path =RestResources.DELETE_USER)
     public ResponseEntity<?> deleteUser(){

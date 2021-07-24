@@ -8,6 +8,7 @@ public interface RestResources {
      * */
     String USER_ROOT="/users";
     String UPDATE_USER_DETAILS = "/update";
+    String ADD_ADDRESS= "/add-address";
     String GET_USER_DETAILS="/profile";
     String FORGET_PASSWORD="/{email}/forgot-password";
     String RESET_PASSWORD="/{email}/resetpassword";
