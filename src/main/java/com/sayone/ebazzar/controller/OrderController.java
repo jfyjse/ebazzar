@@ -65,7 +65,10 @@ public class OrderController {
     @GetMapping(path = RestResources.GET_ORDER_BY_ID)
     public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long orderId) {
 
-        OrderDetailsModel orderDetailsModel = orderService.getOrderById(orderId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        OrderDetailsModel orderDetailsModel = orderService.getOrderById(user.getUserId(),orderId);
         return new ResponseEntity<>(orderDetailsModel, HttpStatus.OK);
 
     }
