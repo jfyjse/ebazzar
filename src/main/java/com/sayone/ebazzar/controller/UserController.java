@@ -27,8 +27,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-//    http://localhost:8080/users
-    @PostMapping
+//    http://localhost:8080/users/registration
+    @PostMapping(path =RestResources.ADD_USER)
     public ResponseEntity<UserRestModel>  createUser(@RequestBody UserDetailsRequestModel userDetails){
 
         try {
@@ -139,7 +139,7 @@ public class UserController {
     //    http://localhost:8080/users/add-address
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping(path = RestResources.ADD_ADDRESS)
-    public ResponseEntity<AddressResponseModel>  createUser(@RequestBody AddressRequestModel newAddress){
+    public ResponseEntity<AddressResponseModel>  addAddress(@RequestBody AddressRequestModel newAddress){
 
         try {
 
@@ -155,24 +155,20 @@ public class UserController {
 
     }
 
-    //    http://localhost:8080/users/delete
+  //    http://localhost:8080/users/delete
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path =RestResources.DELETE_USER)
     public ResponseEntity<?> deleteUser(){
-
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto userDto=userService.getUser(auth.getName());
             userService.deleteUser(userDto.getEmail());
             return new ResponseEntity<>(HttpStatus.OK);
         }
-
         catch (Exception e){
             e.printStackTrace();
             throw new RequestException(ErrorMessages.COULD_NOT_DELETE_RECORD.getErrorMessages());
-
         }
-
     }
 
     private String getSiteURL(HttpServletRequest request) {

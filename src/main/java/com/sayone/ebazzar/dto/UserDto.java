@@ -12,6 +12,7 @@ public class UserDto implements Serializable {
     private String password;
     private int phoneNumber;
     private String userType;
+    private Boolean  userStatus;
     private List<AddressDto> addressDtos;
     private String encryptedPassword;
 
@@ -73,6 +74,14 @@ public class UserDto implements Serializable {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public Boolean getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(Boolean userStatus) {
+        this.userStatus = userStatus;
     }
 
     public List<AddressDto> getAddressDtos() {

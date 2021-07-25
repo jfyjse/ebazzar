@@ -9,6 +9,7 @@ public class  UserRestModel {
     private String firstName;
     private String lastName;
     private String email;
+    private int phoneNumber;
     private List<AddressResponseModel> addressResponseModels;
 
 
@@ -35,7 +36,15 @@ public class  UserRestModel {
     public void setEmail(String email) {
         this.email = email;
     }
-        public List<AddressResponseModel> getAddressResponseModels() {
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public List<AddressResponseModel> getAddressResponseModels() {
         return addressResponseModels;
     }
     public void setAddressResponseModels(List<AddressResponseModel> addressResponseModels) {
