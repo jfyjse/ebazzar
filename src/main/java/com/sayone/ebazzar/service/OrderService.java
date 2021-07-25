@@ -122,11 +122,13 @@ public class OrderService {
         return orderDetailsModels;
     }
 
-    public OrderDetailsModel getOrderById(Long id) {
+    public OrderDetailsModel getOrderById(Long userId,Long id) {
 
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(id);
         if (!orderEntity.isPresent())
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
+        if(orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
+            throw new RequestException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
 
         OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
         BeanUtils.copyProperties(orderEntity.get(), orderDetailsModel);
@@ -154,11 +156,17 @@ public class OrderService {
 
     public OrderResponsemodel updateStatus(Long orderId, String status, String url) throws Exception {
         String status1 = status.toLowerCase();
+        if(!status1.equals("confirmed") && !status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered") && !status1.equals("cancelled") )
+            throw new RequestException(ErrorMessages.INVALID_STATUS.getErrorMessages());
+
         OrderResponsemodel orderResponsemodel = new OrderResponsemodel();
 
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(orderId);
         if (!orderEntity.isPresent())
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
+        if(orderEntity.get().getOrderStatus().equals(status1))
+            throw new RequestException(ErrorMessages.SAME_STATUS.getErrorMessages());
+
         OrderEntity orderEntity1 = orderEntity.get();
         orderEntity1.setOrderStatus(status1);
 
@@ -176,15 +184,21 @@ public class OrderService {
     public List<OrderDetailsModel> findOrderByStatus(Long userId, String status) {
 
         String status1 = status.toLowerCase();
+
+        if(!status1.equals("confirmed") && !status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered") && !status1.equals("cancelled") )
+            throw new RequestException(ErrorMessages.INVALID_STATUS.getErrorMessages());
+
         List<OrderDetailsModel> orderDetailsModels = new ArrayList<OrderDetailsModel>();
         List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId, "closed");
 
         if (cartEntityList.isEmpty())
             throw new RequestException(ErrorMessages.NO_ORDER_FOUND.getErrorMessages());
 
+        boolean orderfound = false;
         for (CartEntity cartEntity : cartEntityList) {
             OrderEntity orderEntity = orderRepository.findBycartIdandStatus(cartEntity.getCartId(), status1);
             if (orderEntity != null) {
+                orderfound = true;
                 OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
                 BeanUtils.copyProperties(orderEntity, orderDetailsModel);
 
@@ -210,6 +224,8 @@ public class OrderService {
             }
 
         }
+        if(orderfound == false)
+            throw new RequestException(ErrorMessages.NO_ORDER_STATUS.getErrorMessages());
         return orderDetailsModels;
     }
 
@@ -220,6 +236,8 @@ public class OrderService {
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
         if (orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
             throw new RequestException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
+        if(orderEntity.get().getOrderStatus().equals("cancelled"))
+            throw new RequestException(ErrorMessages.ALREDAY_CANCELLED.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();
         orderEntity1.setOrderStatus("cancelled");

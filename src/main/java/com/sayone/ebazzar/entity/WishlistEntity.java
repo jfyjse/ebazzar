@@ -1,18 +1,34 @@
 package com.sayone.ebazzar.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "wishlist")
 public class WishlistEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long wishlistId;
-    private long userId;
-    private long productId;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private UserEntity userEntity;
+
+    @OneToMany(targetEntity = WishlistItemEntity.class,cascade = CascadeType.MERGE)
+    @JoinColumn(name = "wish_id", referencedColumnName = "wishlistId")
+    private List<WishlistItemEntity> wishlistItemEntityList;
+
+
+    public List<WishlistItemEntity> getWishlistItemEntityList() {
+        return wishlistItemEntityList;
+    }
+
+    public void setWishlistItemEntityList(List<WishlistItemEntity> wishlistItemEntityList) {
+        this.wishlistItemEntityList = wishlistItemEntityList;
+    }
 
     public long getWishlistId() {
         return wishlistId;
@@ -22,19 +38,12 @@ public class WishlistEntity {
         this.wishlistId = wishlistId;
     }
 
-    public long getUserId() {
-        return userId;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
 }

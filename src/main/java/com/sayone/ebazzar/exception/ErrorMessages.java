@@ -10,6 +10,10 @@ public enum ErrorMessages {
     INVALID_ADDRESS("There is no address with this ID"),
     INVALID_USER_ADDRESS("This is not user address"),
     INVALID_ORDERID("There is no order with this ID"),
+    SAME_STATUS("The order is already with the same status"),
+    ALREDAY_CANCELLED("The order is already cancelled"),
+    INVALID_STATUS("This is not a valid status. Status can only be shipped, in-transit, delivered or cancelled"),
+    NO_ORDER_STATUS("There is no order with this status"),
     ORDER_NOT_DELIVERED("The product is not yet delivered. So, you cannot give review"),
     PRODUCT_NOT_PURCHASED("You cannot give Review for a Product you have not purchased"),
     NO_PRODUCT_FOUND("There is no Product with the given ID"),
@@ -27,8 +31,9 @@ public enum ErrorMessages {
     INVALID_RATING("Rating should be less than 6"),
     NO_REVIEW_GIVEN("There are no reviews given "),
     NO_REVIEW_FOUND("There is no review given for the specified product"),
-    DELETED_ACCOUNT("Account is deleted");
-
+    DELETED_ACCOUNT("Account is deleted"),
+    WISH_PRODUCT_EXISTS("PRODUCT ALREADY IN WISH"),
+    WISH_PID_NOTFOUND("PROVIDE PRODUCT ID");
 
     ErrorMessages(String errorMessages) {
         this.errorMessages = errorMessages;

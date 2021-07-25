@@ -11,7 +11,6 @@ public interface RestResources {
     String GET_USER_DETAILS="/profile";
     String FORGET_PASSWORD="/{email}/forgot-password";
     String RESET_PASSWORD="/{email}/resetpassword";
-    String DELETE_ADDRESS="/{addressId}";
     String DELETE_USER="/delete";
 
     /*
@@ -53,5 +52,14 @@ public interface RestResources {
     /*
      * API Endpoints for Category
      * */ String GET_ALL_CATEGORY = "/category";
+
+
+    /*
+     * API Endpoints for Category
+     * */ String WISHLIST_ROOT = "/wishlist";
+          String GET_WISHLIST = "/get";
+          String CREATE_WISHLIST = "/add/{productId}";
+          String DELETE_FROM_WISHLIST = "/remove/{pid}";
+
 
 }
