@@ -50,6 +50,9 @@ public class UserEntity implements Serializable {
     @Column
     private Boolean emailVerificationStatus=false;
 
+    @Column
+    private Boolean  userStatus;
+
     @UpdateTimestamp
     private LocalDateTime updatedTime;
     @CreationTimestamp
@@ -158,5 +161,13 @@ public class UserEntity implements Serializable {
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+
+    public Boolean getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(Boolean userStatus) {
+        this.userStatus = userStatus;
     }
 }

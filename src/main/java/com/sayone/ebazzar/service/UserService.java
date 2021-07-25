@@ -80,6 +80,7 @@ public class UserService implements UserDetailsService {
             addressEntities.add(addressEntity);
         }
         userEntity.setAddress(addressEntities);
+        userEntity.setUserStatus(true);
         UserEntity storedUserDetails=userRepository.save(userEntity);
         List<AddressResponseModel> addressResponseModels = new ArrayList<AddressResponseModel>();
         for (int i =0;i<storedUserDetails.getAddress().size();i++){
@@ -196,20 +197,22 @@ public class UserService implements UserDetailsService {
         return returnValue;
     }
 
-    public String deleteUser(String email)
+    public void deleteUser(String email)
     {
         UserEntity userEntity=userRepository.findByEmail(email);
         if(userEntity == null) throw new UsernameNotFoundException(email);
-        userRepository.delete(userEntity);
-        return "user deleted";
+        userEntity.setUserStatus(false);
+        userRepository.save(userEntity);
 
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email)  {
         UserEntity userEntity = userRepository.findByEmail(email);
-
         if(userEntity == null) throw new UsernameNotFoundException(email);
+        userEntity.setUserStatus(getUser(email).getUserStatus());
+        System.out.println(userEntity.getUserStatus());
+        if(userEntity.getUserStatus()==false) throw new RequestException(ErrorMessages.DELETED_ACCOUNT.getErrorMessages());
         return new User(userEntity.getEmail(),userEntity.getEncryptedPassword(),new ArrayList<>());
     }
 }

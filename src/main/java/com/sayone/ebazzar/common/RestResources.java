@@ -5,6 +5,7 @@ public interface RestResources {
     /*
      * API Endpoints for user related operations
      * */ String USER_ROOT = "/users";
+    String ADD_USER = "/registration";
     String UPDATE_USER_DETAILS = "/update";
     String ADD_ADDRESS= "/add-address";
     String GET_USER_DETAILS="/profile";

@@ -31,9 +31,9 @@ public enum ErrorMessages {
     INVALID_RATING("Rating should be less than 6"),
     NO_REVIEW_GIVEN("There are no reviews given "),
     NO_REVIEW_FOUND("There is no review given for the specified product"),
+    DELETED_ACCOUNT("Account is deleted"),
     WISH_PRODUCT_EXISTS("PRODUCT ALREADY IN WISH"),
     WISH_PID_NOTFOUND("PROVIDE PRODUCT ID");
-
 
     ErrorMessages(String errorMessages) {
         this.errorMessages = errorMessages;
