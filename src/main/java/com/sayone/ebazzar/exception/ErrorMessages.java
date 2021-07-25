@@ -10,6 +10,7 @@ public enum ErrorMessages {
     INVALID_ADDRESS("There is no address with this ID"),
     INVALID_USER_ADDRESS("This is not user address"),
     INVALID_ORDERID("There is no order with this ID"),
+    SAME_STATUS("The order is already with the same status"),
     ALREDAY_CANCELLED("The order is already cancelled"),
     INVALID_STATUS("This is not a valid status. Status can only be shipped, in-transit, delivered or cancelled"),
     NO_ORDER_STATUS("There is no order with this status"),
