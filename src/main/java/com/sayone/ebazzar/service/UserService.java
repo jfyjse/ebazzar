@@ -211,7 +211,6 @@ public class UserService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByEmail(email);
         if(userEntity == null) throw new UsernameNotFoundException(email);
         userEntity.setUserStatus(getUser(email).getUserStatus());
-        System.out.println(userEntity.getUserStatus());
         if(userEntity.getUserStatus()==false) throw new RequestException(ErrorMessages.DELETED_ACCOUNT.getErrorMessages());
         return new User(userEntity.getEmail(),userEntity.getEncryptedPassword(),new ArrayList<>());
     }

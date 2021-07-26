@@ -31,6 +31,9 @@ public class UserConfig {
             user1.setEncryptedPassword(bCryptPasswordEncoder.encode(user1.getPassword()));
             user2.setEncryptedPassword(bCryptPasswordEncoder.encode(user2.getPassword()));
             user3.setEncryptedPassword(bCryptPasswordEncoder.encode(user3.getPassword()));
+            user1.setUserStatus(true);
+            user2.setUserStatus(true);
+            user3.setUserStatus(true);
             userRepository.saveAll(List.of(user1,user2,user3));
 
             AddressEntity addressEntity1 = new AddressEntity("ABC Lane","ABC Street","ABC City","AS3223","shipping",user1);
