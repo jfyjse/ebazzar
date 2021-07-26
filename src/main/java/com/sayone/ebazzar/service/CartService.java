@@ -50,8 +50,6 @@ public class CartService {
             cartEntity1.setTotalAmount(cartItemEntity.getTotalPrice());
 
             cartItemRepository.save(cartItemEntity);
-            productEntity.setQuantity(productEntity.getQuantity()-quantity);
-            productRepository.save(productEntity);
             return cartRepository.save(cartEntity1);
 
         } else {
@@ -71,8 +69,6 @@ public class CartService {
                     cartEntity1.getCartItemEntityList().get(i).setQuantity(cartEntity1.getCartItemEntityList().get(i).getQuantity()+quantity);
                     cartEntity1.getCartItemEntityList().get(i).setTotalPrice(cartEntity1.getCartItemEntityList().get(i).getTotalPrice() + ( quantity * productEntity.getPrice()));
 
-                    productEntity.setQuantity(productEntity.getQuantity()-quantity);
-                    productRepository.save(productEntity);
 
                     double grandtotal = 0;
                     for(CartItemEntity cartItemEntity:cartEntity1.getCartItemEntityList()){
@@ -84,8 +80,6 @@ public class CartService {
                     return cartRepository.save(cartEntity1);
                 }
             }
-            productEntity.setQuantity(productEntity.getQuantity()-quantity);
-            productRepository.save(productEntity);
 
             CartItemEntity cartItemEntity = new CartItemEntity();
             cartItemEntity.setProductEntity(productEntity);
@@ -113,9 +107,6 @@ public class CartService {
         Integer quantity= cartItemRepository.getQuantity(productId);
         System.out.println(quantity + " quantity");
         System.out.println("cartid= "+cartId);
-
-        productEntity.setQuantity(productEntity.getQuantity()+quantity);
-        productRepository.save(productEntity);
 
         cartItemRepository.deleteAProduct(cartId,productId);
 
