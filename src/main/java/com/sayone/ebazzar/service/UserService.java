@@ -148,6 +148,8 @@ public class UserService implements UserDetailsService {
         boolean returnValue = false;
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDto,userEntity);
+        userEntity.setUserStatus(getUser(userDto.getEmail()).getUserStatus());
+        if(userEntity.getUserStatus()==false) throw new RequestException(ErrorMessages.DELETED_ACCOUNT.getErrorMessages());
         String token=new Utils().generatePasswordResetToken(userEntity.getEmail());
         PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
         passwordResetTokenEntity.setToken(token);

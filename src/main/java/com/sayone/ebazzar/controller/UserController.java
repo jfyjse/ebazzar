@@ -103,7 +103,8 @@ public class UserController {
 
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException(ErrorMessages.NO_RECORD_FOUND.getErrorMessages());
+            throw new RequestException(e.getMessage());
+
         }
 
     }
