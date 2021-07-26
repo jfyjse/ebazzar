@@ -29,7 +29,7 @@ public class OrderController {
     @Autowired
     UserService userService;
 
-    //http:localhost:8080/orders
+    //http://localhost:8080/orders
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     public ResponseEntity<OrderResponsemodel> createOrder(@RequestBody OrderRequestModel orderRequestModel, HttpServletRequest request) throws Exception {
@@ -44,7 +44,7 @@ public class OrderController {
 
     }
 
-    // http:localhost:8080/orders/all
+    // http://localhost:8080/orders/all
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.VIEW_ORDERS)
     public ResponseEntity<List<OrderDetailsModel>> getLoggedInUserOrders() throws Exception {
@@ -60,7 +60,7 @@ public class OrderController {
         }
     }
 
-    //http:localhost:8080/orders/all/1
+    //http://localhost:8080/orders/all/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ORDER_BY_ID)
     public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long orderId) {
@@ -73,7 +73,7 @@ public class OrderController {
 
     }
 
-    //http:localhost:8080/orders/1?status="Shipped"
+    //http://localhost:8080/orders/1?status="Shipped"
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_ORDER_STATUS)
     public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId, @RequestParam(value = "status") String status, HttpServletRequest request) throws Exception {
@@ -99,7 +99,7 @@ public class OrderController {
         }
     }
 
-    // http:localhost:8080/orders/1
+    // http://localhost:8080/orders/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.CANCEL_ORDER)
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, HttpServletRequest request) throws Exception {
