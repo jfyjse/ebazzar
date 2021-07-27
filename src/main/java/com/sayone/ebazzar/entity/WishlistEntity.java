@@ -17,19 +17,24 @@ public class WishlistEntity {
     @JsonIgnore
     private UserEntity userEntity;
 
-    @OneToMany(targetEntity = WishlistItemEntity.class,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "wish_id", referencedColumnName = "wishlistId")
-    private List<WishlistItemEntity> wishlistItemEntityList;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "wishlist_products",
+            joinColumns = {
+                    @JoinColumn(name = "wishlist_id", referencedColumnName = "wishlistId",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "product_id", referencedColumnName = "productId",
+                            nullable = false, updatable = false)})
+    @JsonIgnore
+    private List<ProductEntity> productEntityList;
 
-
-    public List<WishlistItemEntity> getWishlistItemEntityList() {
-        return wishlistItemEntityList;
+    public List<ProductEntity> getProductEntityList() {
+        return productEntityList;
     }
 
-    public void setWishlistItemEntityList(List<WishlistItemEntity> wishlistItemEntityList) {
-        this.wishlistItemEntityList = wishlistItemEntityList;
+    public void setProductEntityList(List<ProductEntity> productEntityList) {
+        this.productEntityList = productEntityList;
     }
-
     public long getWishlistId() {
         return wishlistId;
     }
