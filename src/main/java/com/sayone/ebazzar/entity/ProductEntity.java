@@ -94,5 +94,18 @@ public class ProductEntity implements Serializable {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", updatedTime=" + updatedTime +
+                ", createTime=" + createTime +
+                ", subCategory=" + subCategory +
+                '}';
+    }
 }
 
