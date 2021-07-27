@@ -1,8 +1,8 @@
 package com.sayone.ebazzar.controller;
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
+import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.entity.WishlistEntity;
-import com.sayone.ebazzar.entity.WishlistItemEntity;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.service.UserService;
@@ -25,6 +25,8 @@ public class WishlistController {
     WishlistService wishlistService;
     @Autowired
     UserService userService;
+
+    //http://localhost:8080/wishlist/add/2
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping(path = RestResources.CREATE_WISHLIST)
     public ResponseEntity<WishlistEntity> addToWishlist(@PathVariable (value = "productId") Long productId){
@@ -34,6 +36,7 @@ public class WishlistController {
         return new ResponseEntity<>(wishlistEntity, HttpStatus.OK);
     }
 
+    //http://localhost:8080/wishlist/remove/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.DELETE_FROM_WISHLIST)
     public void deleteProductFromWishlist(@PathVariable (value = "pid") Long productId){
@@ -50,9 +53,10 @@ public class WishlistController {
 
     }
 
+    //http://localhost:8080/wishlist/get
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_WISHLIST)
-    public List<WishlistItemEntity> getWishlistItems(){
+    public List<ProductEntity> getWishlistItems(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
         return wishlistService.getWishlistItems(user.getUserId());

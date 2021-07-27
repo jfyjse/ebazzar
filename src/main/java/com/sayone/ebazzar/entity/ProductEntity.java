@@ -1,6 +1,7 @@
 package com.sayone.ebazzar.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 
@@ -30,7 +32,19 @@ public class ProductEntity implements Serializable {
     public ProductEntity() {
     }
 
+    @ManyToMany(mappedBy = "productEntityList", fetch = FetchType.LAZY)
+    @JsonIgnore
 
+
+    private List<WishlistEntity> wishlistEntity;
+
+    public List<WishlistEntity> getWishlistEntity() {
+        return wishlistEntity;
+    }
+
+    public void setWishlistEntity(List<WishlistEntity> wishlistEntity) {
+        this.wishlistEntity = wishlistEntity;
+    }
 
     @UpdateTimestamp
     private LocalDateTime updatedTime;

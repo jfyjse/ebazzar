@@ -55,7 +55,7 @@ public class CartController {
     }
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     //http://localhost:8080/cart/remove/1
-    @PutMapping(path = RestResources.REMOVE_PRODUCT_FROM_CART)
+    @DeleteMapping(path = RestResources.REMOVE_PRODUCT_FROM_CART)
     public void removeProductFromCart(@PathVariable(value = "pid") Long productId){
         if (productId == null ){
             throw new RequestException(ErrorMessages.CART_PRODUCTID_NOTFOUND.getErrorMessages());}
