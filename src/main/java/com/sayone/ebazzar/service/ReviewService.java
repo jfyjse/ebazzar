@@ -6,7 +6,6 @@ import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.model.request.ReviewRequestModel;
 import com.sayone.ebazzar.model.response.ReviewResponseModel;
 import com.sayone.ebazzar.repository.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class ReviewService {
     @Autowired
     OrderRepository orderRepository;
 
-    public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel, Long userId) throws Exception {
+    public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel, Long userId) {
 
         ProductEntity productEntity = getProductById(reviewRequestModel.getProductId());
 
@@ -50,11 +49,11 @@ public class ReviewService {
                     break;
                 }
             }
-            if (productPurchased == true)
+            if (productPurchased)
                 break;
 
         }
-        if (productPurchased == false)
+        if (!productPurchased)
             throw new RequestException(ErrorMessages.PRODUCT_NOT_PURCHASED.getErrorMessages());
 
         boolean orderDelivered = false;
@@ -65,7 +64,7 @@ public class ReviewService {
                 break;
             }
         }
-        if (orderDelivered == false)
+        if (!orderDelivered)
             throw new RequestException(ErrorMessages.ORDER_NOT_DELIVERED.getErrorMessages());
 
         UserEntity userEntity = getUserById(userId);
@@ -92,17 +91,17 @@ public class ReviewService {
         return reviewResponseModel;
     }
 
-    public ProductEntity getProductById(Long productId) throws Exception {
+    public ProductEntity getProductById(Long productId) {
         Optional<ProductEntity> productEntity = productRepository.findById(productId);
-        if (!productEntity.isPresent()) {
+        if (productEntity.isEmpty()) {
             throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
         }
         return productEntity.get();
     }
 
-    public UserEntity getUserById(Long userId) throws Exception {
+    public UserEntity getUserById(Long userId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
-        if (!userEntity.isPresent()) {
+        if (userEntity.isEmpty()) {
             throw new RequestException(ErrorMessages.NO_USER_FOUND.getErrorMessages());
         }
         return userEntity.get();
@@ -111,11 +110,7 @@ public class ReviewService {
 
     public ReviewResponseModel updateReview(ReviewRequestModel reviewRequestModel, Long userId) {
 
-        ModelMapper modelMapper = new ModelMapper();
-
-        ProductEntity productEntity = productRepository.findByProductId(reviewRequestModel.getProductId());
-        if (productEntity == null)
-            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
+        getProductById(reviewRequestModel.getProductId());
 
         Optional<ReviewEntity> reviewEntity = reviewRepository.findByProductAndUser(reviewRequestModel.getProductId(), userId);
         if (reviewEntity.isEmpty())
@@ -138,9 +133,7 @@ public class ReviewService {
 
     public ReviewResponseModel findReviewForProduct(Long productId, Long userId) {
 
-        ProductEntity productEntity = productRepository.findByProductId(productId);
-        if (productEntity == null)
-            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
+        getProductById(productId);
 
         Optional<ReviewEntity> reviewEntity = reviewRepository.findByProductAndUser(productId, userId);
         if (reviewEntity.isEmpty())
@@ -156,9 +149,7 @@ public class ReviewService {
 
     public void deleteReview(Long productId, Long userId) {
 
-        ProductEntity productEntity = productRepository.findByProductId(productId);
-        if (productEntity == null)
-            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
+        getProductById(productId);
 
         Integer status = reviewRepository.deleteReview(productId, userId);
         if (status == 0)
@@ -170,7 +161,7 @@ public class ReviewService {
         if (reviewEntityList.isEmpty())
             throw new RequestException(ErrorMessages.NO_REVIEW_GIVEN.getErrorMessages());
 
-        List<ReviewResponseModel> reviewResponseModels = new ArrayList<ReviewResponseModel>();
+        List<ReviewResponseModel> reviewResponseModels = new ArrayList<>();
         for (ReviewEntity reviewEntity : reviewEntityList) {
             ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
             BeanUtils.copyProperties(reviewEntity, reviewResponseModel);
