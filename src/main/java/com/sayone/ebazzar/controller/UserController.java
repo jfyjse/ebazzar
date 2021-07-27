@@ -1,6 +1,7 @@
 package com.sayone.ebazzar.controller;
 
 
+import com.sayone.ebazzar.common.Notes;
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
@@ -10,6 +11,7 @@ import com.sayone.ebazzar.model.response.*;
 import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class UserController {
     UserService userService;
 
 //    http://localhost:8080/users/registration
+    @ApiOperation(value = "API for user registration",notes = Notes.USER_REGISTRATION)
     @PostMapping(path =RestResources.ADD_USER)
     public ResponseEntity<UserRestModel>  createUser(@RequestBody UserDetailsRequestModel userDetails){
 
@@ -43,6 +46,7 @@ public class UserController {
     }
 
 //    http://localhost:8080/users/update
+    @ApiOperation(value = " API for updating user details",notes = Notes.USER_UPDATE)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_USER_DETAILS)
 
@@ -64,6 +68,7 @@ public class UserController {
     }
 
     //    http://localhost:8080/users/profile
+    @ApiOperation(value = "API for getting user information",notes = Notes.USER_PROFILE)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_USER_DETAILS)
     public ResponseEntity<UserRestModel> getUserDetails(){
@@ -82,6 +87,7 @@ public class UserController {
 
 
     //    http://localhost:8080/users/teena@gmail.com/forgot-password
+    @ApiOperation(value = "API for forgot password",notes = Notes.FORGOT_PASSWORD)
     @GetMapping(path = RestResources.FORGET_PASSWORD)
     public ResponseEntity<OperationStatusModel> forgotPassword(@PathVariable String email, HttpServletRequest request) throws Exception{
 
@@ -110,6 +116,7 @@ public class UserController {
     }
 
     //    http://localhost:8080/users/teena@gmail.com/resetpassword
+    @ApiOperation(value = "API for resetting password",notes = Notes.RESET_PASSWORD)
     @PostMapping(path = RestResources.RESET_PASSWORD)
     public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
             @PathVariable String email,
@@ -138,6 +145,7 @@ public class UserController {
     }
 
     //    http://localhost:8080/users/add-address
+    @ApiOperation(value = "API for adding address for the user",notes = Notes.ADD_ADDRESS)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping(path = RestResources.ADD_ADDRESS)
     public ResponseEntity<AddressResponseModel>  addAddress(@RequestBody AddressRequestModel newAddress){
@@ -157,7 +165,8 @@ public class UserController {
     }
 
   //    http://localhost:8080/users/delete
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
+  @ApiOperation(value = "API for deleting ",notes = Notes.USER_REGISTRATION)
+  @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path =RestResources.DELETE_USER)
     public ResponseEntity<?> deleteUser(){
         try {
