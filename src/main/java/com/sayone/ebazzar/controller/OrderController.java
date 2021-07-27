@@ -47,7 +47,7 @@ public class OrderController {
     // http://localhost:8080/orders/all
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.VIEW_ORDERS)
-    public ResponseEntity<List<OrderDetailsModel>> getLoggedInUserOrders() throws Exception {
+    public ResponseEntity<List<OrderDetailsModel>> getLoggedInUserOrders() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
