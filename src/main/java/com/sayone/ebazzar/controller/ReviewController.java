@@ -1,5 +1,6 @@
 package com.sayone.ebazzar.controller;
 
+import com.sayone.ebazzar.common.Notes;
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
@@ -10,6 +11,7 @@ import com.sayone.ebazzar.service.ReviewService;
 import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class ReviewController {
     UserService userService;
 
     // http://localhost:8080/reviews
+    @ApiOperation(value = "API for giving review for a product",notes = Notes.GIVE_REVIEW)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     public ResponseEntity<ReviewResponseModel> createReview(@RequestBody ReviewRequestModel reviewRequestModel) {
@@ -44,6 +47,7 @@ public class ReviewController {
     }
 
     // http://localhost:8080/reviews/update
+    @ApiOperation(value = "API for editing an already existing review",notes = Notes.UPDATE_REVIEW)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_RATING_BY_ID)
     public ResponseEntity<ReviewResponseModel> updateRating(@RequestBody ReviewRequestModel reviewRequestModel) {
@@ -55,6 +59,7 @@ public class ReviewController {
     }
 
     // http://localhost:8080/reviews/all
+    @ApiOperation(value = "API for viewing all the reviews given by the user",notes = Notes.GET_ALL)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ALL_REVIEWS)
     public ResponseEntity<List<ReviewResponseModel>> getAllReview() {
@@ -70,6 +75,7 @@ public class ReviewController {
     }
 
     // http://localhost:8080/reviews/all/1
+    @ApiOperation(value = "API for viewing the review given for a particular product",notes = Notes.GET_REVIEW)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_RATING_FOR_PRODUCT)
     public ResponseEntity<ReviewResponseModel> getRatingUsingPid(@PathVariable Long pid) {
@@ -86,6 +92,7 @@ public class ReviewController {
     }
 
     // http://localhost:8080/reviews/delete?pid=1
+    @ApiOperation(value = "API for deleting a review given for a product",notes = Notes.DELETE_REVIEW)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.DELETE_REVIEW)
     public ResponseEntity<?> deleteRating(@RequestParam(value = "pid") Long productId) {

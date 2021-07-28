@@ -1,5 +1,6 @@
 package com.sayone.ebazzar.controller;
 
+import com.sayone.ebazzar.common.Notes;
 import com.sayone.ebazzar.common.RestResources;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.model.request.OrderRequestModel;
@@ -9,6 +10,7 @@ import com.sayone.ebazzar.service.OrderService;
 import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class OrderController {
     UserService userService;
 
     //http://localhost:8080/orders
+    @ApiOperation(value = "API for placing an order",notes = Notes.CREATE_ORDER)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     public ResponseEntity<OrderResponsemodel> createOrder(@RequestBody OrderRequestModel orderRequestModel, HttpServletRequest request) throws Exception {
@@ -45,6 +48,7 @@ public class OrderController {
     }
 
     // http://localhost:8080/orders/all
+    @ApiOperation(value = "API for viewing all orders of the user",notes = Notes.GET_ALL_ORDERS)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.VIEW_ORDERS)
     public ResponseEntity<List<OrderDetailsModel>> getLoggedInUserOrders() {
@@ -61,6 +65,7 @@ public class OrderController {
     }
 
     //http://localhost:8080/orders/all/1
+    @ApiOperation(value = "API for getting the details of an order",notes = Notes.GET_ORDER)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_ORDER_BY_ID)
     public ResponseEntity<OrderDetailsModel> getOrder(@PathVariable Long orderId) {
@@ -73,7 +78,8 @@ public class OrderController {
 
     }
 
-    //http://localhost:8080/orders/1?status="Shipped"
+    //http://localhost:8080/orders/1?status=Shipped
+    @ApiOperation(value = "API for updating the status of an order",notes = Notes.UPDATE_STATUS)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.UPDATE_ORDER_STATUS)
     public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId, @RequestParam(value = "status") String status, HttpServletRequest request) throws Exception {
@@ -84,6 +90,7 @@ public class OrderController {
     }
 
     // http://localhost:8080/orders?status=Confirmed
+    @ApiOperation(value = "API for viewing orders in a particular order status",notes = Notes.GET_ORDER_STATUS)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping
     public ResponseEntity<List<OrderDetailsModel>> getOrderByStatus(@RequestParam(value = "status") String status) {
@@ -100,6 +107,7 @@ public class OrderController {
     }
 
     // http://localhost:8080/orders/1
+    @ApiOperation(value = "API for cancelling an order",notes = Notes.CANCEL_ORDER)
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.CANCEL_ORDER)
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, HttpServletRequest request) throws Exception {
