@@ -1,7 +1,11 @@
 package com.sayone.ebazzar.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -14,6 +18,11 @@ public class PasswordResetTokenEntity implements Serializable {
     private Long id;
 
     private String token;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
 
     @OneToOne
     @JoinColumn(name = "user_id")

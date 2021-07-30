@@ -1,8 +1,11 @@
 package com.sayone.ebazzar.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -11,6 +14,11 @@ public class WishlistEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long wishlistId;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    private LocalDateTime createTime;
 
     @OneToOne
     @JoinColumn(name = "user_id")
