@@ -26,7 +26,7 @@ public class UserConfig {
         return args -> {
             UserEntity user1=new UserEntity("Teena","Alex","teena@gmail.com","123",62525,"customer");
             UserEntity user2=new UserEntity("Miya","Mathew","miya@gmail.com","123",62525,"customer");
-            UserEntity user3=new UserEntity("Rahul","Thomas","rahul@gmail.com","123",62525,"customer");
+            UserEntity user3=new UserEntity("Rahul","Thomas","rahul@gmail.com","123",62525,"seller");
 
             user1.setEncryptedPassword(bCryptPasswordEncoder.encode(user1.getPassword()));
             user2.setEncryptedPassword(bCryptPasswordEncoder.encode(user2.getPassword()));
