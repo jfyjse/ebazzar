@@ -1,8 +1,7 @@
 package com.sayone.ebazzar.service;
 
-//import com.sayone.ebazzar.document.ElasticProduct;
+import com.sayone.ebazzar.document.ElasticProduct;
 import com.sayone.ebazzar.dto.ProductDto;
-import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.entity.SubCategoryEntity;
 import com.sayone.ebazzar.exception.ErrorMessages;
@@ -16,7 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-//import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 
