@@ -2,6 +2,7 @@ package com.sayone.ebazzar.controller;
 
 
 import com.sayone.ebazzar.common.RestResources;
+import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.dto.ProductDto;
@@ -9,6 +10,7 @@ import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.service.ProductService;
 
 
+import com.sayone.ebazzar.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,6 +36,9 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     ProductService productService;
+
+    @Autowired
+    UserService userService;
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping
@@ -68,11 +75,13 @@ public class ProductController {
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto addProduct) throws RequestException {
 
         try{
-            ProductDto product = productService.addProduct(addProduct);
+            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            ProductDto product = productService.addProduct(addProduct, userDto.getUserType());
             return ResponseEntity.status(HttpStatus.CREATED).body(product);
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new RequestException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
+            throw  new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         }
     }
 
@@ -80,12 +89,14 @@ public class ProductController {
     @PutMapping(RestResources.UPDATE_PRODUCT)
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto body,@PathVariable Long id){
         try {
-            ProductDto product = productService.updateProduct(body,id);
+            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            ProductDto product = productService.updateProduct(body,id,userDto.getUserType());
             return ResponseEntity.status(HttpStatus.OK).body(product);
         }
         catch (Exception e){
             e.printStackTrace();
-            throw new RequestException((ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages()));
+            throw new RequestException((ErrorMessages.INVALID_SELLER.getErrorMessages()));
         }
 
     }
@@ -93,7 +104,9 @@ public class ProductController {
     @DeleteMapping(RestResources.DELETE_PRODUCT)
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try {
-            this.productService.deleteProduct(id);
+            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+            UserDto userDto=userService.getUser(auth.getName());
+            this.productService.deleteProduct(id,userDto.getUserType());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         catch (Exception e){

@@ -1,9 +1,12 @@
 package com.sayone.ebazzar.service;
 
-import com.sayone.ebazzar.document.ElasticProduct;
+//import com.sayone.ebazzar.document.ElasticProduct;
 import com.sayone.ebazzar.dto.ProductDto;
+import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.ProductEntity;
 import com.sayone.ebazzar.entity.SubCategoryEntity;
+import com.sayone.ebazzar.exception.ErrorMessages;
+import com.sayone.ebazzar.exception.RequestException;
 import com.sayone.ebazzar.repository.ProductRepository;
 import com.sayone.ebazzar.repository.SubCategoryRepository;
 import org.springframework.beans.BeanUtils;
@@ -13,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+//import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 
@@ -43,7 +46,8 @@ public class ProductService {
     }
 
 
-    public ProductDto addProduct(ProductDto addProduct) {
+    public ProductDto addProduct(ProductDto addProduct,String userType) {
+        if(!userType.equals("seller")) throw new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         ProductEntity product = new ProductEntity();
         ProductDto returnValue = new ProductDto();
 
@@ -82,7 +86,8 @@ public class ProductService {
     }
 
 
-    public ProductDto updateProduct(ProductDto body, Long Id) {
+    public ProductDto updateProduct(ProductDto body, Long Id,String userType) {
+        if(!userType.equals("seller")) throw new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         ProductEntity product = new ProductEntity();
         BeanUtils.copyProperties(body, product);
         ProductEntity productToUpdate = productRepository.findByProductId(Id);
@@ -100,7 +105,8 @@ public class ProductService {
         return returnValue;
     }
 
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id,String userType) {
+        if(!userType.equals("seller")) throw new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         productRepository.deleteById(id);
     }
 }
