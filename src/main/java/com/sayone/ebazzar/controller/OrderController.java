@@ -84,8 +84,11 @@ public class OrderController {
     @PutMapping(path = RestResources.UPDATE_ORDER_STATUS)
     public ResponseEntity<OrderResponsemodel> updateOrderStatus(@PathVariable Long orderId, @RequestParam(value = "status") String status, HttpServletRequest request) throws Exception {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
         String url = orderService.getSiteURL(request);
-        return new ResponseEntity<>(orderService.updateStatus(orderId, status, url), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(orderService.updateStatus(user,orderId, status, url), HttpStatus.ACCEPTED);
 
     }
 
