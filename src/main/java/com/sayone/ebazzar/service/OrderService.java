@@ -1,5 +1,6 @@
 package com.sayone.ebazzar.service;
 
+import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.*;
 import com.sayone.ebazzar.exception.ErrorMessages;
 import com.sayone.ebazzar.exception.RequestException;
@@ -159,9 +160,12 @@ public class OrderService {
         return orderDetailsModel;
     }
 
-    public OrderResponsemodel updateStatus(Long orderId, String status, String url) throws Exception {
+    public OrderResponsemodel updateStatus(UserDto user, Long orderId, String status, String url) throws Exception {
+
+        if(!user.getUserStatus().equals("seller"))
+            throw new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         String status1 = status.toLowerCase();
-        if(!status1.equals("confirmed") && !status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered") && !status1.equals("cancelled") )
+        if(!status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered"))
             throw new RequestException(ErrorMessages.INVALID_STATUS.getErrorMessages());
 
         OrderResponsemodel orderResponsemodel = new OrderResponsemodel();
@@ -244,7 +248,8 @@ public class OrderService {
         if(orderEntity.get().getOrderStatus().equals("cancelled"))
             throw new RequestException(ErrorMessages.ALREADY_CANCELLED.getErrorMessages());
         if(orderEntity.get().getOrderStatus().equals("delivered") ||
-                orderEntity.get().getOrderStatus().equals("in-transit"))
+                orderEntity.get().getOrderStatus().equals("in-transit") ||
+        orderEntity.get().getOrderStatus().equals("shipped"))
             throw new RequestException(ErrorMessages.CANCEL_REJECTED.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();

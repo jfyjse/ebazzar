@@ -30,7 +30,7 @@ public class ProductService {
     @Autowired
     ElasticsearchRepository elasticsearchRepository;
 
-    public Page<ProductEntity> getProduct(int page, int limit,String sortBy) {
+    public Page<ProductEntity>  getProduct(int page, int limit,String sortBy) {
         Sort sort=Sort.by(Sort.Direction.ASC,sortBy);
         Pageable pageableRequest = PageRequest.of(page,limit,sort);
         Page<ProductEntity> productpage = productRepository.findAll(pageableRequest);
