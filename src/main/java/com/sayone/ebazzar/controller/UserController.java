@@ -117,7 +117,7 @@ public class UserController {
 
     //    http://localhost:8080/users/teena@gmail.com/resetpassword
     @ApiOperation(value = "API for resetting password",notes = Notes.RESET_PASSWORD)
-    @PostMapping(path = RestResources.RESET_PASSWORD)
+    @PutMapping(path = RestResources.RESET_PASSWORD)
     public ResponseEntity<OperationStatusModel> verifyPasswordResetToken(
             @PathVariable String email,
             @RequestParam(value = "token") String token,
@@ -165,7 +165,7 @@ public class UserController {
     }
 
   //    http://localhost:8080/users/delete
-  @ApiOperation(value = "API for deleting ",notes = Notes.USER_REGISTRATION)
+  @ApiOperation(value = "API for deleting ",notes = Notes.DELETE_USER)
   @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path =RestResources.DELETE_USER)
     public ResponseEntity<?> deleteUser(){
