@@ -25,7 +25,6 @@ public class WishlistController {
     WishlistService wishlistService;
     @Autowired
     UserService userService;
-
     //http://localhost:8080/wishlist/add/2
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping(path = RestResources.CREATE_WISHLIST)
@@ -35,24 +34,20 @@ public class WishlistController {
         WishlistEntity wishlistEntity =wishlistService.addProductToWishlist(user.getUserId(),productId);
         return new ResponseEntity<>(wishlistEntity, HttpStatus.OK);
     }
-
     //http://localhost:8080/wishlist/remove/1
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.DELETE_FROM_WISHLIST)
     public void deleteProductFromWishlist(@PathVariable (value = "pid") Long productId){
 
         if (productId == null ){
-            throw new RequestException(ErrorMessages.WISH_PID_NOTFOUND.getErrorMessages());}
-
+            throw new RequestException(ErrorMessages.WISH_PID_NOTFOUND.getErrorMessages());
+        }
         else {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto user = userService.getUser(auth.getName());
             wishlistService.removeProductFromWishlist(user.getUserId(), productId);
-
         }
-
     }
-
     //http://localhost:8080/wishlist/get
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping(path = RestResources.GET_WISHLIST)
@@ -60,7 +55,5 @@ public class WishlistController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
         return wishlistService.getWishlistItems(user.getUserId());
-
     }
-
 }

@@ -23,7 +23,6 @@ public class WishlistService {
     @Autowired
     ProductRepository productRepository;
 
-
     public  void removeProductFromWishlist(long userId, Long productId) {
         Optional<WishlistEntity> wishlistEntity =wishlistRepository.findByUserId(userId);
         WishlistEntity wishlistEntity1 = wishlistEntity.get();
@@ -39,22 +38,17 @@ public class WishlistService {
             ProductEntity productEntity = productRepository.findById(productId).get();
             wishlistEntity1.setProductEntityList(List.of(productEntity));
         }
-
         else{
-
             wishlistEntity1 = wishlistEntity.get();
             ProductEntity productEntity = productRepository.findById(productId).get();
-
             for (int i=0;i<wishlistEntity1.getProductEntityList().size();i++){
                 if(productEntity == wishlistEntity1.getProductEntityList().get(i)){
                     throw new RequestException(ErrorMessages.WISH_PRODUCT_EXISTS.getErrorMessages());
                 }
             }
-
             wishlistEntity1.getProductEntityList().add(productEntity);
         }
         return wishlistRepository.save(wishlistEntity1);
-
     }
 
     public List<ProductEntity> getWishlistItems(long userId) {
