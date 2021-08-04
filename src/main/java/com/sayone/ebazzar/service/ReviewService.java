@@ -35,6 +35,9 @@ public class ReviewService {
 
     public ReviewResponseModel createReview(ReviewRequestModel reviewRequestModel, Long userId) {
 
+        if (reviewRequestModel.getProductId() == null)
+            throw new RequestException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessages());
+
         ProductEntity productEntity = getProductById(reviewRequestModel.getProductId());
 
         List<CartEntity> cartEntityList = cartRepository.findByUserIdAndStatus(userId, "closed");
@@ -60,9 +63,17 @@ public class ReviewService {
         for (CartEntity cartEntity : cartEntityList) {
             OrderEntity orderEntity = orderRepository.findBycartIdandStatus(cartEntity.getCartId(), "delivered");
             if (orderEntity != null) {
-                orderDelivered = true;
-                break;
+                CartEntity cartEntity1 = cartRepository.getById(orderEntity.getCartEntity().getCartId());
+                for (CartItemEntity cartItemEntity : cartEntity1.getCartItemEntityList()) {
+                    if (cartItemEntity.getProductEntity().getProductId() == reviewRequestModel.getProductId()) {
+                        orderDelivered = true;
+                        break;
+                    }
+                }
+
             }
+            if (orderDelivered)
+                break;
         }
         if (!orderDelivered)
             throw new RequestException(ErrorMessages.ORDER_NOT_DELIVERED.getErrorMessages());

@@ -9,9 +9,9 @@ public class Exception {
     private final HttpStatus httpStatus;
     private final ZonedDateTime timeStamp;
 
-    public Exception(String message,HttpStatus httpStatus, ZonedDateTime timeStamp) {
+    public Exception(String message, HttpStatus httpStatus, ZonedDateTime timeStamp) {
         this.message = message;
-       this.httpStatus = httpStatus;
+        this.httpStatus = httpStatus;
         this.timeStamp = timeStamp;
     }
 
