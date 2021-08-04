@@ -7,11 +7,11 @@ public interface RestResources {
      * */ String USER_ROOT = "/users";
     String ADD_USER = "/registration";
     String UPDATE_USER_DETAILS = "/update";
-    String ADD_ADDRESS= "/add-address";
-    String GET_USER_DETAILS="/profile";
-    String FORGET_PASSWORD="/{email}/forgot-password";
-    String RESET_PASSWORD="/{email}/resetpassword";
-    String DELETE_USER="/delete";
+    String ADD_ADDRESS = "/add-address";
+    String GET_USER_DETAILS = "/profile";
+    String FORGET_PASSWORD = "/{email}/forgot-password";
+    String RESET_PASSWORD = "/{email}/resetpassword";
+    String DELETE_USER = "/delete";
 
     /*
      * API Endpoints for Review related operations
@@ -40,11 +40,11 @@ public interface RestResources {
     /*
      * API Endpoints for Cart
      * */ String CART_ROOT = "/cart";
-          String GET_ALL_CART_ITEMS = "/get";
-          String ADD_TO_CART = "/add/{productId}";
-          String REMOVE_PRODUCT_FROM_CART = "/remove/{pid}";
-  
-  /*
+    String GET_ALL_CART_ITEMS = "/get";
+    String ADD_TO_CART = "/add/{productId}";
+    String REMOVE_PRODUCT_FROM_CART = "/remove/{pid}";
+
+    /*
      * API Endpoints for SubCategory
      * */ String GET_ALL_SUBCATEGORY = "/subCategory";
     String GET_PRODUCTS_BY_SUBCATEGORY = "/{name}";
@@ -53,13 +53,11 @@ public interface RestResources {
      * API Endpoints for Category
      * */ String GET_ALL_CATEGORY = "/category";
 
-
     /*
      * API Endpoints for Category
      * */ String WISHLIST_ROOT = "/wishlist";
-          String GET_WISHLIST = "/get";
-          String CREATE_WISHLIST = "/add/{productId}";
-          String DELETE_FROM_WISHLIST = "/remove/{pid}";
-
+    String GET_WISHLIST = "/get";
+    String CREATE_WISHLIST = "/add/{productId}";
+    String DELETE_FROM_WISHLIST = "/remove/{pid}";
 
 }

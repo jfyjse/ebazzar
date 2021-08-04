@@ -75,9 +75,9 @@ public class OrderService {
 
         OrderEntity storedEntity = orderRepository.save(orderEntity);
 
-        for(CartItemEntity cartItemEntity:storedEntity.getCartEntity().getCartItemEntityList()){
-            ProductEntity productEntity=productRepository.findByProductId(cartItemEntity.getProductEntity().getProductId());
-            productEntity.setQuantity((productEntity.getQuantity())-(cartItemEntity.getQuantity()));
+        for (CartItemEntity cartItemEntity : storedEntity.getCartEntity().getCartItemEntityList()) {
+            ProductEntity productEntity = productRepository.findByProductId(cartItemEntity.getProductEntity().getProductId());
+            productEntity.setQuantity((productEntity.getQuantity()) - (cartItemEntity.getQuantity()));
             productRepository.save(productEntity);
         }
         triggerMailForOrderPlacement(orderEntity, url);
@@ -128,12 +128,12 @@ public class OrderService {
         return orderDetailsModels;
     }
 
-    public OrderDetailsModel getOrderById(Long userId,Long id) {
+    public OrderDetailsModel getOrderById(Long userId, Long id) {
 
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(id);
         if (orderEntity.isEmpty())
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
-        if(orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
+        if (orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
             throw new RequestException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
 
         OrderDetailsModel orderDetailsModel = new OrderDetailsModel();
@@ -162,10 +162,10 @@ public class OrderService {
 
     public OrderResponsemodel updateStatus(UserDto user, Long orderId, String status, String url) throws Exception {
 
-        if(!user.getUserStatus().equals("seller"))
+        if (!user.getUserType().equals("seller"))
             throw new RequestException(ErrorMessages.INVALID_SELLER.getErrorMessages());
         String status1 = status.toLowerCase();
-        if(!status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered"))
+        if (!status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered"))
             throw new RequestException(ErrorMessages.INVALID_STATUS.getErrorMessages());
 
         OrderResponsemodel orderResponsemodel = new OrderResponsemodel();
@@ -173,7 +173,7 @@ public class OrderService {
         Optional<OrderEntity> orderEntity = orderRepository.findByOrderId(orderId);
         if (orderEntity.isEmpty())
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
-        if(orderEntity.get().getOrderStatus().equals(status1))
+        if (orderEntity.get().getOrderStatus().equals(status1))
             throw new RequestException(ErrorMessages.SAME_STATUS.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();
@@ -194,7 +194,7 @@ public class OrderService {
 
         String status1 = status.toLowerCase();
 
-        if(!status1.equals("confirmed") && !status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered") && !status1.equals("cancelled") )
+        if (!status1.equals("confirmed") && !status1.equals("shipped") && !status1.equals("in-transit") && !status1.equals("delivered") && !status1.equals("cancelled"))
             throw new RequestException(ErrorMessages.INVALID_STATUS.getErrorMessages());
 
         List<OrderDetailsModel> orderDetailsModels = new ArrayList<OrderDetailsModel>();
@@ -233,7 +233,7 @@ public class OrderService {
             }
 
         }
-        if(!orderfound)
+        if (!orderfound)
             throw new RequestException(ErrorMessages.NO_ORDER_STATUS.getErrorMessages());
         return orderDetailsModels;
     }
@@ -245,11 +245,9 @@ public class OrderService {
             throw new RequestException(ErrorMessages.INVALID_ORDERID.getErrorMessages());
         if (orderEntity.get().getCartEntity().getUserEntity().getUserId() != userId)
             throw new RequestException(ErrorMessages.INVALID_USER_ORDER.getErrorMessages());
-        if(orderEntity.get().getOrderStatus().equals("cancelled"))
+        if (orderEntity.get().getOrderStatus().equals("cancelled"))
             throw new RequestException(ErrorMessages.ALREADY_CANCELLED.getErrorMessages());
-        if(orderEntity.get().getOrderStatus().equals("delivered") ||
-                orderEntity.get().getOrderStatus().equals("in-transit") ||
-        orderEntity.get().getOrderStatus().equals("shipped"))
+        if (orderEntity.get().getOrderStatus().equals("delivered") || orderEntity.get().getOrderStatus().equals("in-transit"))
             throw new RequestException(ErrorMessages.CANCEL_REJECTED.getErrorMessages());
 
         OrderEntity orderEntity1 = orderEntity.get();
