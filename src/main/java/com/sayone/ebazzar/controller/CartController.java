@@ -25,26 +25,23 @@ public class CartController {
     CartService cartService;
     @Autowired
     UserService userService;
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     //http://localhost:8080/cart/add/1?quantity=3
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping(path = RestResources.ADD_TO_CART)
     public ResponseEntity<CartEntity> addCartItem(@PathVariable (value = "productId") Long productId,
                                                   @RequestParam (value = "quantity") Integer quantity) throws Exception {
         if (productId == null || !(quantity>0)){
-
-            throw new RequestException(ErrorMessages.CART_QUANTITY_PID_ERROR.getErrorMessages());}
-
+            throw new RequestException(ErrorMessages.CART_QUANTITY_PID_ERROR.getErrorMessages());
+        }
         else {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto user = userService.getUser(auth.getName());
             CartEntity cartEntity = cartService.addCartItem(user.getUserId(), productId, quantity);
             return new ResponseEntity<>(cartEntity, HttpStatus.CREATED);
         }
-
-
     }
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     //http://localhost:8080/cart/get?
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping( path = RestResources.GET_ALL_CART_ITEMS)
     public List<CartItemEntity> getCartItems(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -53,20 +50,17 @@ public class CartController {
 
         return cartItemEntityList;
     }
-    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     //http://localhost:8080/cart/remove/1
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping(path = RestResources.REMOVE_PRODUCT_FROM_CART)
     public void removeProductFromCart(@PathVariable(value = "pid") Long productId){
         if (productId == null ){
-            throw new RequestException(ErrorMessages.CART_PRODUCTID_NOTFOUND.getErrorMessages());}
-
+            throw new RequestException(ErrorMessages.CART_PRODUCTID_NOTFOUND.getErrorMessages());
+        }
         else {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserDto user = userService.getUser(auth.getName());
             cartService.removeProductFromCart(user.getUserId(), productId);
-
         }
-
     }
-
 }
