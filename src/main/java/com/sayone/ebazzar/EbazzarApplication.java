@@ -9,24 +9,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class EbazzarApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EbazzarApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EbazzarApplication.class, args);
+    }
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public  SpringApplicationContext springApplicationContext(){
-		return new SpringApplicationContext();
-	}
+    @Bean
+    public SpringApplicationContext springApplicationContext() {
+        return new SpringApplicationContext();
+    }
 
-	@Bean(name = "AppProperties")
-	public AppProperties getProperties(){
-		return new AppProperties();
-	}
-
+    @Bean(name = "AppProperties")
+    public AppProperties getProperties() {
+        return new AppProperties();
+    }
 
 }

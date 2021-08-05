@@ -19,7 +19,7 @@ public class Runner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Add Categories");
 
-        if (categoryRepository.findAll().isEmpty()){
+        if (categoryRepository.findAll().isEmpty()) {
 
             //ADD CATEGORY AND SUB-CATEGORY  OF ELECTRONICS
             Category electronics = new Category("Electronics");

@@ -11,12 +11,10 @@ public class OrderDto implements Serializable {
     private AddressDto billingAddress;
     private CartDto cartDto;
 
-
     public OrderDto() {
     }
 
-    public OrderDto(String orderStatus, int orderAmount,
-                    AddressDto shippingAddress, AddressDto billingAddress, CartDto cartDto) {
+    public OrderDto(String orderStatus, int orderAmount, AddressDto shippingAddress, AddressDto billingAddress, CartDto cartDto) {
         this.orderStatus = orderStatus;
         this.orderAmount = orderAmount;
         this.shippingAddress = shippingAddress;
