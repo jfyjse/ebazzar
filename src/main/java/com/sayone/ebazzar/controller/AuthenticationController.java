@@ -1,6 +1,4 @@
 package com.sayone.ebazzar.controller;
-
-
 import com.sayone.ebazzar.common.Notes;
 import com.sayone.ebazzar.model.request.LoginRequestModel;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
-
-
 @RestController
-
-
 public class AuthenticationController {
     @ApiOperation(value = "User login",notes = Notes.USER_LOGIN)
     @ApiResponses(value = {

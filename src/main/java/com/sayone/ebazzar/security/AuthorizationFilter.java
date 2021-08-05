@@ -1,5 +1,4 @@
 package com.sayone.ebazzar.security;
-
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-
 public class AuthorizationFilter extends BasicAuthenticationFilter {
-
     public AuthorizationFilter(AuthenticationManager authManager){
         super(authManager);
     }
@@ -50,10 +47,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             }
             return null;
         }
-
         return null;
     }
-
-
 
 }
