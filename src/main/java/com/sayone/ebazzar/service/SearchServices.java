@@ -1,7 +1,7 @@
 package com.sayone.ebazzar.service;
 
 import com.sayone.ebazzar.document.ElasticProduct;
-import com.sayone.ebazzar.repository.ProductElasticRepository;
+//import com.sayone.ebazzar.repository.ProductElasticRepository;
 
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.Operator;
@@ -22,8 +22,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @Service
 public class SearchServices {
 
-    @Autowired
-    ProductElasticRepository productElasticRepository;
+//    @Autowired
+//    ProductElasticRepository productElasticRepository;
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchTemplate;

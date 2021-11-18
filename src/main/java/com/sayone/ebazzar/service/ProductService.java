@@ -29,8 +29,8 @@ public class ProductService {
     ProductRepository productRepository;
     @Autowired
     SubCategoryRepository subCategoryRepository;
-    @Autowired
-    ElasticsearchRepository elasticsearchRepository;
+//    @Autowired
+//    ElasticsearchRepository elasticsearchRepository;
 
     public Page<ProductEntity>  getProduct(int page, int limit,String sortBy) {
         Sort sort=Sort.by(Sort.Direction.ASC,sortBy);
@@ -62,14 +62,14 @@ public class ProductService {
             returnValue.setSubCategoryName(saveProduct.getSubCategory().getSubCategoryName());
 
 
-            ElasticProduct elasticProduct = new ElasticProduct();
-            elasticProduct.setName(saveProduct.getProductName());
-            elasticProduct.setId(saveProduct.getProductId());
-            elasticProduct.setSubcategory(saveProduct.getSubCategory().getSubCategoryName());
-            elasticProduct.setPrice(saveProduct.getPrice().toString());
-            elasticProduct.setQuantity(saveProduct.getQuantity().toString());
-            elasticProduct.setDescription(saveProduct.getDescription());
-            elasticsearchRepository.save(elasticProduct);
+//            ElasticProduct elasticProduct = new ElasticProduct();
+//            elasticProduct.setName(saveProduct.getProductName());
+//            elasticProduct.setId(saveProduct.getProductId());
+//            elasticProduct.setSubcategory(saveProduct.getSubCategory().getSubCategoryName());
+//            elasticProduct.setPrice(saveProduct.getPrice().toString());
+//            elasticProduct.setQuantity(saveProduct.getQuantity().toString());
+//            elasticProduct.setDescription(saveProduct.getDescription());
+//            elasticsearchRepository.save(elasticProduct);
             return returnValue;
         } else {
             product.setSubCategory(subCategoryRepository.findBySubCategoryName("Others"));
