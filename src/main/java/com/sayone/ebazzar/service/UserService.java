@@ -1,4 +1,5 @@
 package com.sayone.ebazzar.service;
+
 import com.sayone.ebazzar.dto.AddressDto;
 import com.sayone.ebazzar.dto.UserDto;
 import com.sayone.ebazzar.entity.AddressEntity;
@@ -32,14 +33,21 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
+
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     AddressRepository addressRepository;
+
     @Autowired
     PasswordResetTokenRepository passwordResetTokenRepository;
+
+
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
     @Autowired
     EmailService emailService;
 
@@ -83,6 +91,7 @@ public class UserService implements UserDetailsService {
         }
         returnValue.setAddressResponseModels(addressResponseModels);
         BeanUtils.copyProperties(storedUserDetails,returnValue);
+
         return returnValue;
     }
 
@@ -135,6 +144,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean requestPasswordReset(UserDto userDto,String url) throws MessagingException,UnsupportedEncodingException{
+
         boolean returnValue = false;
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDto,userEntity);
@@ -155,6 +165,7 @@ public class UserService implements UserDetailsService {
             UserEntity userEntity,
             String url)
             throws MessagingException, UnsupportedEncodingException {
+
         emailService.sendSimpleEmailForPasswordReset(passwordResetTokenEntity,userEntity,url);
     }
 
@@ -194,6 +205,7 @@ public class UserService implements UserDetailsService {
         if(userEntity == null) throw new UsernameNotFoundException(email);
         userEntity.setUserStatus(false);
         userRepository.save(userEntity);
+
     }
 
     @Override
